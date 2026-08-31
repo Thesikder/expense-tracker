@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Money Tracker</title>
+<title>Thomas's Tracker</title>
 
 <style>
 *{box-sizing:border-box}
 
 body{
   margin:0;
-  background:#f6f6f4;
-  color:#202020;
+  background:#111;
+  color:#eee;
   font-family:Arial,sans-serif;
 }
 
@@ -25,13 +25,13 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:28px;
+  margin-bottom:26px;
 }
 
 h1{
   margin:0;
-  font-size:30px;
-  letter-spacing:-1px;
+  font-size:28px;
+  letter-spacing:-.8px;
 }
 
 .month{
@@ -48,22 +48,23 @@ h1{
 .monthNav button{
   width:40px;
   height:40px;
-  border:0;
+  border:1px solid #292929;
   border-radius:12px;
-  background:#fff;
+  background:#1b1b1b;
+  color:#eee;
   font-size:22px;
 }
 
 .balanceBox{
-  background:#202020;
-  color:#fff;
-  border-radius:22px;
-  padding:22px;
-  margin-bottom:12px;
+  background:#1c1c1c;
+  border:1px solid #292929;
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:10px;
 }
 
 .balanceLabel{
-  color:#bbb;
+  color:#888;
   font-size:13px;
 }
 
@@ -81,9 +82,10 @@ h1{
 }
 
 .moneyBox{
-  background:#fff;
-  border-radius:16px;
-  padding:15px;
+  background:#1c1c1c;
+  border:1px solid #292929;
+  border-radius:15px;
+  padding:14px;
 }
 
 .moneyBox small{
@@ -97,46 +99,52 @@ h1{
   font-size:17px;
 }
 
-.income{color:#168653}
-.expense{color:#d84c4c}
+.income{color:#55c98a}
+.expense{color:#ff6b6b}
 
 .add{
   width:100%;
-  margin:16px 0 28px;
-  padding:16px;
+  margin:15px 0 28px;
+  padding:15px;
   border:0;
-  border-radius:16px;
-  background:#202020;
-  color:#fff;
+  border-radius:15px;
+  background:#eee;
+  color:#111;
   font-size:16px;
   font-weight:bold;
 }
 
 .sectionTitle{
-  font-size:18px;
+  font-size:17px;
   font-weight:bold;
   margin:22px 0 12px;
 }
 
 .dayTitle{
-  color:#999;
+  color:#777;
   font-size:11px;
   font-weight:bold;
   margin:18px 4px 8px;
   text-transform:uppercase;
-  letter-spacing:.4px;
+  letter-spacing:.5px;
 }
 
 .tx{
-  background:#fff;
-  border-radius:15px;
-  padding:14px;
+  background:#191919;
+  border:1px solid #292929;
+  border-left:4px solid #555;
+  border-radius:14px;
+  padding:13px;
   margin-bottom:8px;
   display:flex;
   justify-content:space-between;
   align-items:center;
   cursor:pointer;
 }
+
+.tx.cash{border-left-color:#55c98a}
+.tx.gpay{border-left-color:#5ca9ff}
+.tx.debit{border-left-color:#e4c44f}
 
 .txLeft{
   min-width:0;
@@ -148,7 +156,7 @@ h1{
 }
 
 .txNote{
-  color:#999;
+  color:#777;
   font-size:12px;
   margin-top:4px;
   white-space:nowrap;
@@ -169,8 +177,9 @@ h1{
 }
 
 .category{
-  background:#fff;
-  border-radius:14px;
+  background:#191919;
+  border:1px solid #292929;
+  border-radius:13px;
   padding:12px 14px;
   margin-bottom:8px;
 }
@@ -183,7 +192,7 @@ h1{
 
 .bar{
   height:5px;
-  background:#eee;
+  background:#292929;
   border-radius:5px;
   margin-top:8px;
   overflow:hidden;
@@ -191,23 +200,24 @@ h1{
 
 .fill{
   height:100%;
-  background:#555;
+  background:#777;
   border-radius:5px;
 }
 
 .empty{
-  background:#fff;
-  border-radius:15px;
-  padding:24px;
+  background:#191919;
+  border:1px solid #292929;
+  border-radius:14px;
+  padding:23px;
   text-align:center;
-  color:#999;
+  color:#777;
 }
 
 .modal{
   display:none;
   position:fixed;
   inset:0;
-  background:#0008;
+  background:#000b;
   align-items:flex-end;
   justify-content:center;
   z-index:10;
@@ -216,7 +226,8 @@ h1{
 .sheet{
   width:100%;
   max-width:620px;
-  background:#fff;
+  background:#181818;
+  border:1px solid #292929;
   border-radius:22px 22px 0 0;
   padding:20px 16px 28px;
 }
@@ -235,20 +246,21 @@ h1{
 
 .switch button{
   padding:12px;
-  border:1px solid #ddd;
+  border:1px solid #333;
   border-radius:12px;
-  background:#f5f5f5;
+  background:#222;
+  color:#aaa;
   font-size:14px;
 }
 
 .switch .active{
-  background:#202020;
-  color:#fff;
+  background:#eee;
+  color:#111;
 }
 
 label{
   display:block;
-  color:#777;
+  color:#888;
   font-size:13px;
   margin:12px 0 6px;
 }
@@ -256,10 +268,15 @@ label{
 input,select{
   width:100%;
   padding:13px;
-  border:1px solid #ddd;
+  border:1px solid #333;
   border-radius:12px;
-  background:#fff;
+  background:#222;
+  color:#eee;
   font-size:16px;
+}
+
+input::placeholder{
+  color:#666;
 }
 
 .actions{
@@ -277,12 +294,13 @@ input,select{
 }
 
 .cancel{
-  background:#eee;
+  background:#292929;
+  color:#eee;
 }
 
 .save{
-  background:#202020;
-  color:#fff;
+  background:#eee;
+  color:#111;
 }
 
 .delete{
@@ -292,13 +310,19 @@ input,select{
   padding:12px;
   border:0;
   border-radius:12px;
-  background:#ffe5e5;
-  color:#c33;
+  background:#4a2020;
+  color:#ff8b8b;
 }
 
 @media(max-width:380px){
-  .app{padding-left:12px;padding-right:12px}
-  .balanceValue{font-size:30px}
+  .app{
+    padding-left:12px;
+    padding-right:12px;
+  }
+
+  .balanceValue{
+    font-size:30px;
+  }
 }
 </style>
 </head>
@@ -309,7 +333,7 @@ input,select{
 
 <header>
   <div>
-    <h1>Money</h1>
+    <h1>Thomas's Tracker</h1>
     <div class="month" id="month"></div>
   </div>
 
@@ -325,6 +349,7 @@ input,select{
 </div>
 
 <div class="moneyRow">
+
   <div class="moneyBox">
     <small>Income</small>
     <strong class="income" id="income">₹0</strong>
@@ -334,6 +359,7 @@ input,select{
     <small>Spent</small>
     <strong class="expense" id="expenses">₹0</strong>
   </div>
+
 </div>
 
 <button class="add" id="add" type="button">
@@ -343,7 +369,7 @@ input,select{
 <div class="sectionTitle">Recent transactions</div>
 <div id="transactions"></div>
 
-<div class="sectionTitle">Where your money goes</div>
+<div class="sectionTitle">Your spending on</div>
 <div id="categories"></div>
 
 </div>
@@ -355,12 +381,23 @@ input,select{
 <h2 id="formTitle">Add Transaction</h2>
 
 <div class="switch">
-  <button id="expenseType" class="active" type="button">Expense</button>
-  <button id="incomeType" type="button">Income</button>
+  <button id="expenseType" class="active" type="button">
+    Expense
+  </button>
+
+  <button id="incomeType" type="button">
+    Income
+  </button>
 </div>
 
 <label>Amount</label>
-<input id="amount" type="number" min="0" step="0.01" placeholder="₹ 0">
+<input
+  id="amount"
+  type="number"
+  min="0"
+  step="0.01"
+  placeholder="₹ 0"
+>
 
 <label id="catLabel">Category</label>
 <select id="category"></select>
@@ -376,11 +413,20 @@ input,select{
 <input id="date" type="date">
 
 <label>Note (optional)</label>
-<input id="note" type="text" placeholder="What was it for?">
+<input
+  id="note"
+  type="text"
+  placeholder="What was it for?"
+>
 
 <div class="actions">
-  <button class="cancel" id="cancel" type="button">Cancel</button>
-  <button class="save" id="save" type="button">Save</button>
+  <button class="cancel" id="cancel" type="button">
+    Cancel
+  </button>
+
+  <button class="save" id="save" type="button">
+    Save
+  </button>
 </div>
 
 <button class="delete" id="delete" type="button">
@@ -391,6 +437,7 @@ input,select{
 </div>
 
 <script>
+
 const expenseCats=[
 "🍽️ Restaurant",
 "🍔 Fast Food",
@@ -432,6 +479,7 @@ let viewDate=new Date();
 const $=id=>document.getElementById(id);
 
 function today(){
+
   const d=new Date();
 
   return d.getFullYear()+"-"+
@@ -440,12 +488,15 @@ function today(){
 }
 
 function money(n){
-  return "₹"+Number(n).toLocaleString("en-IN",{
-    maximumFractionDigits:2
-  });
+
+  return "₹"+Number(n).toLocaleString(
+    "en-IN",
+    {maximumFractionDigits:2}
+  );
 }
 
 function safe(s){
+
   return String(s).replace(/[&<>"']/g,c=>({
     "&":"&amp;",
     "<":"&lt;",
@@ -456,31 +507,38 @@ function safe(s){
 }
 
 function setCategories(selected){
+
   const list=
     type==="expense"?expenseCats:incomeCats;
 
   $("category").innerHTML="";
 
   list.forEach(x=>{
+
     const o=document.createElement("option");
 
     o.value=x;
     o.textContent=x;
 
     $("category").appendChild(o);
+
   });
 
   $("catLabel").textContent=
-    type==="expense"?"Category":"Income source";
+    type==="expense"?
+    "Category":
+    "Income source";
 
   if(selected)
     $("category").value=selected;
 }
 
 function openForm(t){
+
   $("modal").style.display="flex";
 
   if(t){
+
     editId=t.id;
     type=t.type;
 
@@ -515,42 +573,61 @@ function openForm(t){
   }
 
   $("expenseType").classList.toggle(
-    "active",type==="expense"
+    "active",
+    type==="expense"
   );
 
   $("incomeType").classList.toggle(
-    "active",type==="income"
+    "active",
+    type==="income"
   );
 }
 
 function closeForm(){
+
   $("modal").style.display="none";
 }
 
 function save(){
-  const value=Number($("amount").value);
+
+  const value=
+    Number($("amount").value);
 
   if(!value||value<=0){
+
     alert("Please enter a valid amount.");
+
     return;
   }
 
   const item={
+
     id:editId||Date.now(),
+
     type:type,
+
     amount:value,
+
     category:$("category").value,
+
     payment:$("payment").value,
+
     date:$("date").value||today(),
+
     note:$("note").value.trim()
+
   };
 
   if(editId){
+
     data=data.map(x=>
       x.id===editId?item:x
     );
+
   }else{
+
     data.push(item);
+
   }
 
   localStorage.setItem(
@@ -559,15 +636,19 @@ function save(){
   );
 
   closeForm();
+
   render();
 }
 
 function remove(){
+
   if(!editId)return;
 
   if(confirm("Delete this transaction?")){
 
-    data=data.filter(x=>x.id!==editId);
+    data=data.filter(
+      x=>x.id!==editId
+    );
 
     localStorage.setItem(
       "moneyTracker",
@@ -575,65 +656,98 @@ function remove(){
     );
 
     closeForm();
+
     render();
   }
 }
 
 function dateText(s){
-  const d=new Date(s+"T00:00:00");
 
-  return d.toLocaleDateString("en-IN",{
-    weekday:"long",
-    day:"numeric",
-    month:"short"
-  });
+  const d=
+    new Date(s+"T00:00:00");
+
+  return d.toLocaleDateString(
+    "en-IN",
+    {
+      weekday:"long",
+      day:"numeric",
+      month:"short"
+    }
+  );
 }
 
 function monthText(){
-  return viewDate.toLocaleDateString("en-IN",{
-    month:"long",
-    year:"numeric"
-  });
+
+  return viewDate.toLocaleDateString(
+    "en-IN",
+    {
+      month:"long",
+      year:"numeric"
+    }
+  );
 }
 
 function render(){
 
-  $("month").textContent=monthText();
+  $("month").textContent=
+    monthText();
 
-  const y=viewDate.getFullYear();
-  const m=viewDate.getMonth();
+  const y=
+    viewDate.getFullYear();
+
+  const m=
+    viewDate.getMonth();
 
   const monthly=data.filter(t=>{
-    const d=new Date(t.date+"T00:00:00");
+
+    const d=
+      new Date(t.date+"T00:00:00");
 
     return d.getFullYear()===y &&
            d.getMonth()===m;
+
   });
 
-  const inc=monthly
-    .filter(t=>t.type==="income")
-    .reduce((a,t)=>a+Number(t.amount),0);
+  const inc=
+    monthly
+      .filter(t=>t.type==="income")
+      .reduce(
+        (a,t)=>a+Number(t.amount),
+        0
+      );
 
-  const exp=monthly
-    .filter(t=>t.type==="expense")
-    .reduce((a,t)=>a+Number(t.amount),0);
+  const exp=
+    monthly
+      .filter(t=>t.type==="expense")
+      .reduce(
+        (a,t)=>a+Number(t.amount),
+        0
+      );
 
-  $("income").textContent=money(inc);
-  $("expenses").textContent=money(exp);
-  $("balance").textContent=money(inc-exp);
+  $("income").textContent=
+    money(inc);
+
+  $("expenses").textContent=
+    money(exp);
+
+  $("balance").textContent=
+    money(inc-exp);
 
   renderTransactions();
+
   renderCategories(monthly);
 }
 
 function renderTransactions(){
 
-  const box=$("transactions");
+  const box=
+    $("transactions");
 
   const list=[...data]
-    .sort((a,b)=>
-      b.date.localeCompare(a.date) ||
-      b.id-a.id
+    .sort(
+      (a,b)=>
+        b.date.localeCompare(a.date) ||
+        b.id-a.id
     )
     .slice(0,30);
 
@@ -641,7 +755,8 @@ function renderTransactions(){
 
     box.innerHTML=
       '<div class="empty">'+
-      'No transactions yet.</div>';
+      'No transactions yet.'+
+      '</div>';
 
     return;
   }
@@ -654,43 +769,60 @@ function renderTransactions(){
 
     if(t.date!==last){
 
-      const d=document.createElement("div");
+      const d=
+        document.createElement("div");
 
       d.className="dayTitle";
-      d.textContent=dateText(t.date);
+
+      d.textContent=
+        dateText(t.date);
 
       box.appendChild(d);
 
       last=t.date;
     }
 
-    const row=document.createElement("div");
+    const row=
+      document.createElement("div");
 
-    row.className="tx";
+    row.className=
+      "tx "+t.payment;
 
     const sign=
-      t.type==="income"?"+":"-";
+      t.type==="income"?
+      "+":
+      "-";
 
     const cls=
       t.type==="income"?
-      "income":"expense";
+      "income":
+      "expense";
 
     row.innerHTML=
+
       '<div class="txLeft">'+
+
         '<div class="txName">'+
           safe(t.category)+
         '</div>'+
+
         (t.note?
           '<div class="txNote">'+
           safe(t.note)+
           '</div>':
           '')+
+
       '</div>'+
+
       '<div class="txAmount '+cls+'">'+
-        sign+money(t.amount)+
+
+        sign+
+        money(t.amount)+
+
         ' <span class="pay">'+
         payEmoji[t.payment]+
         '</span>'+
+
       '</div>';
 
     row.addEventListener(
@@ -699,15 +831,19 @@ function renderTransactions(){
     );
 
     box.appendChild(row);
+
   });
 }
 
 function renderCategories(monthly){
 
-  const box=$("categories");
+  const box=
+    $("categories");
 
   const expenses=
-    monthly.filter(t=>t.type==="expense");
+    monthly.filter(
+      t=>t.type==="expense"
+    );
 
   if(!expenses.length){
 
@@ -722,37 +858,56 @@ function renderCategories(monthly){
   const totals={};
 
   expenses.forEach(t=>{
+
     totals[t.category]=
       (totals[t.category]||0)+
       Number(t.amount);
+
   });
 
   const list=
     Object.entries(totals)
-    .sort((a,b)=>b[1]-a[1]);
+      .sort((a,b)=>b[1]-a[1]);
 
-  const highest=list[0][1];
+  const highest=
+    list[0][1];
 
   box.innerHTML="";
 
   list.forEach(([name,value])=>{
 
-    const row=document.createElement("div");
+    const row=
+      document.createElement("div");
 
     row.className="category";
 
     row.innerHTML=
+
       '<div class="catRow">'+
-        '<span>'+safe(name)+'</span>'+
-        '<strong>'+money(value)+'</strong>'+
+
+        '<span>'+
+        safe(name)+
+        '</span>'+
+
+        '<strong>'+
+        money(value)+
+        '</strong>'+
+
       '</div>'+
+
       '<div class="bar">'+
+
         '<div class="fill" style="width:'+
-        Math.min(100,value/highest*100)+
+        Math.min(
+          100,
+          value/highest*100
+        )+
         '%"></div>'+
+
       '</div>';
 
     box.appendChild(row);
+
   });
 }
 
@@ -779,6 +934,7 @@ $("delete").addEventListener(
 $("expenseType").addEventListener(
   "click",
   ()=>{
+
     type="expense";
 
     $("expenseType")
@@ -788,12 +944,14 @@ $("expenseType").addEventListener(
       .classList.remove("active");
 
     setCategories();
+
   }
 );
 
 $("incomeType").addEventListener(
   "click",
   ()=>{
+
     type="income";
 
     $("incomeType")
@@ -803,42 +961,51 @@ $("incomeType").addEventListener(
       .classList.remove("active");
 
     setCategories();
+
   }
 );
 
 $("prev").addEventListener(
   "click",
   ()=>{
+
     viewDate.setMonth(
       viewDate.getMonth()-1
     );
 
     render();
+
   }
 );
 
 $("next").addEventListener(
   "click",
   ()=>{
+
     viewDate.setMonth(
       viewDate.getMonth()+1
     );
 
     render();
+
   }
 );
 
 $("modal").addEventListener(
   "click",
   e=>{
+
     if(e.target===$("modal"))
       closeForm();
+
   }
 );
 
 setCategories();
+
 render();
+
 </script>
 
 </body>
-</html>
+  </html>
