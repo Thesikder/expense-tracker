@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expense Tracker</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #222;
+}
+
+.app {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px 16px 40px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.month {
+  color: #777;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.month-btn {
+  border: 0;
+  background: white;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 9px;
+  margin-bottom: 18px;
+}
+
+.summary-card {
+  background: white;
+  border-radius: 16px;
+  padding: 14px 10px;
+}
+
+.summary-card small {
+  color: #888;
+  font-size: 12px;
+}
+
+.summary-card strong {
+  display: block;
+  margin-top: 7px;
+  font-size: 17px;
+}
+
+.income {
+  color: #198754;
+}
+
+.expense {
+  color: #d94b4b;
+}
+
+.balance {
+  color: #333;
+}
+
+.add-btn {
+  width: 100%;
+  border: 0;
+  border-radius: 15px;
+  padding: 15px;
+  background: #222;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 22px;
+}
+
+.section-title {
+  font-size: 17px;
+  font-weight: bold;
+  margin: 20px 0 12px;
+}
+
+.transaction {
+  background: white;
+  border-radius: 15px;
+  padding: 13px;
+  margin-bottom: 9px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.transaction-left {
+  min-width: 0;
+}
+
+.transaction-name {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.transaction-date {
+  color: #999;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.transaction-right {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.amount {
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.payment {
+  font-size: 15px;
+  margin-left: 5px;
+}
+
+.empty {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  color: #999;
+}
+
+.category {
+  background: white;
+  border-radius: 15px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+
+.category-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+}
+
+.bar {
+  height: 5px;
+  background: #eee;
+  border-radius: 5px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: #555;
+  border-radius: 5px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-box {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 22px 22px 0 0;
+  padding: 20px 16px 28px;
+}
+
+.modal-box h2 {
+  margin-top: 0;
+  font-size: 20px;
+}
+
+.toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.toggle button {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  background: #f7f7f7;
+  font-size: 14px;
+}
+
+.toggle button.active {
+  background: #222;
+  color: white;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  color: #777;
+  margin: 12px 0 6px;
+}
+
+input, select {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  font-size: 16px;
+  background: white;
+}
+
+.form-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.form-buttons button {
+  padding: 13px;
+  border-radius: 12px;
+  border: 0;
+  font-size: 15px;
+}
+
+.save {
+  background: #222;
+  color: white;
+}
+
+.cancel {
+  background: #eee;
+}
+
+.delete {
+  background: #ffe5e5;
+  color: #c33;
+  margin-top: 8px;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 12px;
+}
+
+@media (max-width: 380px) {
+  .summary-card strong {
+    font-size: 15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="header">
+    <div>
+      <h1>Money</h1>
+      <div class="month" id="monthName"></div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <div class="summary-card">
+      <small>Income</small>
+      <strong class="income" id="incomeTotal">₹0</strong>
+    </div>
+
+    <div class="summary-card">
+      <small>Expenses</small>
+      <strong class="expense" id="expenseTotal">₹0</strong>
+    </div>
+
+    <div class="summary-card">
+      <small>Balance</small>
+      <strong class="balance" id="balanceTotal">₹0</strong>
+    </div>
+  </div>
+
+  <button class="add-btn" id="addBtn">＋ Add Transaction</button>
+
+  <div class="section-title">Recent transactions</div>
+  <div id="transactions"></div>
+
+  <div class="section-title">Where your money goes</div>
+  <div id="categories"></div>
+
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+
+    <h2 id="formTitle">Add Transaction</h2>
+
+    <div class="toggle">
+      <button type="button" id="expenseBtn" class="active">Expense</button>
+      <button type="button" id="incomeBtn">Income</button>
+    </div>
+
+    <label>Amount</label>
+    <input type="number" id="amount" placeholder="₹ 0" min="0" step="0.01">
+
+    <label id="categoryLabel">Category</label>
+    <select id="category"></select>
+
+    <label>Payment method</label>
+    <select id="payment">
+      <option value="cash">💵 Cash</option>
+      <option value="gpay">📱 GPay</option>
+      <option value="debit">💳 Debit Card</option>
+    </select>
+
+    <label>Date</label>
+    <input type="date" id="date">
+
+    <label>Note (optional)</label>
+    <input type="text" id="note" placeholder="What was it for?">
+
+    <div class="form-buttons">
+      <button type="button" class="cancel" id="cancelBtn">Cancel</button>
+      <button type="button" class="save" id="saveBtn">Save</button>
+    </div>
+
+    <button type="button" class="delete" id="deleteBtn" style="display:none">
+      Delete transaction
+    </button>
+
+  </div>
+</div>
+
+<script>
+const expenseCategories = [
+  "🍽️ Restaurant",
+  "🍔 Fast Food",
+  "🥤 Juice & Ice Cream",
+  "🎬 Movies",
+  "⛽ Petrol",
+  "📱 Apps & Digital",
+  "🌐 Internet / Recharge",
+  "👨‍👩‍👦 Parents",
+  "🛒 Groceries",
+  "👕 Clothing",
+  "🧼 Personal & Cleaning",
+  "🍳 Kitchen",
+  "🛵 Scooty Service",
+  "📦 Other"
+];
+
+const incomeCategories = [
+  "💼 Salary",
+  "💰 Other Income",
+  "↩️ Refund",
+  "📦 Other"
+];
+
+const paymentEmoji = {
+  cash: "💵",
+  gpay: "📱",
+  debit: "💳"
+};
+
+let transactions = JSON.parse(localStorage.getItem("expensesData") || "[]");
+let currentType = "expense";
+let editingId = null;
+
+const modal = document.getElementById("modal");
+const amount = document.getElementById("amount");
+const category = document.getElementById("category");
+const payment = document.getElementById("payment");
+const date = document.getElementById("date");
+const note = document.getElementById("note");
+
+function today() {
+  const d = new Date();
+  return d.toISOString().split("T")[0];
+}
+
+function money(value) {
+  return "₹" + Number(value).toLocaleString("en-IN", {
+    maximumFractionDigits: 2
+  });
+}
+
+function formatDate(value) {
+  const d = new Date(value + "T00:00:00");
+
+  return d.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    weekday: "short"
+  });
+}
+
+function updateCategories() {
+  const list = currentType === "expense"
+    ? expenseCategories
+    : incomeCategories;
+
+  category.innerHTML = "";
+
+  list.forEach(item => {
+    const option = document.createElement("option");
+    option.value = item;
+    option.textContent = item;
+    category.appendChild(option);
+  });
+
+  document.getElementById("categoryLabel").textContent =
+    currentType === "expense" ? "Category" : "Income source";
+}
+
+function openForm(transaction = null) {
+  modal.style.display = "flex";
+
+  if (transaction) {
+    editingId = transaction.id;
+    currentType = transaction.type;
+
+    amount.value = transaction.amount;
+    date.value = transaction.date;
+    note.value = transaction.note || "";
+    payment.value = transaction.payment;
+
+    document.getElementById("deleteBtn").style.display = "block";
+    document.getElementById("formTitle").textContent = "Edit Transaction";
+  } else {
+    editingId = null;
+    currentType = "expense";
+
+    amount.value = "";
+    date.value = today();
+    note.value = "";
+    payment.value = "gpay";
+
+    document.getElementById("deleteBtn").style.display = "none";
+    document.getElementById("formTitle").textContent = "Add Transaction";
+  }
+
+  updateButtons();
+  updateCategories();
+
+  if (transaction) {
+    category.value = transaction.category;
+  }
+}
+
+function updateButtons() {
+  document.getElementById("expenseBtn")
+    .classList.toggle("active", currentType === "expense");
+
+  document.getElementById("incomeBtn")
+    .classList.toggle("active", currentType === "income");
+}
+
+function closeForm() {
+  modal.style.display = "none";
+}
+
+function save() {
+  const value = Number(amount.value);
+
+  if (!value || value <= 0) {
+    alert("Please enter a valid amount.");
+    return;
+  }
+
+  const item = {
+    id: editingId || Date.now(),
+    type: currentType,
+    amount: value,
+    category: category.value,
+    payment: payment.value,
+    date: date.value || today(),
+    note: note.value.trim()
+  };
+
+  if (editingId) {
+    transactions = transactions.map(t =>
+      t.id === editingId ? item : t
+    );
+  } else {
+    transactions.push(item);
+  }
+
+  localStorage.setItem(
+    "expensesData",
+    JSON.stringify(transactions)
+  );
+
+  closeForm();
+  render();
+}
+
+function removeTransaction() {
+  if (!editingId) return;
+
+  if (confirm("Delete this transaction?")) {
+    transactions = transactions.filter(t => t.id !== editingId);
+
+    localStorage.setItem(
+      "expensesData",
+      JSON.stringify(transactions)
+    );
+
+    closeForm();
+    render();
+  }
+}
+
+function render() {
+  const now = new Date();
+
+  document.getElementById("monthName").
