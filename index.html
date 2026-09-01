@@ -4,366 +4,143 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Thomas's Tracker</title>
-
 <style>
 *{box-sizing:border-box}
+body{margin:0;background:#111;color:#eee;font-family:Arial,sans-serif}
+.app{max-width:620px;margin:auto;padding:24px 16px 50px}
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+h1{margin:0;font-size:28px}
+.month{margin-top:5px;color:#888;font-size:14px}
+.monthNav{display:flex;gap:6px}
+.monthNav button{width:40px;height:40px;border:1px solid #292929;border-radius:12px;background:#1b1b1b;color:#eee;font-size:22px}
 
-body{
-  margin:0;
-  background:#111;
-  color:#eee;
-  font-family:Arial,sans-serif;
-}
-
-.app{
-  max-width:620px;
-  margin:auto;
-  padding:24px 16px 40px;
-}
-
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:26px;
-}
-
-h1{
-  margin:0;
-  font-size:28px;
-  letter-spacing:-.8px;
-}
-
-.month{
-  margin-top:5px;
-  color:#888;
-  font-size:14px;
-}
-
-.monthNav{
-  display:flex;
-  gap:6px;
-}
-
-.monthNav button{
-  width:40px;
-  height:40px;
-  border:1px solid #292929;
-  border-radius:12px;
-  background:#1b1b1b;
-  color:#eee;
-  font-size:22px;
-}
-
-.balanceBox{
-  background:#1c1c1c;
-  border:1px solid #292929;
-  border-radius:20px;
-  padding:20px;
-  margin-bottom:10px;
-}
-
-.balanceLabel{
-  color:#888;
-  font-size:13px;
-}
-
-.balanceValue{
-  font-size:34px;
-  font-weight:bold;
-  margin-top:5px;
-  letter-spacing:-1px;
-}
-
-.moneyRow{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.moneyBox{
-  background:#1c1c1c;
-  border:1px solid #292929;
-  border-radius:15px;
-  padding:14px;
-}
-
-.moneyBox small{
-  color:#888;
-  font-size:12px;
-}
-
-.moneyBox strong{
-  display:block;
-  margin-top:6px;
-  font-size:17px;
-}
-
+.balanceBox,.moneyBox,.dailyBox,.category,.empty,.tx{background:#191919;border:1px solid #292929}
+.balanceBox{border-radius:20px;padding:19px;margin-bottom:10px}
+.balanceLabel{color:#888;font-size:13px}
+.balanceValue{font-size:34px;font-weight:bold;margin-top:5px}
+.moneyRow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.moneyBox{border-radius:15px;padding:14px}
+.moneyBox small{color:#888;font-size:12px}
+.moneyBox strong{display:block;margin-top:6px;font-size:17px}
 .income{color:#55c98a}
 .expense{color:#ff6b6b}
 
-.add{
-  width:100%;
-  margin:15px 0 28px;
-  padding:15px;
-  border:0;
-  border-radius:15px;
-  background:#eee;
-  color:#111;
-  font-size:16px;
-  font-weight:bold;
-}
+.dailyBox{margin-top:10px;border-radius:15px;padding:14px 16px}
+.dailyTop{display:flex;justify-content:space-between;align-items:center}
+.dailyLeft small,.dailyRight{color:#888;font-size:12px}
+.dailyLeft strong{display:block;margin-top:5px;font-size:21px}
+.dailyRight{text-align:right}
+.dailyRight strong{display:block;color:#eee;font-size:12px;margin-top:4px}
+.dailyBox.over{border-color:#8b3030;background:#351818}
+.dailyEdit{margin-top:10px;width:100%;padding:9px;border:1px solid #333;border-radius:10px;background:#222;color:#ddd}
 
-.sectionTitle{
-  font-size:17px;
-  font-weight:bold;
-  margin:22px 0 12px;
-}
+.add{width:100%;margin:15px 0 27px;padding:15px;border:0;border-radius:15px;background:#eee;color:#111;font-size:16px;font-weight:bold}
+.sectionTitle{font-size:17px;font-weight:bold;margin:22px 0 12px}
+.dayTitle{color:#777;font-size:11px;font-weight:bold;margin:18px 4px 8px;text-transform:uppercase;letter-spacing:.5px}
 
-.dayTitle{
-  color:#777;
-  font-size:11px;
-  font-weight:bold;
-  margin:18px 4px 8px;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-}
-
-.tx{
-  background:#191919;
-  border:1px solid #292929;
-  border-left:4px solid #555;
-  border-radius:14px;
-  padding:13px;
-  margin-bottom:8px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  cursor:pointer;
-}
-
+.tx{border-left:4px solid #555;border-radius:14px;padding:13px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .tx.cash{border-left-color:#55c98a}
 .tx.gpay{border-left-color:#5ca9ff}
 .tx.debit{border-left-color:#e4c44f}
+.tx.savings{border-left-color:#b88cff}
+.tx.transfer{border-left-color:#aaa}
+.txLeft{min-width:0}
+.txName{font-weight:bold;font-size:15px}
+.txNote{color:#777;font-size:12px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:235px}
+.txAmount{font-weight:bold;white-space:nowrap;font-size:15px}
+.pay{font-size:14px;margin-left:4px}
 
-.txLeft{
-  min-width:0;
-}
+.category{border-radius:13px;padding:12px 14px;margin-bottom:8px}
+.catRow{display:flex;justify-content:space-between;font-size:14px}
+.bar{height:5px;background:#292929;border-radius:5px;margin-top:8px;overflow:hidden}
+.fill{height:100%;background:#777;border-radius:5px}
+.empty{border-radius:14px;padding:23px;text-align:center;color:#777}
 
-.txName{
-  font-weight:bold;
-  font-size:15px;
-}
+.modal{display:none;position:fixed;inset:0;background:#000b;align-items:flex-end;justify-content:center;z-index:10}
+.sheet{width:100%;max-width:620px;max-height:92vh;overflow-y:auto;background:#181818;border:1px solid #292929;border-radius:22px 22px 0 0;padding:20px 16px 28px}
+.sheet h2{margin:0 0 18px;font-size:21px}
+.switch{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:16px}
+.switch button{padding:12px 5px;border:1px solid #333;border-radius:12px;background:#222;color:#aaa;font-size:13px}
+.switch .active{background:#eee;color:#111}
+label{display:block;color:#888;font-size:13px;margin:12px 0 6px}
+input,select{width:100%;padding:13px;border:1px solid #333;border-radius:12px;background:#222;color:#eee;font-size:16px}
+input::placeholder{color:#666}
 
-.txNote{
-  color:#777;
-  font-size:12px;
-  margin-top:4px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  max-width:230px;
-}
+.salaryOptions{display:none;background:#202020;border:1px solid #333;border-radius:13px;padding:13px;margin-top:10px}
+.checkRow{display:flex;align-items:center;gap:9px;color:#ddd;font-size:14px}
+.checkRow input{width:18px;height:18px;margin:0}
+.subField{display:none}
+.info,.dailyPreview{background:#202020;border:1px solid #303030;border-radius:12px;padding:11px;margin-top:10px;color:#aaa;font-size:12px;line-height:1.5}
+.dailyPreview{display:none}
+.dailyPreview strong{color:#eee;font-size:16px}
 
-.txAmount{
-  font-weight:bold;
-  white-space:nowrap;
-  font-size:15px;
-}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}
+.actions button{padding:13px;border:0;border-radius:12px;font-size:15px}
+.cancel{background:#292929;color:#eee}
+.save{background:#eee;color:#111}
+.delete{display:none;width:100%;margin-top:8px;padding:12px;border:0;border-radius:12px;background:#4a2020;color:#ff8b8b}
 
-.pay{
-  font-size:14px;
-  margin-left:4px;
-}
-
-.category{
-  background:#191919;
-  border:1px solid #292929;
-  border-radius:13px;
-  padding:12px 14px;
-  margin-bottom:8px;
-}
-
-.catRow{
-  display:flex;
-  justify-content:space-between;
-  font-size:14px;
-}
-
-.bar{
-  height:5px;
-  background:#292929;
-  border-radius:5px;
-  margin-top:8px;
-  overflow:hidden;
-}
-
-.fill{
-  height:100%;
-  background:#777;
-  border-radius:5px;
-}
-
-.empty{
-  background:#191919;
-  border:1px solid #292929;
-  border-radius:14px;
-  padding:23px;
-  text-align:center;
-  color:#777;
-}
-
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#000b;
-  align-items:flex-end;
-  justify-content:center;
-  z-index:10;
-}
-
-.sheet{
-  width:100%;
-  max-width:620px;
-  background:#181818;
-  border:1px solid #292929;
-  border-radius:22px 22px 0 0;
-  padding:20px 16px 28px;
-}
-
-.sheet h2{
-  margin:0 0 18px;
-  font-size:21px;
-}
-
-.switch{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-bottom:16px;
-}
-
-.switch button{
-  padding:12px;
-  border:1px solid #333;
-  border-radius:12px;
-  background:#222;
-  color:#aaa;
-  font-size:14px;
-}
-
-.switch .active{
-  background:#eee;
-  color:#111;
-}
-
-label{
-  display:block;
-  color:#888;
-  font-size:13px;
-  margin:12px 0 6px;
-}
-
-input,select{
-  width:100%;
-  padding:13px;
-  border:1px solid #333;
-  border-radius:12px;
-  background:#222;
-  color:#eee;
-  font-size:16px;
-}
-
-input::placeholder{
-  color:#666;
-}
-
-.actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:18px;
-}
-
-.actions button{
-  padding:13px;
-  border:0;
-  border-radius:12px;
-  font-size:15px;
-}
-
-.cancel{
-  background:#292929;
-  color:#eee;
-}
-
-.save{
-  background:#eee;
-  color:#111;
-}
-
-.delete{
-  display:none;
-  width:100%;
-  margin-top:8px;
-  padding:12px;
-  border:0;
-  border-radius:12px;
-  background:#4a2020;
-  color:#ff8b8b;
-}
+.settings{font-size:12px;color:#777;text-align:center;margin-top:18px}
+.settings button{border:0;background:none;color:#aaa;text-decoration:underline}
 
 @media(max-width:380px){
-  .app{
-    padding-left:12px;
-    padding-right:12px;
-  }
-
-  .balanceValue{
-    font-size:30px;
-  }
+.app{padding-left:12px;padding-right:12px}
+.balanceValue{font-size:30px}
 }
 </style>
 </head>
 
 <body>
-
 <div class="app">
 
 <header>
-  <div>
-    <h1>Thomas's Tracker</h1>
-    <div class="month" id="month"></div>
-  </div>
-
-  <div class="monthNav">
-    <button id="prev" type="button">‹</button>
-    <button id="next" type="button">›</button>
-  </div>
+<div>
+<h1>Thomas's Tracker</h1>
+<div class="month" id="month"></div>
+</div>
+<div class="monthNav">
+<button id="prev">‹</button>
+<button id="next">›</button>
+</div>
 </header>
 
 <div class="balanceBox">
-  <div class="balanceLabel">Balance</div>
-  <div class="balanceValue" id="balance">₹0</div>
+<div class="balanceLabel">Balance</div>
+<div class="balanceValue" id="balance">₹0</div>
 </div>
 
 <div class="moneyRow">
-
-  <div class="moneyBox">
-    <small>Income</small>
-    <strong class="income" id="income">₹0</strong>
-  </div>
-
-  <div class="moneyBox">
-    <small>Spent</small>
-    <strong class="expense" id="expenses">₹0</strong>
-  </div>
-
+<div class="moneyBox">
+<small>Income</small>
+<strong class="income" id="income">₹0</strong>
 </div>
 
-<button class="add" id="add" type="button">
-  ＋ Add Transaction
+<div class="moneyBox">
+<small>Spent</small>
+<strong class="expense" id="expenses">₹0</strong>
+</div>
+</div>
+
+<div class="dailyBox" id="dailyBox">
+<div class="dailyTop">
+<div class="dailyLeft">
+<small>Daily Limit</small>
+<strong id="dailyAmount">—</strong>
+</div>
+
+<div class="dailyRight">
+Today's status
+<strong id="dailyDate">—</strong>
+</div>
+</div>
+
+<button class="dailyEdit" id="editDaily">
+Update Daily Limit
+</button>
+</div>
+
+<button class="add" id="add">
+＋ Add Transaction
 </button>
 
 <div class="sectionTitle">Recent transactions</div>
@@ -372,65 +149,109 @@ input::placeholder{
 <div class="sectionTitle">Your spending on</div>
 <div id="categories"></div>
 
+<div class="settings">
+Starting balance:
+<span id="startDisplay">₹0</span>
+·
+<button id="setStart">Set / change</button>
+</div>
+
 </div>
 
 <div class="modal" id="modal">
-
 <div class="sheet">
 
 <h2 id="formTitle">Add Transaction</h2>
 
 <div class="switch">
-  <button id="expenseType" class="active" type="button">
-    Expense
-  </button>
-
-  <button id="incomeType" type="button">
-    Income
-  </button>
+<button id="expenseType" class="active">Expense</button>
+<button id="incomeType">Income</button>
+<button id="transferType">Transfer</button>
 </div>
 
 <label>Amount</label>
-<input
-  id="amount"
-  type="number"
-  min="0"
-  step="0.01"
-  placeholder="₹ 0"
->
+<input id="amount" type="number" min="0" step="0.01" placeholder="₹ 0">
+
+<div id="normalFields">
 
 <label id="catLabel">Category</label>
 <select id="category"></select>
 
 <label>Payment method</label>
 <select id="payment">
-  <option value="cash">💵 Cash</option>
-  <option value="gpay">📱 GPay</option>
-  <option value="debit">💳 Debit Card</option>
+<option value="cash">💵 Cash</option>
+<option value="gpay">📱 GPay</option>
+<option value="debit">💳 Debit Card</option>
 </select>
+
+</div>
+
+<div id="transferFields" style="display:none">
+
+<label>From</label>
+<select id="fromAccount">
+<option value="cash">💵 Cash</option>
+<option value="gpay">📱 GPay</option>
+<option value="debit">💳 Debit Card</option>
+<option value="savings">🔒 Savings</option>
+</select>
+
+<label>To</label>
+<select id="toAccount">
+<option value="gpay">📱 GPay</option>
+<option value="cash">💵 Cash</option>
+<option value="debit">💳 Debit Card</option>
+<option value="savings">🔒 Savings</option>
+</select>
+
+<div class="info">
+Transfers move money between accounts and are not counted as spending.
+Moving money to Savings reduces your Balance.
+</div>
+
+</div>
+
+<div class="salaryOptions" id="salaryOptions">
+
+<div class="checkRow">
+<input type="checkbox" id="calculateLimit">
+<span>Calculate Daily Limit</span>
+</div>
+
+<div class="subField" id="savingsField">
+
+<label>Savings</label>
+<input id="savings" type="number" min="0" step="0.01" placeholder="₹ 0">
+
+</div>
+
+<div class="dailyPreview" id="dailyPreview">
+
+This salary will set the Daily Limit for the
+<b>next salary cycle</b>.
+
+<br><br>
+
+Calculated Daily Limit:
+<strong id="previewValue">₹0</strong>
+
+</div>
+
+</div>
 
 <label>Date</label>
 <input id="date" type="date">
 
 <label>Note (optional)</label>
-<input
-  id="note"
-  type="text"
-  placeholder="What was it for?"
->
+<input id="note" type="text" placeholder="What was it for?">
 
 <div class="actions">
-  <button class="cancel" id="cancel" type="button">
-    Cancel
-  </button>
-
-  <button class="save" id="save" type="button">
-    Save
-  </button>
+<button class="cancel" id="cancel">Cancel</button>
+<button class="save" id="save">Save</button>
 </div>
 
-<button class="delete" id="delete" type="button">
-  Delete transaction
+<button class="delete" id="delete">
+Delete transaction
 </button>
 
 </div>
@@ -459,17 +280,29 @@ const incomeCats=[
 "💼 Salary",
 "💰 Other Income",
 "↩️ Refund",
-"📦 Other"
+"📦 Other Income"
 ];
 
 const payEmoji={
-  cash:"💵",
-  gpay:"📱",
-  debit:"💳"
+cash:"💵",
+gpay:"📱",
+debit:"💳"
+};
+
+const accountName={
+cash:"Cash",
+gpay:"GPay",
+debit:"Debit Card",
+savings:"Savings"
 };
 
 let data=JSON.parse(
-  localStorage.getItem("moneyTracker")||"[]"
+localStorage.getItem("moneyTracker")||"[]"
+);
+
+let settings=JSON.parse(
+localStorage.getItem("moneyTrackerSettings")||
+'{"startingBalance":0}'
 );
 
 let type="expense";
@@ -479,533 +312,945 @@ let viewDate=new Date();
 const $=id=>document.getElementById(id);
 
 function today(){
-
-  const d=new Date();
-
-  return d.getFullYear()+"-"+
-    String(d.getMonth()+1).padStart(2,"0")+"-"+
-    String(d.getDate()).padStart(2,"0");
+let d=new Date();
+return d.getFullYear()+"-"+
+String(d.getMonth()+1).padStart(2,"0")+"-"+
+String(d.getDate()).padStart(2,"0");
 }
 
 function money(n){
-
-  return "₹"+Number(n).toLocaleString(
-    "en-IN",
-    {maximumFractionDigits:2}
-  );
+return "₹"+Number(n||0).toLocaleString(
+"en-IN",
+{maximumFractionDigits:2}
+);
 }
 
 function safe(s){
+return String(s||"").replace(
+/[&<>"']/g,
+c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[c])
+);
+}
 
-  return String(s).replace(/[&<>"']/g,c=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[c]));
+function dateText(s){
+return new Date(s+"T00:00:00")
+.toLocaleDateString(
+"en-IN",
+{
+weekday:"long",
+day:"numeric",
+month:"short"
+}
+);
 }
 
 function setCategories(selected){
 
-  const list=
-    type==="expense"?expenseCats:incomeCats;
+let list=
+type==="expense"
+?expenseCats
+:incomeCats;
 
-  $("category").innerHTML="";
+$("category").innerHTML="";
 
-  list.forEach(x=>{
+list.forEach(x=>{
+let o=document.createElement("option");
+o.value=x;
+o.textContent=x;
+$("category").appendChild(o);
+});
 
-    const o=document.createElement("option");
+$("catLabel").textContent=
+type==="expense"
+?"Category"
+:"Income source";
 
-    o.value=x;
-    o.textContent=x;
+if(selected)
+$("category").value=selected;
+}
 
-    $("category").appendChild(o);
+function isSalary(){
+return type==="income" &&
+$("category").value==="💼 Salary";
+}
 
-  });
+function updateForm(){
 
-  $("catLabel").textContent=
-    type==="expense"?
-    "Category":
-    "Income source";
+let tr=type==="transfer";
 
-  if(selected)
-    $("category").value=selected;
+$("normalFields").style.display=
+tr?"none":"block";
+
+$("transferFields").style.display=
+tr?"block":"none";
+
+$("salaryOptions").style.display=
+isSalary()?"block":"none";
+
+}
+
+function activeButtons(){
+
+$("expenseType").classList.toggle(
+"active",
+type==="expense"
+);
+
+$("incomeType").classList.toggle(
+"active",
+type==="income"
+);
+
+$("transferType").classList.toggle(
+"active",
+type==="transfer"
+);
+
 }
 
 function openForm(t){
 
-  $("modal").style.display="flex";
+$("modal").style.display="flex";
 
-  if(t){
+editId=t?t.id:null;
 
-    editId=t.id;
-    type=t.type;
+type=t?t.type:"expense";
 
-    $("formTitle").textContent=
-      "Edit Transaction";
+$("formTitle").textContent=
+t
+?"Edit Transaction"
+:"Add Transaction";
 
-    $("amount").value=t.amount;
-    $("date").value=t.date;
-    $("note").value=t.note||"";
-    $("payment").value=t.payment;
+$("amount").value=
+t?t.amount:"";
 
-    $("delete").style.display="block";
+$("date").value=
+t?t.date:today();
 
-    setCategories(t.category);
+$("note").value=
+t?t.note||"":"";
 
-  }else{
+if(t&&t.type==="transfer"){
 
-    editId=null;
-    type="expense";
+$("fromAccount").value=
+t.from||"gpay";
 
-    $("formTitle").textContent=
-      "Add Transaction";
+$("toAccount").value=
+t.to||"savings";
 
-    $("amount").value="";
-    $("date").value=today();
-    $("note").value="";
-    $("payment").value="gpay";
+}else{
 
-    $("delete").style.display="none";
+$("payment").value=
+t?t.payment||"gpay":"gpay";
 
-    setCategories();
-  }
+setCategories(
+t?t.category:null
+);
 
-  $("expenseType").classList.toggle(
-    "active",
-    type==="expense"
-  );
+}
 
-  $("incomeType").classList.toggle(
-    "active",
-    type==="income"
-  );
+$("delete").style.display=
+t?"block":"none";
+
+activeButtons();
+updateForm();
+
+$("calculateLimit").checked=
+!!(t&&t.calculateLimit);
+
+$("savings").value=
+t&&t.savings
+?t.savings
+:"";
+
+$("savingsField").style.display=
+isSalary()&&$("calculateLimit").checked
+?"block"
+:"none";
+
+preview();
+
 }
 
 function closeForm(){
+$("modal").style.display="none";
+}
 
-  $("modal").style.display="none";
+function nextMonthDate(s){
+
+let d=new Date(
+s+"T00:00:00"
+);
+
+d.setMonth(d.getMonth()+1);
+
+return d;
+}
+
+function cycleDays(s){
+
+return Math.round(
+(
+nextMonthDate(s)-
+new Date(s+"T00:00:00")
+)/86400000
+);
+
+}
+
+function preview(){
+
+if(
+!isSalary()||
+!$("calculateLimit").checked
+){
+
+$("dailyPreview").style.display="none";
+
+return;
+}
+
+let spend=Math.max(
+0,
+(Number($("amount").value)||0)-
+(Number($("savings").value)||0)
+);
+
+$("previewValue").textContent=
+money(
+spend/
+cycleDays(
+$("date").value||today()
+)
+);
+
+$("dailyPreview").style.display="block";
+
 }
 
 function save(){
 
-  const value=
-    Number($("amount").value);
+let amount=
+Number($("amount").value);
 
-  if(!value||value<=0){
+if(!amount||amount<=0){
 
-    alert("Please enter a valid amount.");
+alert("Please enter a valid amount.");
 
-    return;
-  }
+return;
+}
 
-  const item={
+let item;
 
-    id:editId||Date.now(),
+if(type==="transfer"){
 
-    type:type,
+let from=$("fromAccount").value;
+let to=$("toAccount").value;
 
-    amount:value,
+if(from===to){
 
-    category:$("category").value,
+alert(
+"From and To accounts must be different."
+);
 
-    payment:$("payment").value,
+return;
+}
 
-    date:$("date").value||today(),
+item={
+id:editId||Date.now(),
+type,
+amount,
+from,
+to,
+date:$("date").value||today(),
+note:$("note").value.trim()
+};
 
-    note:$("note").value.trim()
+}else{
 
-  };
+let savings=0;
+let calc=false;
 
-  if(editId){
+if(isSalary()){
 
-    data=data.map(x=>
-      x.id===editId?item:x
-    );
+calc=
+$("calculateLimit").checked;
 
-  }else{
+if(calc){
 
-    data.push(item);
+savings=
+Number($("savings").value)||0;
 
-  }
+if(savings>amount){
 
-  localStorage.setItem(
-    "moneyTracker",
-    JSON.stringify(data)
-  );
+alert(
+"Savings cannot be greater than salary."
+);
 
-  closeForm();
+return;
+}
 
-  render();
+}
+
+}
+
+let old=
+editId
+?data.find(x=>x.id===editId)
+:null;
+
+item={
+id:editId||Date.now(),
+type,
+amount,
+category:$("category").value,
+payment:$("payment").value,
+date:$("date").value||today(),
+note:$("note").value.trim(),
+savings,
+calculateLimit:calc,
+dailyOverride:
+old&&old.dailyOverride!=null
+?old.dailyOverride
+:null
+};
+
+}
+
+if(editId){
+
+data=data.map(
+x=>x.id===editId
+?item
+:x
+);
+
+}else{
+
+data.push(item);
+
+}
+
+localStorage.setItem(
+"moneyTracker",
+JSON.stringify(data)
+);
+
+closeForm();
+render();
+
 }
 
 function remove(){
 
-  if(!editId)return;
+if(
+editId&&
+confirm("Delete transaction?")
+){
 
-  if(confirm("Delete this transaction?")){
+data=data.filter(
+x=>x.id!==editId
+);
 
-    data=data.filter(
-      x=>x.id!==editId
-    );
+localStorage.setItem(
+"moneyTracker",
+JSON.stringify(data)
+);
 
-    localStorage.setItem(
-      "moneyTracker",
-      JSON.stringify(data)
-    );
+closeForm();
+render();
 
-    closeForm();
-
-    render();
-  }
 }
 
-function dateText(s){
-
-  const d=
-    new Date(s+"T00:00:00");
-
-  return d.toLocaleDateString(
-    "en-IN",
-    {
-      weekday:"long",
-      day:"numeric",
-      month:"short"
-    }
-  );
 }
 
-function monthText(){
+function latestSalaryBefore(date){
 
-  return viewDate.toLocaleDateString(
-    "en-IN",
-    {
-      month:"long",
-      year:"numeric"
-    }
-  );
+return data
+.filter(
+t=>
+t.type==="income"&&
+t.category==="💼 Salary"&&
+t.calculateLimit&&
+t.date<date
+)
+.sort(
+(a,b)=>b.date.localeCompare(a.date)
+)[0]||null;
+
+}
+
+function planFor(date){
+
+let s=
+latestSalaryBefore(date);
+
+if(!s)
+return null;
+
+let spend=Math.max(
+0,
+Number(s.amount)-
+Number(s.savings||0)
+);
+
+let daily=
+s.dailyOverride!=null
+?Number(s.dailyOverride)
+:spend/cycleDays(s.date);
+
+return{
+salary:s,
+daily
+};
+
+}
+
+function dailyStatus(date){
+
+let p=planFor(date);
+
+if(!p)
+return null;
+
+let expenses=
+data.filter(
+t=>
+t.type==="expense"&&
+t.date>p.salary.date&&
+t.date<=date
+);
+
+let spentToday=
+expenses
+.filter(t=>t.date===date)
+.reduce(
+(a,t)=>a+Number(t.amount),
+0
+);
+
+return{
+limit:p.daily,
+available:p.daily-spentToday
+};
+
+}
+
+function renderDaily(){
+
+let st=dailyStatus(today());
+
+if(!st){
+
+$("dailyAmount").textContent="—";
+$("dailyDate").textContent="No salary plan";
+$("dailyBox").classList.remove("over");
+
+return;
+}
+
+$("dailyAmount").textContent=
+money(st.available);
+
+$("dailyDate").textContent=
+st.available<0
+?"Over limit"
+:"Today";
+
+$("dailyBox").classList.toggle(
+"over",
+st.available<0
+);
+
+}
+
+function cumulativeBalance(endDate){
+
+let total=
+Number(settings.startingBalance)||0;
+
+data
+.filter(t=>t.date<=endDate)
+.forEach(t=>{
+
+if(t.type==="income"){
+
+total+=
+Number(t.amount)-
+Number(t.savings||0);
+
+}
+
+else if(t.type==="expense"){
+
+total-=Number(t.amount);
+
+}
+
+else if(t.type==="transfer"){
+
+if(
+t.from!=="savings"&&
+t.to==="savings"
+){
+
+total-=Number(t.amount);
+
+}
+
+if(
+t.from==="savings"&&
+t.to!=="savings"
+){
+
+total+=Number(t.amount);
+
+}
+
+}
+
+});
+
+return total;
+
 }
 
 function render(){
 
-  $("month").textContent=
-    monthText();
+let y=viewDate.getFullYear();
+let m=viewDate.getMonth();
 
-  const y=
-    viewDate.getFullYear();
+let first=
+new Date(y,m,1);
 
-  const m=
-    viewDate.getMonth();
+let last=
+new Date(y,m+1,0);
 
-  const monthly=data.filter(t=>{
+let monthly=
+data.filter(t=>{
 
-    const d=
-      new Date(t.date+"T00:00:00");
+let d=
+new Date(
+t.date+"T00:00:00"
+);
 
-    return d.getFullYear()===y &&
-           d.getMonth()===m;
+return d>=first&&d<=last;
 
-  });
+});
 
-  const inc=
-    monthly
-      .filter(t=>t.type==="income")
-      .reduce(
-        (a,t)=>a+Number(t.amount),
-        0
-      );
+$("month").textContent=
+viewDate.toLocaleDateString(
+"en-IN",
+{
+month:"long",
+year:"numeric"
+}
+);
 
-  const exp=
-    monthly
-      .filter(t=>t.type==="expense")
-      .reduce(
-        (a,t)=>a+Number(t.amount),
-        0
-      );
+$("income").textContent=
+money(
+monthly
+.filter(t=>t.type==="income")
+.reduce(
+(a,t)=>
+a+
+Number(t.amount)-
+Number(t.savings||0),
+0
+)
+);
 
-  $("income").textContent=
-    money(inc);
+$("expenses").textContent=
+money(
+monthly
+.filter(t=>t.type==="expense")
+.reduce(
+(a,t)=>a+Number(t.amount),
+0
+)
+);
 
-  $("expenses").textContent=
-    money(exp);
+let endDate=
+last.getFullYear()+"-"+
+String(last.getMonth()+1).padStart(2,"0")+"-"+
+String(last.getDate()).padStart(2,"0");
 
-  $("balance").textContent=
-    money(inc-exp);
+$("balance").textContent=
+money(
+cumulativeBalance(endDate)
+);
 
-  renderTransactions();
+$("startDisplay").textContent=
+money(settings.startingBalance);
 
-  renderCategories(monthly);
+renderDaily();
+renderTransactions();
+renderCategories(monthly);
+
 }
 
 function renderTransactions(){
 
-  const box=
-    $("transactions");
+let box=$("transactions");
 
-  const list=[...data]
-    .sort(
-      (a,b)=>
-        b.date.localeCompare(a.date) ||
-        b.id-a.id
-    )
-    .slice(0,30);
+let list=
+[...data]
+.sort(
+(a,b)=>
+b.date.localeCompare(a.date)||
+b.id-a.id
+)
+.slice(0,40);
 
-  if(!list.length){
+if(!list.length){
 
-    box.innerHTML=
-      '<div class="empty">'+
-      'No transactions yet.'+
-      '</div>';
+box.innerHTML=
+'<div class="empty">No transactions yet.</div>';
 
-    return;
-  }
+return;
+}
 
-  box.innerHTML="";
+box.innerHTML="";
 
-  let last="";
+let last="";
 
-  list.forEach(t=>{
+list.forEach(t=>{
 
-    if(t.date!==last){
+if(t.date!==last){
 
-      const d=
-        document.createElement("div");
+let d=
+document.createElement("div");
 
-      d.className="dayTitle";
+d.className="dayTitle";
+d.textContent=dateText(t.date);
 
-      d.textContent=
-        dateText(t.date);
+box.appendChild(d);
 
-      box.appendChild(d);
+last=t.date;
 
-      last=t.date;
-    }
+}
 
-    const row=
-      document.createElement("div");
+let row=
+document.createElement("div");
 
-    row.className=
-      "tx "+t.payment;
+row.className=
+"tx "+
+(
+t.type==="transfer"
+?"transfer"
+:t.payment||"gpay"
+);
 
-    const sign=
-      t.type==="income"?
-      "+":
-      "-";
+if(t.type==="transfer"){
 
-    const cls=
-      t.type==="income"?
-      "income":
-      "expense";
+let f={
+cash:"💵",
+gpay:"📱",
+debit:"💳",
+savings:"🔒"
+}[t.from];
 
-    row.innerHTML=
+let to={
+cash:"💵",
+gpay:"📱",
+debit:"💳",
+savings:"🔒"
+}[t.to];
 
-      '<div class="txLeft">'+
+row.innerHTML=
+'<div class="txLeft">'+
+'<div class="txName">🔄 Transfer</div>'+
+'<div class="txNote">'+
+f+" "+
+accountName[t.from]+
+" → "+
+to+" "+
+accountName[t.to]+
+(t.note
+?" · "+safe(t.note)
+:"")+
+'</div></div>'+
+'<div class="txAmount">'+
+money(t.amount)+
+'</div>';
 
-        '<div class="txName">'+
-          safe(t.category)+
-        '</div>'+
+}else{
 
-        (t.note?
-          '<div class="txNote">'+
-          safe(t.note)+
-          '</div>':
-          '')+
+let sign=
+t.type==="income"
+?"+"
+:"-";
 
-      '</div>'+
+let cls=
+t.type==="income"
+?"income"
+:"expense";
 
-      '<div class="txAmount '+cls+'">'+
+let note=t.note||"";
 
-        sign+
-        money(t.amount)+
+if(
+t.type==="income"&&
+t.category==="💼 Salary"&&
+t.savings
+){
 
-        ' <span class="pay">'+
-        payEmoji[t.payment]+
-        '</span>'+
+note=
+(note
+?note+" · "
+:"")+
+money(t.savings)+
+" savings";
 
-      '</div>';
+}
 
-    row.addEventListener(
-      "click",
-      ()=>openForm(t)
-    );
+row.innerHTML=
+'<div class="txLeft">'+
+'<div class="txName">'+
+safe(t.category)+
+'</div>'+
+(
+note
+?'<div class="txNote">'+
+safe(note)+
+'</div>'
+:""
+)+
+'</div>'+
+'<div class="txAmount '+cls+'">'+
+sign+
+money(t.amount)+
+' <span class="pay">'+
+(payEmoji[t.payment]||"")+
+'</span></div>';
 
-    box.appendChild(row);
+}
 
-  });
+row.onclick=()=>openForm(t);
+
+box.appendChild(row);
+
+});
+
 }
 
 function renderCategories(monthly){
 
-  const box=
-    $("categories");
+let box=$("categories");
 
-  const expenses=
-    monthly.filter(
-      t=>t.type==="expense"
-    );
+let ex=
+monthly.filter(
+t=>t.type==="expense"
+);
 
-  if(!expenses.length){
+if(!ex.length){
 
-    box.innerHTML=
-      '<div class="empty">'+
-      'Your spending breakdown will appear here.'+
-      '</div>';
+box.innerHTML=
+'<div class="empty">Your spending breakdown will appear here.</div>';
 
-    return;
-  }
-
-  const totals={};
-
-  expenses.forEach(t=>{
-
-    totals[t.category]=
-      (totals[t.category]||0)+
-      Number(t.amount);
-
-  });
-
-  const list=
-    Object.entries(totals)
-      .sort((a,b)=>b[1]-a[1]);
-
-  const highest=
-    list[0][1];
-
-  box.innerHTML="";
-
-  list.forEach(([name,value])=>{
-
-    const row=
-      document.createElement("div");
-
-    row.className="category";
-
-    row.innerHTML=
-
-      '<div class="catRow">'+
-
-        '<span>'+
-        safe(name)+
-        '</span>'+
-
-        '<strong>'+
-        money(value)+
-        '</strong>'+
-
-      '</div>'+
-
-      '<div class="bar">'+
-
-        '<div class="fill" style="width:'+
-        Math.min(
-          100,
-          value/highest*100
-        )+
-        '%"></div>'+
-
-      '</div>';
-
-    box.appendChild(row);
-
-  });
+return;
 }
 
-$("add").addEventListener(
-  "click",
-  ()=>openForm()
+let totals={};
+
+ex.forEach(t=>{
+
+totals[t.category]=
+(totals[t.category]||0)+
+Number(t.amount);
+
+});
+
+let list=
+Object.entries(totals)
+.sort((a,b)=>b[1]-a[1]);
+
+let high=list[0][1];
+
+box.innerHTML="";
+
+list.forEach(
+([name,v])=>{
+
+let r=
+document.createElement("div");
+
+r.className="category";
+
+r.innerHTML=
+'<div class="catRow">'+
+'<span>'+safe(name)+'</span>'+
+'<strong>'+money(v)+'</strong>'+
+'</div>'+
+'<div class="bar">'+
+'<div class="fill" style="width:'+
+Math.min(100,v/high*100)+
+'%"></div>'+
+'</div>';
+
+box.appendChild(r);
+
+}
 );
 
-$("cancel").addEventListener(
-  "click",
-  closeForm
+}
+
+function updateDailyLimit(){
+
+let p=planFor(today());
+
+if(!p){
+
+alert(
+"Add a salary with Calculate Daily Limit enabled first."
 );
 
-$("save").addEventListener(
-  "click",
-  save
+return;
+}
+
+let value=
+prompt(
+"Enter your Daily Limit for this salary cycle:",
+String(Math.round(p.daily))
 );
 
-$("delete").addEventListener(
-  "click",
-  remove
+if(value===null)
+return;
+
+value=Number(value);
+
+if(!value||value<0){
+
+alert("Please enter a valid Daily Limit.");
+
+return;
+}
+
+p.salary.dailyOverride=value;
+
+data=data.map(
+t=>
+t.id===p.salary.id
+?p.salary
+:t
 );
 
-$("expenseType").addEventListener(
-  "click",
-  ()=>{
-
-    type="expense";
-
-    $("expenseType")
-      .classList.add("active");
-
-    $("incomeType")
-      .classList.remove("active");
-
-    setCategories();
-
-  }
+localStorage.setItem(
+"moneyTracker",
+JSON.stringify(data)
 );
-
-$("incomeType").addEventListener(
-  "click",
-  ()=>{
-
-    type="income";
-
-    $("incomeType")
-      .classList.add("active");
-
-    $("expenseType")
-      .classList.remove("active");
-
-    setCategories();
-
-  }
-);
-
-$("prev").addEventListener(
-  "click",
-  ()=>{
-
-    viewDate.setMonth(
-      viewDate.getMonth()-1
-    );
-
-    render();
-
-  }
-);
-
-$("next").addEventListener(
-  "click",
-  ()=>{
-
-    viewDate.setMonth(
-      viewDate.getMonth()+1
-    );
-
-    render();
-
-  }
-);
-
-$("modal").addEventListener(
-  "click",
-  e=>{
-
-    if(e.target===$("modal"))
-      closeForm();
-
-  }
-);
-
-setCategories();
 
 render();
 
-</script>
+}
 
-</body>
-  </html>
+$("add").onclick=
+()=>openForm();
+
+$("cancel").onclick=
+closeForm;
+
+$("save").onclick=
+save;
+
+$("delete").onclick=
+remove;
+
+$("editDaily").onclick=
+updateDailyLimit;
+
+$("expenseType").onclick=()=>{
+type="expense";
+activeButtons();
+setCategories();
+updateForm();
+};
+
+$("incomeType").onclick=()=>{
+type="income";
+activeButtons();
+setCategories();
+updateForm();
+};
+
+$("transferType").onclick=()=>{
+type="transfer";
+activeButtons();
+updateForm();
+};
+
+$("category").onchange=()=>{
+updateForm();
+preview();
+};
+
+$("calculateLimit").onchange=()=>{
+
+$("savingsField").style.display=
+$("calculateLimit").checked
+?"block"
+:"none";
+
+preview();
+
+};
+
+$("amount").oninput=preview;
+$("savings").oninput=preview;
+$("date").onchange=preview;
+
+$("prev").onclick=()=>{
+viewDate.setMonth(
+viewDate.getMonth()-1
+);
+render();
+};
+
+$("next").onclick=()=>{
+viewDate.setMonth(
+viewDate.getMonth()+1
+);
+render();
+};
+
+$("modal").onclick=e=>{
+
+if(e.target===$("modal"))
+closeForm();
+
+};
+
+$("setStart").onclick=()=>{
+
+let v=
+prompt(
+"Enter your starting balance:",
+String(
+settings.startingBalance||0
+)
+);
+
+if(v===null)
+return;
+
+v=Number(v);
+
+if(v<0||isNaN(v)){
+
+alert("Please enter a valid amount.");
+
+return;
+}
+
+settings.startingBalance=v;
+
+localStorage.setItem(
+"moneyTrackerSettings",
+JSON.stringify(settings)
+);
+  
