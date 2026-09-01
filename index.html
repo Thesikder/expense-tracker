@@ -26,14 +26,13 @@
 
 body{
   margin:0;
-  color:var(--text);
-  font-family:"Manrope",Arial,sans-serif;
   background:
-    radial-gradient(circle at 15% 10%,rgba(255,255,255,.035),transparent 24%),
-    radial-gradient(circle at 85% 70%,rgba(255,255,255,.025),transparent 25%),
+    radial-gradient(circle at 12% 18%,rgba(240,200,75,.025),transparent 22%),
+    radial-gradient(circle at 88% 72%,rgba(92,169,255,.02),transparent 25%),
     #111214;
-  min-height:100vh;
-  overflow-x:hidden;
+  color:#eee;
+  font-family:"Manrope",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
 }
 
 /* subtle finance scribbles / watermark */
@@ -53,6 +52,28 @@ body:before{
   word-spacing:22px;
 }
 
+.backgroundScribbles{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+}
+.backgroundScribbles .scribble{
+  position:absolute;
+  color:rgba(255,255,255,.018);
+  font-family:"DM Mono",monospace;
+  font-weight:500;
+  user-select:none;
+  transform:rotate(-12deg);
+}
+.backgroundScribbles .s1{left:4%;top:25%;font-size:76px;transform:rotate(-18deg)}
+.backgroundScribbles .s2{right:6%;top:12%;font-size:38px;transform:rotate(8deg)}
+.backgroundScribbles .s3{left:-2%;top:57%;font-size:26px;transform:rotate(-8deg)}
+.backgroundScribbles .s4{right:7%;top:70%;font-size:70px;transform:rotate(14deg)}
+.backgroundScribbles .s5{left:12%;bottom:7%;font-size:22px;transform:rotate(5deg)}
+.backgroundScribbles .s6{right:-1%;bottom:27%;font-size:30px;transform:rotate(-9deg)}
+.app{position:relative;z-index:1}
 .app{
   max-width:680px;
   margin:auto;
@@ -62,8 +83,8 @@ body:before{
 header{
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
+  align-items:flex-start;
+  margin-bottom:24px;
 }
 
 .brand{
@@ -74,9 +95,10 @@ header{
 }
 
 .month{
-  color:var(--muted);
-  font-size:12px;
+  color:#66676d;
   margin-top:5px;
+  font-size:10px;
+  letter-spacing:.1px;
 }
 
 .monthNav{
@@ -84,7 +106,7 @@ header{
   gap:6px;
 }
 
-.monthNav button{
+.monthNav button{transition:transform .16s ease,background .16s ease,border-color .16s ease,opacity .16s ease;}
   width:40px;
   height:40px;
   border:1px solid var(--border);
@@ -102,6 +124,13 @@ header{
   margin-bottom:10px;
 }
 
+.monthNav button:hover{
+  background:#25262a;
+  border-color:#3b3c40;
+}
+.monthNav button:active{
+  transform:scale(.94);
+}
 .card{
   background:var(--panel);
   border:1px solid var(--border);
@@ -141,7 +170,20 @@ header{
   margin-bottom:10px;
 }
 
+@keyframes balanceIn{
+  from{opacity:.35;transform:translateY(4px) scale(.985)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+.money strong{animation:balanceIn .35s ease-out}
 .money{
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+} 
+.money:hover{
+  transform:translateY(-1px);
+  border-color:#35363a;
+  box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:15px;
@@ -264,9 +306,12 @@ header{
 .add:active{transform:scale(.985)}
 
 .sectionTitle{
-  font-size:16px;
+  color:#d9d9dc;
+  font-size:12px;
   font-weight:700;
-  margin:21px 0 10px;
+  letter-spacing:-.1px;
+  margin-top:22px;
+  margin-bottom:10px;
 }
 
 .transaction{
@@ -717,6 +762,14 @@ input:focus,select:focus{outline:1px solid #888}
 </head>
 
 <body>
+<div class="backgroundScribbles" aria-hidden="true">
+  <span class="scribble s1">₹</span>
+  <span class="scribble s2">SAVE</span>
+  <span class="scribble s3">SPEND LESS</span>
+  <span class="scribble s4">%</span>
+  <span class="scribble s5">DISCIPLINE</span>
+  <span class="scribble s6">₹500</span>
+</div>
 <div class="app">
 
 <header>
@@ -1557,3 +1610,12 @@ render();
 </script>
 </body>
 </html>
+<style>
+@media(max-width:620px){
+  .app{padding:18px 13px 46px}
+  h1{font-size:17px}
+  .money strong{font-size:31px}
+  .daily{padding:15px}
+  .transaction{padding:11px 10px}
+}
+</style>
