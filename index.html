@@ -111,12 +111,13 @@ header{
 }
 
 .hero{
-  display:grid;
-  grid-template-columns:1fr 118px;
-  gap:10px;
-  margin-bottom:10px;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 118px !important;
+  column-gap:14px !important;
+  row-gap:14px !important;
+  align-items:stretch;
+  margin-bottom:16px !important;
 }
-
 button:active{transform:scale(.98)}
 .card{
   background:var(--panel);
@@ -151,18 +152,24 @@ button:active{transform:scale(.98)}
 }
 
 .moneyRow{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-bottom:10px;
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  column-gap:14px !important;
+  row-gap:14px !important;
+  margin-bottom:16px !important;
 }
-
 @keyframes balanceIn{
   from{opacity:.45;transform:translateY(3px)}
   to{opacity:1;transform:translateY(0)}
 }
 .money strong{animation:balanceIn .3s ease-out}
+.hero .card{
+  box-shadow:0 0 0 1px rgba(255,255,255,.012);
+}
 .money{
+  box-shadow:0 0 0 1px rgba(255,255,255,.018);
+
+
   background:var(--panel);
   border:1px solid var(--border);
   border-radius:15px;
@@ -447,21 +454,23 @@ button:active{transform:scale(.98)}
 
 .toggleRow{
   display:flex;
+  justify-content:center;
   background:#191a1d;
   border:1px solid var(--border);
   border-radius:12px;
   padding:4px;
-  gap:4px;
+  gap:6px;
 }
 
 .toggleRow button{
-  flex:1;
+  flex:0 0 58px;
   border:0;
   border-radius:9px;
   background:transparent;
   color:#777;
-  padding:9px 5px;
-  font-size:11px;
+  padding:8px 5px;
+  font-size:18px;
+  line-height:1;
   cursor:pointer;
   transition:.2s;
 }
@@ -822,8 +831,8 @@ input:focus,select:focus{outline:1px solid #888}
   <div class="sectionTitle" style="margin-top:0">Statistics</div>
 
   <div class="toggleRow">
-    <button type="button" id="barToggle" onclick="setChart('bar')">▥ Bar Chart</button>
-    <button type="button" id="pieToggle" onclick="setChart('pie')">◉ Pie Chart</button>
+    <button type="button" id="barToggle" onclick="setChart('bar')" aria-label="Bar chart" title="Bar chart">▥</button>
+    <button type="button" id="pieToggle" onclick="setChart('pie')" aria-label="Pie chart" title="Pie chart">◉</button>
   </div>
 
   <div class="statsMiniRow">
@@ -1052,37 +1061,87 @@ function dailyLimitForMonth(target){
    A transfer to Savings resets that day's unused allowance to the base daily limit,
    because the money was deliberately removed from spendable funds. */
 function dailyAvailableForDate(dateStr){
-  const dt=new Date(dateStr+"T12:00:00"),base=dailyLimitForMonth(monthKey(dt));
-  if(base===null||base===undefined)return null;
-  let available=Number(base);
+  const dt=new Date(dateStr+"T12:00:00");
+  const base=Number(dailyLimitForMonth(monthKey(dt)));
+  if(!Number.isFinite(base)||base<0)return null;
+
+  /*
+    Allowance ledger:
+    - Every day adds the base daily allowance.
+    - Unused money carries forward.
+    - Overspending creates a deficit which consumes future days.
+    - Displayed available allowance never goes below ₹0, but the hidden
+      ledger can be negative so a large expense can consume future days.
+  */
+  let ledger=base;
+
   for(let day=1;day<dt.getDate();day++){
-    const d=new Date(dt.getFullYear(),dt.getMonth(),day);
-    const key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(day).padStart(2,"0");
-    const spent=data.transactions.filter(t=>t.type==="expense"&&t.date===key).reduce((s,t)=>s+Number(t.amount),0);
-    const saved=data.transactions.filter(t=>t.type==="transfer"&&t.date===key&&t.to==="savings").reduce((s,t)=>s+Number(t.amount),0);
-    const leftover=Math.max(0,available-spent);
-    available=saved>0?base:base+leftover;
+    const key=dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(day).padStart(2,"0");
+
+    const spent=data.transactions
+      .filter(t=>t.type==="expense"&&t.date===key)
+      .reduce((s,t)=>s+Number(t.amount||0),0);
+
+    ledger=ledger-spent+base;
   }
-  const spentToday=data.transactions.filter(t=>t.type==="expense"&&t.date===dateStr&&t.id!==editingId).reduce((s,t)=>s+Number(t.amount),0);
-  return {limit:available,remaining:available-spentToday};
+
+  const spentToday=data.transactions
+    .filter(t=>t.type==="expense"&&t.date===dateStr&&t.id!==editingId)
+    .reduce((s,t)=>s+Number(t.amount||0),0);
+
+  const availableBeforeToday=ledger;
+  const remainingAfterToday=ledger-spentToday;
+
+  return {
+    base,
+    limit:Math.max(0,availableBeforeToday),
+    remaining:remainingAfterToday,
+    displayRemaining:Math.max(0,remainingAfterToday),
+    debt:Math.max(0,-remainingAfterToday)
+  };
 }
 
 function updateExpensePreview(){
   const box=document.getElementById("expenseLimitInfo");
   if(currentType!=="expense"){box.classList.add("hidden");return}
+
   const d=document.getElementById("date").value;
   if(!d){box.classList.add("hidden");return}
-  const r=dailyAvailableForDate(d);box.classList.remove("hidden");
+
+  const r=dailyAvailableForDate(d);
+  box.classList.remove("hidden");
+
   if(r===null){
     document.getElementById("expenseAvailable").textContent="—";
     document.getElementById("expenseAfter").textContent="No salary-based daily limit is set for this month.";
-    box.classList.remove("warning");return;
+    box.classList.remove("warning");
+    return;
   }
-  const amount=Number(document.getElementById("amount").value)||0,after=r.remaining-amount;
-  document.getElementById("expenseAvailable").textContent=money(r.remaining);
-  if(amount<=0){box.classList.remove("warning");document.getElementById("expenseAfter").textContent="Enter an amount to see what remains.";return}
-  if(after<0){box.classList.add("warning");document.getElementById("expenseAfter").textContent="After this expense: Over by "+money(Math.abs(after))}
-  else{box.classList.remove("warning");document.getElementById("expenseAfter").textContent="After this expense: "+money(after)+" remaining"}
+
+  const amount=Number(document.getElementById("amount").value)||0;
+  const available=Math.max(0,r.remaining);
+  const after=r.remaining-amount;
+
+  document.getElementById("expenseAvailable").textContent=money(available);
+
+  if(amount<=0){
+    box.classList.remove("warning");
+    document.getElementById("expenseAfter").textContent=
+      r.debt>0
+        ? "No allowance available today. Future days are being used to recover the deficit."
+        : "Enter an amount to see what remains.";
+    return;
+  }
+
+  if(after<0){
+    box.classList.add("warning");
+    document.getElementById("expenseAfter").textContent=
+      "After this expense: Over by "+money(Math.abs(after));
+  }else{
+    box.classList.remove("warning");
+    document.getElementById("expenseAfter").textContent=
+      "After this expense: "+money(after)+" remaining";
+  }
 }
 
 function saveTransaction(){
@@ -1215,26 +1274,33 @@ function renderDaily(){
     return;
   }
 
-  const spent=Math.max(0,Number(r.limit)-Number(r.remaining));
-  const percent=r.limit>0?Math.min(100,Math.max(0,(spent/r.limit)*100)):0;
+  const available=Math.max(0,r.remaining);
+  const dailyAvailable=Math.max(0,r.limit);
+  const spentToday=data.transactions
+    .filter(t=>t.type==="expense"&&t.date===today())
+    .reduce((s,t)=>s+Number(t.amount||0),0);
+  const percent=dailyAvailable>0
+    ? Math.min(100,Math.max(0,(spentToday/dailyAvailable)*100))
+    : (r.debt>0?100:0);
 
-  limitEl.textContent=money(r.limit);
-  value.textContent=r.remaining<0?money(Math.abs(r.remaining)):money(r.remaining);
-  spentEl.textContent=money(spent)+" spent";
+  limitEl.textContent=money(dailyAvailable);
+  value.textContent=money(available);
+  spentEl.textContent=money(spentToday)+" spent";
   percentEl.textContent=Math.round(percent)+"% used";
   fill.style.width=percent+"%";
 
-  if(r.remaining<0){
+  if(r.debt>0){
     value.className="remainingValue warning";
     fill.classList.add("warning");
-    badge.textContent="OVER LIMIT";
+    badge.textContent="RECOVERING";
     badge.style.color="var(--red)";
     badge.style.background="rgba(255,107,107,.08)";
-    subtitle.textContent="Today's spending is above plan";
-    status.textContent="Over by "+money(Math.abs(r.remaining));
+    subtitle.textContent="Future allowance is covering an earlier overspend";
+    status.textContent="Allowance resumes after "+money(r.debt)+" is recovered";
   }else{
     value.className="remainingValue pulse";
     fill.classList.remove("warning");
+
     if(percent>=80){
       badge.textContent="NEAR LIMIT";
       badge.style.color="#e4c44f";
@@ -1244,11 +1310,16 @@ function renderDaily(){
       badge.textContent="ON TRACK";
       badge.style.color="var(--green)";
       badge.style.background="rgba(88,208,143,.08)";
-      subtitle.textContent="You're within today's allowance";
+      subtitle.textContent="Unused allowance carries forward";
     }
-    status.textContent=money(spent)+" spent of "+money(r.limit);
+
+    status.textContent=
+      dailyAvailable>0
+        ? money(spentToday)+" spent of "+money(dailyAvailable)
+        : "No spendable allowance today";
   }
 }
+
 function closeTransactionMenus(exceptId){
   document.querySelectorAll(".txMenu.show").forEach(menu=>{
     if(menu.dataset.id!==String(exceptId)){
@@ -1586,3 +1657,54 @@ render();
 </script>
 </body>
 </html>
+<style>
+@media(max-width:620px){
+  .hero{grid-template-columns:minmax(0,1fr) 108px;gap:10px}
+  .moneyRow{gap:10px}
+  .toggleRow button{flex-basis:54px}
+}
+</style>
+
+<style>
+@media(max-width:620px){
+  .hero{
+    grid-template-columns:minmax(0,1fr) 108px;
+    column-gap:12px;
+    margin-bottom:13px;
+  }
+  .moneyRow{
+    column-gap:12px;
+    row-gap:12px;
+    margin-bottom:13px;
+  }
+}
+</style>
+
+<style id="top-card-spacing-final">
+.hero{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 118px !important;
+  column-gap:14px !important;
+  row-gap:14px !important;
+  margin-bottom:16px !important;
+}
+.moneyRow{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  column-gap:14px !important;
+  row-gap:14px !important;
+  margin-bottom:16px !important;
+}
+@media(max-width:480px){
+  .hero{
+    grid-template-columns:minmax(0,1fr) 105px !important;
+    column-gap:10px !important;
+    row-gap:10px !important;
+  }
+  .moneyRow{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    column-gap:10px !important;
+    row-gap:10px !important;
+  }
+}
+</style>
