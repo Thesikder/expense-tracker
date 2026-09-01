@@ -3,128 +3,717 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Thomas's Tracker</title>
+<meta name="theme-color" content="#111214">
+<title>DT Expense Tracker</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#111214;
+  --panel:rgba(29,30,33,.92);
+  --panel2:rgba(24,25,28,.94);
+  --border:#303136;
+  --text:#eeeeee;
+  --muted:#85868b;
+  --yellow:#f0c84b;
+  --green:#58d08f;
+  --red:#ff6b6b;
+  --blue:#69aefc;
+  --purple:#b991ff;
+}
+
 *{box-sizing:border-box}
-body{margin:0;background:#111;color:#eee;font-family:Arial,sans-serif}
-.app{max-width:620px;margin:auto;padding:24px 16px 60px}
-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
-h1{margin:0;font-size:29px}.month{color:#888;margin-top:5px;font-size:14px}
-.monthNav{display:flex;gap:6px}.monthNav button{width:42px;height:42px;border:1px solid #292929;border-radius:12px;background:#1b1b1b;color:#eee;font-size:22px}
-.card,.money,.daily,.transaction,.category,.empty{background:#1b1b1b;border:1px solid #292929}
-.card{border-radius:20px;padding:20px;margin-bottom:10px}.label{color:#888;font-size:13px}
-.balance{font-size:36px;font-weight:bold;margin-top:5px}
-.moneyRow{display:grid;grid-template-columns:1fr 1fr;gap:10px}.money{border-radius:15px;padding:15px}
-.money strong{display:block;font-size:18px;margin-top:6px}.income{color:#55c98a}.spent{color:#ff6868}
-.daily{border-radius:15px;padding:16px;margin-top:10px}.daily.over{background:#351818;border-color:#8b3030}
-.dailyTop{display:flex;justify-content:space-between;align-items:center}.dailyValue{font-size:23px;font-weight:bold;margin-top:5px}
-.dailyStatus{color:#888;font-size:12px;text-align:right}.dailyStatus strong{display:block;color:#eee;margin-top:5px}
-.update{width:100%;margin-top:12px;padding:10px;border:1px solid #333;border-radius:10px;background:#222;color:#ddd}
-.add{width:100%;margin:15px 0 28px;padding:16px;border:0;border-radius:15px;background:#eee;color:#111;font-size:17px;font-weight:bold}
-.sectionTitle{font-size:18px;font-weight:bold;margin:22px 0 12px}.day{color:#777;font-size:11px;font-weight:bold;margin:18px 4px 8px;text-transform:uppercase}
-.transaction{border-left:4px solid #777;border-radius:14px;padding:13px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.transaction.cash{border-left-color:#55c98a}.transaction.gpay{border-left-color:#5ca9ff}.transaction.debit{border-left-color:#e4c44f}.transaction.transfer{border-left-color:#b88cff}
-.txName{font-weight:bold;font-size:15px}.txNote{color:#777;font-size:12px;margin-top:4px}.txRight{text-align:right;white-space:nowrap}.txAmount{font-weight:bold}
-.delete{margin-top:6px;border:0;background:none;color:#777;font-size:11px;text-decoration:underline;padding:0;cursor:pointer}
-.empty{border-radius:14px;padding:22px;text-align:center;color:#777}
-.category{border-radius:13px;padding:13px;margin-bottom:8px}.catRow{display:flex;justify-content:space-between}.bar{height:5px;background:#292929;border-radius:5px;margin-top:8px}.fill{height:100%;background:#777;border-radius:5px}
-.starting{text-align:center;color:#777;font-size:12px;margin-top:25px}.starting button{background:none;border:0;color:#aaa;text-decoration:underline;cursor:pointer}
+
+body{
+  margin:0;
+  color:var(--text);
+  font-family:"Manrope",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,255,255,.035),transparent 24%),
+    radial-gradient(circle at 85% 70%,rgba(255,255,255,.025),transparent 25%),
+    #111214;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* subtle finance scribbles / watermark */
+body:before{
+  content:"₹   $   €   ¥     SAVE MORE     ↑     %     SPEND WISELY     ₹     BUILD YOUR FUTURE     ↓     $   €";
+  position:fixed;
+  inset:-5%;
+  z-index:-1;
+  color:rgba(255,255,255,.025);
+  font-family:"DM Mono",monospace;
+  font-size:28px;
+  line-height:3.7;
+  letter-spacing:5px;
+  transform:rotate(-12deg);
+  pointer-events:none;
+  white-space:pre-wrap;
+  word-spacing:22px;
+}
+
+.app{
+  max-width:680px;
+  margin:auto;
+  padding:25px 16px 70px;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.brand{
+  font-family:"DM Mono",monospace;
+  font-size:18px;
+  font-weight:500;
+  letter-spacing:-.5px;
+}
+
+.month{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+}
+
+.monthNav{
+  display:flex;
+  gap:6px;
+}
+
+.monthNav button{
+  width:40px;
+  height:40px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:rgba(27,28,31,.9);
+  color:#eee;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.hero{
+  display:grid;
+  grid-template-columns:1fr 118px;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:19px;
+  padding:18px;
+  backdrop-filter:blur(8px);
+}
+
+.label{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.balance{
+  color:var(--yellow);
+  font-size:34px;
+  font-weight:700;
+  margin-top:5px;
+  letter-spacing:-1px;
+}
+
+.savingsCard{
+  padding:15px;
+}
+
+.savingsValue{
+  color:#ddd;
+  font-size:18px;
+  font-weight:700;
+  margin-top:6px;
+}
+
+.moneyRow{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.money{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:14px;
+}
+
+.money strong{
+  display:block;
+  font-size:17px;
+  margin-top:5px;
+}
+
+.income{color:var(--green)}
+.spent{color:var(--red)}
+
+.daily{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:17px;
+  margin-bottom:10px;
+}
+
+.dailyTop{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.dailyCol:last-child{
+  text-align:right;
+}
+
+.dailyValue,
+.remainingValue{
+  font-size:23px;
+  font-weight:700;
+  margin-top:4px;
+}
+
+.remainingValue{
+  color:var(--green);
+  transition:.25s;
+}
+
+.remainingValue.pulse{
+  animation:softPulse 1.8s ease-in-out infinite;
+}
+
+.remainingValue.warning{
+  color:var(--red);
+  animation:warningPulse 1.1s ease-in-out infinite;
+}
+
+@keyframes softPulse{
+  0%,100%{text-shadow:0 0 0 transparent;transform:scale(1)}
+  50%{text-shadow:0 0 14px rgba(88,208,143,.32);transform:scale(1.025)}
+}
+
+@keyframes warningPulse{
+  0%,100%{text-shadow:0 0 0 transparent}
+  50%{text-shadow:0 0 14px rgba(255,107,107,.42)}
+}
+
+.dailyStatus{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.update{
+  width:100%;
+  margin-top:13px;
+  padding:10px;
+  border:1px solid #36373b;
+  border-radius:10px;
+  background:#222327;
+  color:#bbb;
+  cursor:pointer;
+}
+
+.add{
+  width:100%;
+  margin:7px 0 26px;
+  padding:16px;
+  border:0;
+  border-radius:14px;
+  background:#eee;
+  color:#111;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.15s;
+}
+
+.add:active{transform:scale(.985)}
+
+.sectionTitle{
+  font-size:16px;
+  font-weight:700;
+  margin:21px 0 10px;
+}
+
+.transaction{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-left:4px solid #777;
+  border-radius:13px;
+  padding:12px;
+  margin-bottom:7px;
+}
+
+.transaction.cash{border-left-color:var(--green)}
+.transaction.gpay{border-left-color:var(--blue)}
+.transaction.debit{border-left-color:#e3c44f}
+.transaction.transfer{border-left-color:var(--purple)}
+
+.txMain{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.txName{
+  font-size:14px;
+  font-weight:700;
+}
+
+.txAmount{
+  font-size:14px;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.txMeta{
+  color:#73747a;
+  font-size:10px;
+  margin-top:4px;
+}
+
+.txActions{
+  display:flex;
+  gap:5px;
+  margin-top:7px;
+}
+
+.txActions button{
+  padding:4px 8px;
+  border:1px solid #303136;
+  border-radius:7px;
+  background:#202125;
+  color:#8d8e94;
+  font-size:10px;
+  cursor:pointer;
+}
+
+.txActions .deleteBtn{
+  color:#b36b6b;
+}
+
+.day{
+  color:#696a70;
+  font-size:10px;
+  font-weight:700;
+  margin:16px 4px 6px;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+
+.empty{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:20px;
+  text-align:center;
+  color:#66676c;
+  font-size:12px;
+}
+
+.category{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:11px;
+  margin-bottom:7px;
+}
+
+.catRow{
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+}
+
+.bar{
+  height:4px;
+  background:#2b2c30;
+  border-radius:5px;
+  margin-top:7px;
+}
+
+.fill{
+  height:100%;
+  background:#777;
+  border-radius:5px;
+}
+
+.statsToggle{
+  margin-top:28px;
+  padding-top:17px;
+  border-top:1px solid #292a2d;
+}
+
+.toggleRow{
+  display:flex;
+  background:#191a1d;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:4px;
+  gap:4px;
+}
+
+.toggleRow button{
+  flex:1;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#777;
+  padding:9px 5px;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.toggleRow button.active{
+  background:#eee;
+  color:#111;
+}
+
+.chartWrap{
+  display:none;
+  margin-top:10px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:15px;
+}
+
+.chartWrap.show{display:block}
+
+canvas{
+  width:100%;
+  height:260px;
+  display:block;
+}
+
+.starting{
+  text-align:center;
+  color:#66676c;
+  font-size:10px;
+  margin-top:25px;
+}
+
+.starting button{
+  background:none;
+  border:0;
+  color:#888;
+  text-decoration:underline;
+  cursor:pointer;
+}
 
 /* modal */
-.modal{display:none;position:fixed;inset:0;background:#000b;align-items:flex-end;justify-content:center;z-index:20}.modal.show{display:flex}
-.sheet{width:100%;max-width:620px;max-height:92vh;overflow-y:auto;background:#181818;border:1px solid #292929;border-radius:22px 22px 0 0;padding:20px 16px 28px}
-.sheet h2{margin:0 0 18px;font-size:21px}.tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:16px}
-.tabs button{padding:12px 5px;border:1px solid #333;border-radius:12px;background:#222;color:#aaa}.tabs button.active{background:#eee;color:#111}
-label{display:block;color:#888;font-size:13px;margin:12px 0 6px}
-input,select{width:100%;padding:13px;border:1px solid #333;border-radius:12px;background:#222;color:#eee;font-size:16px}
-input:focus,select:focus{outline:1px solid #aaa}.hidden{display:none!important}
-.info{background:#202020;border:1px solid #303030;border-radius:12px;padding:11px;margin-top:10px;color:#aaa;font-size:12px;line-height:1.5}
-.limitInfo{background:#202020;border:1px solid #303030;border-radius:12px;padding:12px;margin-top:12px}
-.limitInfo.warning{background:#351818;border-color:#8b3030}
-.limitTitle{color:#888;font-size:12px}.limitAmount{font-size:22px;font-weight:bold;margin-top:4px}.limitAfter{color:#aaa;font-size:12px;margin-top:5px}
-.preview{display:none;background:#202020;border:1px solid #303030;border-radius:12px;padding:11px;margin-top:10px;color:#aaa;font-size:12px}.preview strong{display:block;color:#eee;font-size:17px;margin-top:4px}
-.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:18px}.buttons button{padding:13px;border:0;border-radius:12px;font-size:15px}.cancel{background:#292929;color:#eee}.save{background:#eee;color:#111}
-.danger{color:#ff6868}.small{font-size:11px;color:#777;margin-top:5px}
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.76);
+  align-items:flex-end;
+  justify-content:center;
+  z-index:50;
+}
+
+.modal.show{display:flex}
+
+.sheet{
+  width:100%;
+  max-width:680px;
+  max-height:94vh;
+  overflow-y:auto;
+  background:#18191c;
+  border:1px solid #303136;
+  border-radius:22px 22px 0 0;
+  padding:20px 16px 28px;
+}
+
+.sheet h2{
+  margin:0 0 17px;
+  font-size:20px;
+}
+
+.tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:6px;
+  margin-bottom:15px;
+}
+
+.tabs button{
+  padding:11px 5px;
+  border:1px solid #333438;
+  border-radius:10px;
+  background:#222327;
+  color:#999;
+  cursor:pointer;
+}
+
+.tabs button.active{
+  background:#eee;
+  color:#111;
+}
+
+label{
+  display:block;
+  color:#85868b;
+  font-size:12px;
+  margin:11px 0 5px;
+}
+
+input,select{
+  width:100%;
+  padding:12px;
+  border:1px solid #333438;
+  border-radius:11px;
+  background:#222327;
+  color:#eee;
+  font-size:15px;
+}
+
+input:focus,select:focus{outline:1px solid #888}
+
+.hidden{display:none!important}
+
+.check{
+  color:#ddd;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.check input{
+  width:17px;
+  height:17px;
+}
+
+.info,.preview,.limitInfo{
+  background:#202125;
+  border:1px solid #303136;
+  border-radius:11px;
+  padding:10px;
+  margin-top:9px;
+  color:#888;
+  font-size:11px;
+  line-height:1.5;
+}
+
+.preview strong,.limitAmount{
+  display:block;
+  color:#eee;
+  font-size:17px;
+  margin-top:3px;
+}
+
+.limitInfo.warning{
+  background:#351818;
+  border-color:#8b3030;
+}
+
+.limitInfo.warning .limitAmount{color:var(--red)}
+
+.limitAfter{
+  margin-top:4px;
+  color:#999;
+}
+
+.small{
+  color:#65666b;
+  font-size:10px;
+  margin-top:4px;
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+  margin-top:17px;
+}
+
+.buttons button{
+  padding:12px;
+  border:0;
+  border-radius:11px;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.cancel{background:#292a2d;color:#eee}
+.save{background:#eee;color:#111}
+
+@media(max-width:480px){
+  .app{padding:20px 13px 60px}
+  .hero{grid-template-columns:1fr 105px}
+  .balance{font-size:32px}
+  .dailyValue,.remainingValue{font-size:22px}
+}
 </style>
 </head>
+
 <body>
 <div class="app">
+
 <header>
-<div><h1>Thomas's Tracker</h1><div class="month" id="month"></div></div>
-<div class="monthNav"><button type="button" onclick="changeMonth(-1)">‹</button><button type="button" onclick="changeMonth(1)">›</button></div>
+  <div>
+    <div class="brand">DT Expense Tracker</div>
+    <div class="month" id="month"></div>
+  </div>
+  <div class="monthNav">
+    <button type="button" onclick="changeMonth(-1)">‹</button>
+    <button type="button" onclick="changeMonth(1)">›</button>
+  </div>
 </header>
 
-<div class="card"><div class="label">Balance</div><div class="balance" id="balance">₹0</div></div>
+<div class="hero">
+  <div class="card">
+    <div class="label">Balance</div>
+    <div class="balance" id="balance">₹0</div>
+  </div>
+  <div class="card savingsCard">
+    <div class="label">Savings</div>
+    <div class="savingsValue" id="savingsTotal">₹0</div>
+  </div>
+</div>
+
 <div class="moneyRow">
-<div class="money"><div class="label">Income</div><strong class="income" id="income">₹0</strong></div>
-<div class="money"><div class="label">Spent</div><strong class="spent" id="spent">₹0</strong></div>
+  <div class="money">
+    <div class="label">Income</div>
+    <strong class="income" id="income">₹0</strong>
+  </div>
+  <div class="money">
+    <div class="label">Spent</div>
+    <strong class="spent" id="spent">₹0</strong>
+  </div>
 </div>
 
 <div class="daily" id="dailyBox">
-<div class="dailyTop">
-<div><div class="label">Daily Limit</div><div class="dailyValue" id="dailyLimit">—</div></div>
-<div class="dailyStatus">Today's status<strong id="dailyStatus">—</strong></div>
-</div>
-<button type="button" class="update" onclick="updateDailyLimit()">Update Daily Limit</button>
+  <div class="dailyTop">
+    <div class="dailyCol">
+      <div class="label">Daily Limit</div>
+      <div class="dailyValue" id="dailyLimit">—</div>
+    </div>
+    <div class="dailyCol">
+      <div class="label">Amount Remaining</div>
+      <div class="remainingValue pulse" id="remainingValue">—</div>
+      <div class="dailyStatus" id="dailyStatus">—</div>
+    </div>
+  </div>
+  <button type="button" class="update" onclick="updateDailyLimit()">Update Daily Limit</button>
 </div>
 
 <button type="button" class="add" onclick="openTransaction()">＋ Add Transaction</button>
 
-<div class="sectionTitle">Recent transactions</div><div id="transactions"></div>
-<div class="sectionTitle">Your spending on</div><div id="categories"></div>
-<div class="starting">Starting balance: <span id="startingBalance">₹0</span> · <button type="button" onclick="setStartingBalance()">Set / change</button></div>
+<div class="sectionTitle">Recent transactions</div>
+<div id="transactions"></div>
+
+<div class="sectionTitle">Your spending on</div>
+<div id="categories"></div>
+
+<div class="statsToggle">
+  <div class="sectionTitle" style="margin-top:0">Statistics</div>
+  <div class="toggleRow">
+    <button type="button" id="barToggle" onclick="setChart('bar')">▥ Bar Chart</button>
+    <button type="button" id="pieToggle" onclick="setChart('pie')">◉ Pie Chart</button>
+  </div>
+  <div class="chartWrap" id="chartWrap">
+    <canvas id="chart"></canvas>
+  </div>
+</div>
+
+<div class="starting">
+  Starting balance: <span id="startingBalance">₹0</span> ·
+  <button type="button" onclick="setStartingBalance()">Set / change</button>
+</div>
+
 </div>
 
 <div class="modal" id="transactionModal">
 <div class="sheet">
-<h2>Add Transaction</h2>
+<h2 id="modalTitle">Add Transaction</h2>
+
 <div class="tabs">
-<button type="button" id="expenseTab" class="active" onclick="setTransactionType('expense')">Expense</button>
+<button type="button" id="expenseTab" onclick="setTransactionType('expense')">Expense</button>
 <button type="button" id="incomeTab" onclick="setTransactionType('income')">Income</button>
 <button type="button" id="transferTab" onclick="setTransactionType('transfer')">Transfer</button>
 </div>
 
 <label>Amount</label>
-<input id="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="₹ 0" oninput="updateExpensePreview();showPreview()">
+<input id="amount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="₹ 0">
 
 <div id="normalFields">
-<label>Category</label><select id="category"></select>
+<label>Category</label>
+<select id="category"></select>
+
 <label>Payment method</label>
 <select id="payment">
-<option value="cash">💵 Cash</option><option value="gpay">📱 GPay</option><option value="debit">💳 Debit Card</option>
+<option value="cash">💵 Cash</option>
+<option value="gpay">📱 GPay</option>
+<option value="debit">💳 Debit Card</option>
 </select>
 </div>
 
 <div id="transferFields" class="hidden">
 <label>From</label>
-<select id="from"><option value="cash">💵 Cash</option><option value="gpay">📱 GPay</option><option value="debit">💳 Debit Card</option><option value="savings">🏦 Savings</option></select>
+<select id="from">
+<option value="cash">💵 Cash</option>
+<option value="gpay">📱 GPay</option>
+<option value="debit">💳 Debit Card</option>
+<option value="savings">🏦 Savings</option>
+</select>
+
 <label>To</label>
-<select id="to"><option value="savings">🏦 Savings</option><option value="cash">💵 Cash</option><option value="gpay">📱 GPay</option><option value="debit">💳 Debit Card</option></select>
-<div class="info">Transfers between your own accounts do not count as spending. A transfer to Savings reduces available balance.</div>
+<select id="to">
+<option value="savings">🏦 Savings</option>
+<option value="cash">💵 Cash</option>
+<option value="gpay">📱 GPay</option>
+<option value="debit">💳 Debit Card</option>
+</select>
+
+<div class="info">Transfers do not count as spending. A transfer to Savings reduces available balance.</div>
 </div>
 
 <div id="salaryFields" class="hidden">
-<label><input id="calculateDailyLimit" type="checkbox" style="width:18px;height:18px;margin-right:8px;vertical-align:middle" onchange="toggleSalaryFields()"> Calculate Daily Limit</label>
+<label class="check">
+<input id="calculateDailyLimit" type="checkbox">
+Calculate Daily Limit
+</label>
+
 <div id="savingsField" class="hidden">
 <label>Savings from this salary</label>
-<input id="savings" type="number" inputmode="decimal" min="0" step="0.01" placeholder="₹ 0" oninput="showPreview()">
-<div class="preview" id="preview">Calculated Daily Limit<strong id="previewAmount">₹0</strong></div>
-</div>
-</div>
+<input id="savings" type="number" inputmode="decimal" min="0" step="0.01" placeholder="₹ 0">
 
-<label>Date</label>
-<input id="date" type="date" onchange="updateExpensePreview();showPreview()">
-<div class="small">Future dates are not allowed. You can use today or any past date.</div>
+<div class="preview" id="preview">
+Calculated Daily Limit
+<strong id="previewAmount">₹0</strong>
+</div>
+</div>
+</div>
 
 <div id="expenseLimitInfo" class="limitInfo hidden">
-<div class="limitTitle">Available Daily Limit for selected date</div>
+<div>Available Daily Limit for selected date</div>
 <div class="limitAmount" id="expenseAvailable">—</div>
 <div class="limitAfter" id="expenseAfter">Enter an amount to see what remains.</div>
 </div>
 
-<label>Note (optional)</label><input id="note" type="text" placeholder="What was it for?">
+<label>Date</label>
+<input id="date" type="date">
+<div class="small">Future dates are not allowed. Today and past dates are allowed.</div>
 
-<div class="buttons"><button type="button" class="cancel" onclick="closeTransaction()">Cancel</button><button type="button" class="save" onclick="saveTransaction()">Save</button></div>
+<label>Note (optional)</label>
+<input id="note" type="text" placeholder="What was it for?">
+
+<div class="buttons">
+<button type="button" class="cancel" onclick="closeTransaction()">Cancel</button>
+<button type="button" class="save" onclick="saveTransaction()">Save</button>
+</div>
 </div>
 </div>
 
@@ -133,7 +722,9 @@ const STORAGE_KEY="thomasTrackerData";
 const defaultData={transactions:[],startingBalance:0,dailyLimits:{}};
 let data=loadData();
 let currentType="expense";
-let selectedMonth=new Date(); selectedMonth.setDate(1);
+let editingId=null;
+let selectedMonth=new Date();selectedMonth.setDate(1);
+let chartMode=null;
 
 const expenseCategories=[
 ["Restaurant","🍽️"],["Fast Food","🍔"],["Juice & Ice Cream","🥤"],["Movies","🎬"],["Petrol","⛽"],
@@ -144,29 +735,34 @@ const paymentEmoji={cash:"💵",gpay:"📱",debit:"💳",savings:"🏦"};
 
 function loadData(){
   try{
-    const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
-    if(!saved)return structuredClone(defaultData);
-    saved.transactions=Array.isArray(saved.transactions)?saved.transactions:[];
-    saved.startingBalance=Number(saved.startingBalance)||0;
-    saved.dailyLimits=saved.dailyLimits||{};
-    return saved;
+    const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");
+    if(!d)return structuredClone(defaultData);
+    d.transactions=Array.isArray(d.transactions)?d.transactions:[];
+    d.startingBalance=Number(d.startingBalance)||0;
+    d.dailyLimits=d.dailyLimits||{};
+    return d;
   }catch(e){return structuredClone(defaultData)}
 }
 function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}
 function money(v){return "₹"+Math.round(Number(v)||0).toLocaleString("en-IN")}
-function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function today(){
+  const d=new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")
+}
 function monthKey(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}
 function daysInMonth(y,m){return new Date(y,m+1,0).getDate()}
 function dateText(v){return new Date(v+"T12:00:00").toLocaleDateString("en-IN",{weekday:"long",day:"numeric",month:"short",year:"numeric"})}
-function monthName(d){return d.toLocaleDateString("en-IN",{month:"long",year:"numeric"})}
 
 function populateCategories(){
-  const s=document.getElementById("category"); s.innerHTML="";
+  const s=document.getElementById("category");s.innerHTML="";
   (currentType==="income"?incomeCategories:expenseCategories).forEach(x=>{
     const o=document.createElement("option");o.value=x[0];o.textContent=x[1]+" "+x[0];s.appendChild(o)
   });
 }
+
 function openTransaction(){
+  editingId=null;
+  document.getElementById("modalTitle").textContent="Add Transaction";
   document.getElementById("transactionModal").classList.add("show");
   document.getElementById("amount").value="";
   document.getElementById("date").value=today();
@@ -174,11 +770,13 @@ function openTransaction(){
   document.getElementById("note").value="";
   document.getElementById("savings").value="";
   document.getElementById("calculateDailyLimit").checked=false;
-  currentType="expense"; updateTransactionType(); toggleSalaryFields();
+  currentType="expense";
+  updateTransactionType();
+  toggleSalaryFields();
   updateExpensePreview();
-  setTimeout(()=>document.getElementById("amount").focus(),50);
+  setTimeout(()=>document.getElementById("amount").focus(),60);
 }
-function closeTransaction(){document.getElementById("transactionModal").classList.remove("show")}
+function closeTransaction(){document.getElementById("transactionModal").classList.remove("show");editingId=null}
 function setTransactionType(type){currentType=type;updateTransactionType();updateExpensePreview()}
 function updateTransactionType(){
   ["expenseTab","incomeTab","transferTab"].forEach(id=>document.getElementById(id).classList.remove("active"));
@@ -191,28 +789,25 @@ function updateTransactionType(){
   updateExpensePreview();
 }
 function toggleSalaryFields(){
-  const on=document.getElementById("calculateDailyLimit").checked;
-  document.getElementById("savingsField").classList.toggle("hidden",!on);showPreview()
+  document.getElementById("savingsField").classList.toggle("hidden",!document.getElementById("calculateDailyLimit").checked);
+  showPreview();
 }
 function showPreview(){
-  const box=document.getElementById("preview");
-  if(currentType!=="income"||!document.getElementById("calculateDailyLimit").checked){box.style.display="none";return}
-  const salary=Number(document.getElementById("amount").value)||0;
-  const savings=Number(document.getElementById("savings").value)||0;
-  const d=document.getElementById("date").value;
-  if(!d||salary<=0){box.style.display="none";return}
-  const dt=new Date(d+"T12:00:00"), limit=Math.max(0,salary-savings)/daysInMonth(dt.getFullYear(),dt.getMonth());
-  document.getElementById("previewAmount").textContent=money(limit);box.style.display="block"
+  const p=document.getElementById("preview");
+  if(currentType!=="income"||!document.getElementById("calculateDailyLimit").checked){p.style.display="none";return}
+  const salary=Number(document.getElementById("amount").value)||0,savings=Number(document.getElementById("savings").value)||0,d=document.getElementById("date").value;
+  if(!d||salary<=0){p.style.display="none";return}
+  const dt=new Date(d+"T12:00:00");
+  const next=new Date(dt.getFullYear(),dt.getMonth()+1,1);
+  const limit=Math.max(0,salary-savings)/daysInMonth(next.getFullYear(),next.getMonth());
+  document.getElementById("previewAmount").textContent=money(limit);p.style.display="block";
 }
 
-/* Salary paid at the end of one month supplies the daily plan for the next month. */
 function salaryForMonth(target){
-  const salaries=data.transactions.filter(t=>t.type==="income"&&t.category==="Salary"&&t.calculateDailyLimit)
-    .sort((a,b)=>a.date.localeCompare(b.date));
+  const salaries=data.transactions.filter(t=>t.type==="income"&&t.category==="Salary"&&t.calculateDailyLimit===true).sort((a,b)=>a.date.localeCompare(b.date));
   let found=null;
   salaries.forEach(t=>{
-    const d=new Date(t.date+"T12:00:00");
-    const next=new Date(d.getFullYear(),d.getMonth()+1,1);
+    const d=new Date(t.date+"T12:00:00"),next=new Date(d.getFullYear(),d.getMonth()+1,1);
     if(monthKey(next)===target)found=t;
   });
   return found;
@@ -223,18 +818,17 @@ function calculatedDailyLimit(target){
   return Math.max(0,Number(s.amount)-Number(s.savings||0))/daysInMonth(y,m-1);
 }
 function dailyLimitForMonth(target){
-  if(data.dailyLimits[target]!==undefined)return Number(data.dailyLimits[target]);
-  return calculatedDailyLimit(target);
+  return data.dailyLimits[target]!==undefined?Number(data.dailyLimits[target]):calculatedDailyLimit(target);
 }
 
-/* Calculates available allowance for any today/past date, including unused carry-forward. */
+/* Carry-forward:
+   Each day's unused allowance becomes part of the next day's allowance.
+   A transfer to Savings resets that day's unused allowance to the base daily limit,
+   because the money was deliberately removed from spendable funds. */
 function dailyAvailableForDate(dateStr){
-  const dt=new Date(dateStr+"T12:00:00");
-  const target=monthKey(dt);
-  const base=dailyLimitForMonth(target);
+  const dt=new Date(dateStr+"T12:00:00"),base=dailyLimitForMonth(monthKey(dt));
   if(base===null||base===undefined)return null;
-
-  let available=base;
+  let available=Number(base);
   for(let day=1;day<dt.getDate();day++){
     const d=new Date(dt.getFullYear(),dt.getMonth(),day);
     const key=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(day).padStart(2,"0");
@@ -243,23 +837,24 @@ function dailyAvailableForDate(dateStr){
     const leftover=Math.max(0,available-spent);
     available=saved>0?base:base+leftover;
   }
-  const spentToday=data.transactions.filter(t=>t.type==="expense"&&t.date===dateStr).reduce((s,t)=>s+Number(t.amount),0);
+  const spentToday=data.transactions.filter(t=>t.type==="expense"&&t.date===dateStr&&t.id!==editingId).reduce((s,t)=>s+Number(t.amount),0);
   return {limit:available,remaining:available-spentToday};
 }
+
 function updateExpensePreview(){
   const box=document.getElementById("expenseLimitInfo");
   if(currentType!=="expense"){box.classList.add("hidden");return}
-  const d=document.getElementById("date").value;if(!d){box.classList.add("hidden");return}
+  const d=document.getElementById("date").value;
+  if(!d){box.classList.add("hidden");return}
   const r=dailyAvailableForDate(d);box.classList.remove("hidden");
   if(r===null){
     document.getElementById("expenseAvailable").textContent="—";
     document.getElementById("expenseAfter").textContent="No salary-based daily limit is set for this month.";
     box.classList.remove("warning");return;
   }
-  const amount=Number(document.getElementById("amount").value)||0;
+  const amount=Number(document.getElementById("amount").value)||0,after=r.remaining-amount;
   document.getElementById("expenseAvailable").textContent=money(r.remaining);
   if(amount<=0){box.classList.remove("warning");document.getElementById("expenseAfter").textContent="Enter an amount to see what remains.";return}
-  const after=r.remaining-amount;
   if(after<0){box.classList.add("warning");document.getElementById("expenseAfter").textContent="After this expense: Over by "+money(Math.abs(after))}
   else{box.classList.remove("warning");document.getElementById("expenseAfter").textContent="After this expense: "+money(after)+" remaining"}
 }
@@ -271,54 +866,114 @@ function saveTransaction(){
   if(date>today()){alert("Future dates are not allowed.");return}
   const note=document.getElementById("note").value.trim();
 
+  let tx;
   if(currentType==="transfer"){
     const from=document.getElementById("from").value,to=document.getElementById("to").value;
     if(from===to){alert("From and To must be different.");return}
-    data.transactions.push({id:Date.now(),type:"transfer",amount,from,to,date,note});
+    tx={type:"transfer",amount,from,to,date,note};
   }else if(currentType==="income"){
-    const category=document.getElementById("category").value;
-    const calc=category==="Salary"&&document.getElementById("calculateDailyLimit").checked;
+    const category=document.getElementById("category").value,calc=category==="Salary"&&document.getElementById("calculateDailyLimit").checked;
     const savings=calc?Number(document.getElementById("savings").value)||0:0;
     if(savings>amount){alert("Savings cannot be greater than salary.");return}
-    data.transactions.push({id:Date.now(),type:"income",amount,category,payment:document.getElementById("payment").value,date,note,savings,calculateDailyLimit:calc});
+    tx={type:"income",amount,category,payment:document.getElementById("payment").value,date,note,savings,calculateDailyLimit:calc};
   }else{
-    data.transactions.push({id:Date.now(),type:"expense",amount,category:document.getElementById("category").value,payment:document.getElementById("payment").value,date,note});
+    tx={type:"expense",amount,category:document.getElementById("category").value,payment:document.getElementById("payment").value,date,note};
+  }
+
+  if(editingId!==null){
+    const i=data.transactions.findIndex(t=>t.id===editingId);
+    if(i>=0)data.transactions[i]={...data.transactions[i],...tx};
+  }else{
+    data.transactions.push({id:Date.now(),...tx});
   }
   saveData();closeTransaction();render();
 }
 
+function editTransaction(id){
+  const t=data.transactions.find(x=>x.id===id);if(!t)return;
+  editingId=id;
+  document.getElementById("modalTitle").textContent="Edit Transaction";
+  document.getElementById("transactionModal").classList.add("show");
+  document.getElementById("amount").value=t.amount;
+  document.getElementById("date").value=t.date;
+  document.getElementById("date").max=today();
+  document.getElementById("note").value=t.note||"";
+  currentType=t.type;updateTransactionType();
+  if(t.type==="expense"){
+    document.getElementById("category").value=t.category;
+    document.getElementById("payment").value=t.payment;
+  }else if(t.type==="income"){
+    document.getElementById("category").value=t.category;
+    document.getElementById("payment").value=t.payment;
+    document.getElementById("calculateDailyLimit").checked=!!t.calculateDailyLimit;
+    document.getElementById("savings").value=t.savings||"";
+    toggleSalaryFields();
+  }else{
+    document.getElementById("from").value=t.from;
+    document.getElementById("to").value=t.to;
+  }
+  updateExpensePreview();
+}
+
+function deleteTransaction(id){
+  if(confirm("Delete this transaction?")){
+    data.transactions=data.transactions.filter(t=>t.id!==id);
+    saveData();render();
+  }
+}
+
 function closingBalanceUntil(endDate){
   let balance=Number(data.startingBalance)||0;
-  [...data.transactions].filter(t=>t.date<=endDate).sort((a,b)=>a.date.localeCompare(b.date)).forEach(t=>{
+  [...data.transactions].filter(t=>t.date<=endDate).sort((a,b)=>a.date.localeCompare(b.date)||a.id-b.id).forEach(t=>{
     if(t.type==="income")balance+=Number(t.amount)-Number(t.savings||0);
     else if(t.type==="expense")balance-=Number(t.amount);
-    else if(t.type==="transfer"){
+    else{
       if(t.to==="savings"&&t.from!=="savings")balance-=Number(t.amount);
       if(t.from==="savings"&&t.to!=="savings")balance+=Number(t.amount);
     }
   });
   return balance;
 }
+
+function totalSavings(){
+  let total=0;
+  data.transactions.forEach(t=>{
+    if(t.type==="income")total+=Number(t.savings||0);
+    if(t.type==="transfer"&&t.to==="savings"&&t.from!=="savings")total+=Number(t.amount);
+    if(t.type==="transfer"&&t.from==="savings"&&t.to!=="savings")total-=Number(t.amount);
+  });
+  return total;
+}
+
 function render(){
-  const key=monthKey(selectedMonth);
-  document.getElementById("month").textContent=monthName(selectedMonth);
-  const tx=data.transactions.filter(t=>t.date.startsWith(key));
+  const key=monthKey(selectedMonth),tx=data.transactions.filter(t=>t.date.startsWith(key));
+  document.getElementById("month").textContent=selectedMonth.toLocaleDateString("en-IN",{month:"long",year:"numeric"});
   const income=tx.filter(t=>t.type==="income").reduce((s,t)=>s+Number(t.amount)-Number(t.savings||0),0);
   const spent=tx.filter(t=>t.type==="expense").reduce((s,t)=>s+Number(t.amount),0);
   const last=new Date(selectedMonth.getFullYear(),selectedMonth.getMonth()+1,0);
   const lastDate=last.getFullYear()+"-"+String(last.getMonth()+1).padStart(2,"0")+"-"+String(last.getDate()).padStart(2,"0");
   document.getElementById("balance").textContent=money(closingBalanceUntil(lastDate));
-  document.getElementById("income").textContent=money(income);document.getElementById("spent").textContent=money(spent);
+  document.getElementById("savingsTotal").textContent=money(totalSavings());
+  document.getElementById("income").textContent=money(income);
+  document.getElementById("spent").textContent=money(spent);
   document.getElementById("startingBalance").textContent=money(data.startingBalance);
   renderDaily();renderTransactions(tx);renderCategories(tx);
+  if(chartMode)drawChart(chartMode,tx);
 }
+
 function renderDaily(){
-  const r=dailyAvailableForDate(today()),box=document.getElementById("dailyBox");
-  if(!r){document.getElementById("dailyLimit").textContent="—";document.getElementById("dailyStatus").textContent="No salary plan";box.classList.remove("over");return}
+  const r=dailyAvailableForDate(today()),box=document.getElementById("dailyBox"),value=document.getElementById("remainingValue");
+  if(!r){
+    document.getElementById("dailyLimit").textContent="—";
+    value.textContent="—";document.getElementById("dailyStatus").textContent="No salary plan";
+    value.className="remainingValue";return;
+  }
   document.getElementById("dailyLimit").textContent=money(r.limit);
-  document.getElementById("dailyStatus").textContent=r.remaining<0?"Over by "+money(Math.abs(r.remaining)):money(r.remaining)+" remaining";
-  box.classList.toggle("over",r.remaining<0);
+  value.textContent=r.remaining<0?money(Math.abs(r.remaining)):money(r.remaining);
+  document.getElementById("dailyStatus").textContent=r.remaining<0?"Over by":"remaining";
+  value.className="remainingValue "+(r.remaining<0?"warning":"pulse");
 }
+
 function renderTransactions(tx){
   const box=document.getElementById("transactions");
   if(!tx.length){box.innerHTML='<div class="empty">No transactions yet.</div>';return}
@@ -327,15 +982,16 @@ function renderTransactions(tx){
   list.forEach(t=>{
     if(t.date!==last){html+='<div class="day">'+dateText(t.date)+'</div>';last=t.date}
     if(t.type==="transfer"){
-      html+=`<div class="transaction transfer"><div><div class="txName">↔️ Transfer</div><div class="txNote">${paymentEmoji[t.from]||""} ${t.from} → ${paymentEmoji[t.to]||""} ${t.to}${t.note?" · "+escapeHtml(t.note):""}</div></div><div class="txRight"><div class="txAmount">${money(t.amount)}</div><button class="delete" onclick="deleteTransaction(${t.id})">Delete</button></div></div>`;
+      html+=`<div class="transaction transfer"><div class="txMain"><div><div class="txName">↔️ Transfer</div><div class="txMeta">${paymentEmoji[t.from]||""} ${t.from} → ${paymentEmoji[t.to]||""} ${t.to}${t.note?" · "+escapeHtml(t.note):""}</div></div><div><div class="txAmount">${money(t.amount)}</div></div></div><div class="txActions"><button onclick="editTransaction(${t.id})">Edit</button><button class="deleteBtn" onclick="deleteTransaction(${t.id})">Delete</button></div></div>`;
     }else{
-      const positive=t.type==="income", emoji=positive?"💼":(expenseCategories.find(x=>x[0]===t.category)||["","📦"])[1];
-      const method=paymentEmoji[t.payment]||"";
-      html+=`<div class="transaction ${t.payment||""}"><div><div class="txName">${emoji} ${escapeHtml(t.category)}</div><div class="txNote">${positive?"Income":"Expense"}${t.note?" · "+escapeHtml(t.note):""}</div></div><div class="txRight"><div class="txAmount" style="color:${positive?"#55c98a":"#ff6868"}">${positive?"+":"-"}${money(t.amount)} <span>${method}</span></div><button class="delete" onclick="deleteTransaction(${t.id})">Delete</button></div></div>`;
+      const emoji=t.type==="income"?"💼":(expenseCategories.find(x=>x[0]===t.category)||["","📦"])[1];
+      const color=t.type==="income"?"income":"spent";
+      html+=`<div class="transaction ${t.payment||"cash"}"><div class="txMain"><div><div class="txName">${emoji} ${escapeHtml(t.category)}</div><div class="txMeta">${t.type==="income"?"Income":"Expense"} · ${paymentEmoji[t.payment]||""}${t.note?" · "+escapeHtml(t.note):""}${t.savings?" · Savings "+money(t.savings):""}</div></div><div class="txAmount ${color}">${t.type==="income"?"+":"-"}${money(t.amount)}</div></div><div class="txActions"><button onclick="editTransaction(${t.id})">Edit</button><button class="deleteBtn" onclick="deleteTransaction(${t.id})">Delete</button></div></div>`;
     }
   });
   box.innerHTML=html;
 }
+
 function renderCategories(tx){
   const box=document.getElementById("categories"),expenses=tx.filter(t=>t.type==="expense");
   if(!expenses.length){box.innerHTML='<div class="empty">No spending this month.</div>';return}
@@ -343,27 +999,97 @@ function renderCategories(tx){
   const max=Math.max(...Object.values(totals),1);
   box.innerHTML=Object.entries(totals).sort((a,b)=>b[1]-a[1]).map(([cat,v])=>{
     const emoji=(expenseCategories.find(x=>x[0]===cat)||["","📦"])[1];
-    return `<div class="category"><div class="catRow"><span>${emoji} ${escapeHtml(cat)}</span><strong>${money(v)}</strong></div><div class="bar"><div class="fill" style="width:${(v/max)*100}%"></div></div></div>`;
+    return `<div class="category"><div class="catRow"><span>${emoji} ${escapeHtml(cat)}</span><strong>${money(v)}</strong></div><div class="bar"><div class="fill" style="width:${v/max*100}%"></div></div></div>`;
   }).join("");
 }
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function deleteTransaction(id){
-  const t=data.transactions.find(x=>x.id===id);if(!t)return;
-  if(confirm("Delete this transaction?")){data.transactions=data.transactions.filter(x=>x.id!==id);saveData();render()}
+
+function setChart(mode){
+  if(chartMode===mode){chartMode=null}else chartMode=mode;
+  document.getElementById("barToggle").classList.toggle("active",chartMode==="bar");
+  document.getElementById("pieToggle").classList.toggle("active",chartMode==="pie");
+  document.getElementById("chartWrap").classList.toggle("show",!!chartMode);
+  if(chartMode)drawChart(chartMode,data.transactions.filter(t=>t.date.startsWith(monthKey(selectedMonth))));
 }
+
+function drawChart(mode,tx){
+  const canvas=document.getElementById("chart"),ctx=canvas.getContext("2d");
+  const rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+  canvas.width=rect.width*dpr;canvas.height=260*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=rect.width,h=260;ctx.clearRect(0,0,w,h);
+  ctx.font="12px Manrope, Arial";ctx.textBaseline="middle";
+
+  const income=tx.filter(t=>t.type==="income").reduce((s,t)=>s+Number(t.amount)-Number(t.savings||0),0);
+  const expense=tx.filter(t=>t.type==="expense").reduce((s,t)=>s+Number(t.amount),0);
+  const savings=tx.filter(t=>t.type==="income").reduce((s,t)=>s+Number(t.savings||0),0);
+  const totals={};
+  tx.filter(t=>t.type==="expense").forEach(t=>totals[t.category]=(totals[t.category]||0)+Number(t.amount));
+
+  if(mode==="bar"){
+    const vals=[income,expense,savings],labels=["Income","Expense","Savings"],max=Math.max(...vals,1);
+    const base=h-48,barW=Math.min(70,w/5),gap=(w-barW*3)/4;
+    vals.forEach((v,i)=>{
+      const bh=(v/max)*(h-95),x=gap+i*(barW+gap),y=base-bh;
+      ctx.fillStyle="#777";ctx.fillRect(x,y,barW,bh);
+      ctx.fillStyle="#aaa";ctx.textAlign="center";ctx.fillText(labels[i],x+barW/2,base+18);
+      ctx.fillStyle="#eee";ctx.fillText(money(v),x+barW/2,Math.max(12,y-10));
+    });
+    ctx.fillStyle="#666";ctx.textAlign="center";ctx.fillText("Monthly overview",w/2,15);
+  }else{
+    const entries=Object.entries(totals).sort((a,b)=>b[1]-a[1]);
+    const total=entries.reduce((s,x)=>s+x[1],0);
+    if(!total){ctx.fillStyle="#777";ctx.textAlign="center";ctx.fillText("No expenses to display",w/2,h/2);return}
+    const cx=w*.34,cy=h/2,r=Math.min(90,w*.25),palette=["#777","#8d8d8d","#a3a3a3","#696969","#b8b8b8","#5f5f5f"];
+    let start=-Math.PI/2;
+    entries.forEach((e,i)=>{
+      const angle=e[1]/total*Math.PI*2;
+      ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,start+angle);ctx.closePath();
+      ctx.fillStyle=palette[i%palette.length];ctx.fill();start+=angle;
+    });
+    ctx.font="11px Manrope, Arial";ctx.textAlign="left";
+    entries.slice(0,7).forEach((e,i)=>{
+      const y=30+i*29;ctx.fillStyle="#888";ctx.fillRect(w*.58,y-6,9,9);ctx.fillStyle="#ddd";ctx.fillText(e[0]+"  "+money(e[1]),w*.58+16,y);
+    });
+  }
+}
+
 function setStartingBalance(){
   const v=prompt("Enter your starting balance:",String(data.startingBalance||0));if(v===null)return;
   const n=Number(v);if(!Number.isFinite(n)||n<0){alert("Please enter a valid amount.");return}
   data.startingBalance=n;saveData();render();
 }
+
 function updateDailyLimit(){
   const key=monthKey(new Date()),current=dailyLimitForMonth(key);
-  const v=prompt("Enter daily limit for this month:",current==null?"":String(Math.round(current)));
-  if(v===null)return;const n=Number(v);if(!Number.isFinite(n)||n<0){alert("Please enter a valid amount.");return}
+  const v=prompt("Enter your daily limit for this month:",current==null?"":String(Math.round(current)));
+  if(v===null)return;
+  const n=Number(v);if(!Number.isFinite(n)||n<0){alert("Please enter a valid amount.");return}
   data.dailyLimits[key]=n;saveData();render();
 }
-function changeMonth(delta){selectedMonth.setMonth(selectedMonth.getMonth()+delta);render()}
+
+function changeMonth(delta){
+  selectedMonth=new Date(selectedMonth.getFullYear(),selectedMonth.getMonth()+delta,1);
+  render();
+}
+
+function escapeHtml(s){
+  return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+/* Input listeners */
+document.getElementById("amount").addEventListener("input",()=>{updateExpensePreview();showPreview()});
+document.getElementById("savings").addEventListener("input",showPreview);
+document.getElementById("calculateDailyLimit").addEventListener("change",toggleSalaryFields);
+document.getElementById("date").addEventListener("change",function(){
+  if(this.value>today()){alert("Future dates are not allowed.");this.value=today()}
+  updateExpensePreview();showPreview();
+});
+document.getElementById("transactionModal").addEventListener("click",e=>{
+  if(e.target===document.getElementById("transactionModal"))closeTransaction();
+});
+window.addEventListener("resize",()=>{if(chartMode)drawChart(chartMode,data.transactions.filter(t=>t.date.startsWith(monthKey(selectedMonth))))});
+
 document.getElementById("date").max=today();
+populateCategories();
 render();
 </script>
 </body>
