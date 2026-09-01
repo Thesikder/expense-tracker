@@ -9,1107 +9,809 @@
 *{box-sizing:border-box}
 
 body{
-margin:0;
-background:#101010;
-color:#eee;
-font-family:Arial,sans-serif
-}
-
-button,input,select{
-font:inherit
-}
-
-button{
-cursor:pointer
+  margin:0;
+  background:#111;
+  color:#eee;
+  font-family:Arial,sans-serif;
 }
 
 .app{
-max-width:620px;
-margin:auto;
-padding:24px 16px 70px
+  max-width:620px;
+  margin:auto;
+  padding:24px 16px 60px;
 }
 
 header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:24px
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:24px;
 }
 
 h1{
-margin:0;
-font-size:30px
+  margin:0;
+  font-size:29px;
 }
 
 .month{
-color:#888;
-margin-top:6px;
-font-size:15px
+  color:#888;
+  margin-top:5px;
+  font-size:14px;
 }
 
 .monthNav{
-display:flex;
-gap:8px
+  display:flex;
+  gap:8px;
 }
 
 .monthNav button{
-width:46px;
-height:46px;
-border:1px solid #292929;
-border-radius:14px;
-background:#191919;
-color:#eee;
-font-size:24px
+  width:46px;
+  height:46px;
+  border:1px solid #292929;
+  border-radius:14px;
+  background:#1b1b1b;
+  color:#eee;
+  font-size:22px;
+  cursor:pointer;
 }
 
 .card,
 .money,
 .daily{
-background:#191919;
-border:1px solid #292929
+  background:#1b1b1b;
+  border:1px solid #292929;
 }
 
 .card{
-border-radius:22px;
-padding:22px;
-margin-bottom:10px
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:10px;
 }
 
 .label{
-color:#888;
-font-size:14px
+  color:#888;
+  font-size:13px;
 }
 
 .balance{
-font-size:42px;
-font-weight:bold;
-margin-top:7px
+  font-size:36px;
+  font-weight:bold;
+  margin-top:5px;
 }
 
 .moneyRow{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
 .money{
-border-radius:18px;
-padding:17px
+  border-radius:15px;
+  padding:15px;
 }
 
 .money strong{
-display:block;
-font-size:22px;
-margin-top:7px
+  display:block;
+  font-size:18px;
+  margin-top:6px;
 }
 
 .income{
-color:#55c98a
+  color:#55c98a;
 }
 
 .spent{
-color:#ff6868
+  color:#ff6868;
 }
 
 .daily{
-border-radius:18px;
-padding:18px;
-margin-top:10px
+  border-radius:15px;
+  padding:16px;
+  margin-top:10px;
 }
 
 .daily.over{
-background:#351818;
-border-color:#8b3030
+  background:#351818;
+  border-color:#8b3030;
 }
 
 .dailyTop{
-display:flex;
-justify-content:space-between;
-align-items:flex-start
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 .dailyValue{
-font-size:25px;
-font-weight:bold;
-margin-top:6px
+  font-size:23px;
+  font-weight:bold;
+  margin-top:5px;
 }
 
 .daily.over .dailyValue{
-color:#ff6868
+  color:#ff6868;
 }
 
 .dailyStatus{
-color:#888;
-font-size:13px;
-text-align:right
+  color:#888;
+  font-size:12px;
+  text-align:right;
 }
 
 .dailyStatus strong{
-display:block;
-color:#eee;
-font-size:17px;
-margin-top:6px
+  display:block;
+  color:#eee;
+  margin-top:5px;
 }
 
 .update{
-width:100%;
-margin-top:14px;
-padding:12px;
-border:1px solid #333;
-border-radius:12px;
-background:#222;
-color:#ddd
+  width:100%;
+  margin-top:12px;
+  padding:12px;
+  border:1px solid #333;
+  border-radius:10px;
+  background:#222;
+  color:#ddd;
+  font-size:14px;
+  cursor:pointer;
 }
 
 .add{
-width:100%;
-margin:16px 0 30px;
-padding:17px;
-border:0;
-border-radius:17px;
-background:#eee;
-color:#111;
-font-size:18px;
-font-weight:bold
+  width:100%;
+  margin:15px 0 28px;
+  padding:17px;
+  border:0;
+  border-radius:15px;
+  background:#eee;
+  color:#111;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
 }
 
 .sectionTitle{
-font-size:21px;
-font-weight:bold;
-margin:24px 0 12px
+  font-size:19px;
+  font-weight:bold;
+  margin:22px 0 12px;
 }
 
 .day{
-color:#777;
-font-size:12px;
-font-weight:bold;
-margin:20px 5px 8px;
-text-transform:uppercase
+  color:#777;
+  font-size:11px;
+  font-weight:bold;
+  margin:18px 4px 8px;
+  text-transform:uppercase;
 }
 
 .transaction{
-background:#191919;
-border:1px solid #292929;
-border-left:5px solid #777;
-border-radius:15px;
-padding:14px;
-margin-bottom:8px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:12px
+  background:#191919;
+  border:1px solid #292929;
+  border-left:4px solid #777;
+  border-radius:14px;
+  padding:13px;
+  margin-bottom:8px;
 }
 
-.transaction.cash{
-border-left-color:#55c98a
-}
+.transaction.cash{border-left-color:#55c98a}
+.transaction.gpay{border-left-color:#5ca9ff}
+.transaction.debit{border-left-color:#e4c44f}
+.transaction.transfer{border-left-color:#b88cff}
 
-.transaction.gpay{
-border-left-color:#5ca9ff
-}
-
-.transaction.debit{
-border-left-color:#e4c44f
-}
-
-.transaction.transfer{
-border-left-color:#b88cff
-}
-
-.txLeft{
-min-width:0
+.txTop{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
 }
 
 .txName{
-font-weight:bold;
-font-size:16px
-}
-
-.txNote{
-color:#777;
-font-size:12px;
-margin-top:4px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
+  font-weight:bold;
+  font-size:15px;
 }
 
 .txRight{
-text-align:right;
-white-space:nowrap
+  text-align:right;
+  white-space:nowrap;
 }
 
 .txAmount{
-font-weight:bold;
-font-size:16px
+  font-weight:bold;
+}
+
+.txNote{
+  color:#777;
+  font-size:12px;
+  margin-top:4px;
 }
 
 .txActions{
-margin-top:7px
+  margin-top:10px;
+  display:flex;
+  gap:6px;
 }
 
 .txActions button{
-background:none;
-border:0;
-color:#888;
-font-size:12px;
-padding:0 0 0 10px
+  border:1px solid #333;
+  background:#222;
+  color:#bbb;
+  border-radius:8px;
+  padding:6px 10px;
+  font-size:11px;
+  cursor:pointer;
 }
 
-.txActions button:hover{
-color:#eee
-}
-
-.category{
-background:#191919;
-border:1px solid #292929;
-border-radius:15px;
-padding:14px;
-margin-bottom:9px
-}
-
-.catRow{
-display:flex;
-justify-content:space-between;
-align-items:center
-}
-
-.bar{
-height:6px;
-background:#292929;
-border-radius:6px;
-margin-top:9px
-}
-
-.fill{
-height:100%;
-background:#777;
-border-radius:6px
+.txActions button.deleteBtn{
+  color:#ff7777;
 }
 
 .empty{
-background:#191919;
-border:1px solid #292929;
-border-radius:15px;
-padding:24px;
-text-align:center;
-color:#777
+  background:#191919;
+  border:1px solid #292929;
+  border-radius:14px;
+  padding:22px;
+  text-align:center;
+  color:#777;
+}
+
+.category{
+  background:#191919;
+  border:1px solid #292929;
+  border-radius:13px;
+  padding:13px;
+  margin-bottom:8px;
+}
+
+.catRow{
+  display:flex;
+  justify-content:space-between;
+}
+
+.bar{
+  height:5px;
+  background:#292929;
+  border-radius:5px;
+  margin-top:8px;
+}
+
+.fill{
+  height:100%;
+  background:#777;
+  border-radius:5px;
 }
 
 .starting{
-text-align:center;
-color:#777;
-font-size:13px;
-margin-top:26px
+  text-align:center;
+  color:#777;
+  font-size:12px;
+  margin-top:25px;
 }
 
 .starting button{
-background:none;
-border:0;
-color:#aaa;
-text-decoration:underline
+  background:none;
+  border:0;
+  color:#aaa;
+  text-decoration:underline;
+  cursor:pointer;
 }
-
 
 /* MODAL */
 
 .modal{
-display:none;
-position:fixed;
-inset:0;
-background:#000b;
-align-items:flex-end;
-justify-content:center;
-z-index:100
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000b;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:20;
 }
 
 .modal.show{
-display:flex
+  display:flex;
 }
 
 .sheet{
-width:100%;
-max-width:620px;
-max-height:94vh;
-overflow-y:auto;
-background:#181818;
-border:1px solid #303030;
-border-radius:24px 24px 0 0;
-padding:22px 16px 30px
+  width:100%;
+  max-width:620px;
+  max-height:94vh;
+  overflow-y:auto;
+  background:#181818;
+  border:1px solid #292929;
+  border-radius:22px 22px 0 0;
+  padding:20px 16px 28px;
 }
 
 .sheet h2{
-margin:0 0 20px;
-font-size:24px
+  margin:0 0 18px;
+  font-size:21px;
 }
 
 .tabs{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:8px;
-margin-bottom:18px
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:7px;
+  margin-bottom:16px;
 }
 
 .tabs button{
-padding:13px 5px;
-border:1px solid #333;
-border-radius:13px;
-background:#222;
-color:#aaa
+  padding:12px 5px;
+  border:1px solid #333;
+  border-radius:12px;
+  background:#222;
+  color:#aaa;
+  cursor:pointer;
 }
 
 .tabs button.active{
-background:#eee;
-color:#111
+  background:#eee;
+  color:#111;
 }
 
 label{
-display:block;
-color:#888;
-font-size:14px;
-margin:13px 0 7px
+  display:block;
+  color:#888;
+  font-size:13px;
+  margin:12px 0 6px;
 }
 
-input,
-select{
-width:100%;
-padding:14px;
-border:1px solid #333;
-border-radius:13px;
-background:#222;
-color:#eee;
-font-size:16px;
-outline:none
+input,select{
+  width:100%;
+  padding:13px;
+  border:1px solid #333;
+  border-radius:12px;
+  background:#222;
+  color:#eee;
+  font-size:16px;
 }
 
 input:focus,
 select:focus{
-border-color:#777
-}
-
-input:disabled{
-opacity:.5
+  outline:2px solid #777;
 }
 
 .hidden{
-display:none!important
+  display:none!important;
 }
 
 .check{
-display:flex;
-align-items:center;
-gap:10px;
-color:#ddd;
-font-size:14px;
-margin-top:14px
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#ddd;
+  font-size:14px;
+  margin-top:12px;
 }
 
 .check input{
-width:19px;
-height:19px
+  width:18px;
+  height:18px;
 }
 
 .info,
-.preview,
-.expenseLimit{
-background:#202020;
-border:1px solid #303030;
-border-radius:13px;
-padding:12px;
-margin-top:12px;
-color:#aaa;
-font-size:12px;
-line-height:1.5
+.limitInfo,
+.preview{
+  background:#202020;
+  border:1px solid #303030;
+  border-radius:12px;
+  padding:11px;
+  margin-top:10px;
+  color:#aaa;
+  font-size:12px;
+  line-height:1.5;
 }
 
-.preview strong,
-.expenseLimit strong{
-display:block;
-color:#eee;
-font-size:19px;
-margin-top:5px
+.limitInfo strong,
+.preview strong{
+  display:block;
+  color:#eee;
+  font-size:18px;
+  margin-top:4px;
 }
 
-.expenseLimit.good{
-border-color:#335f47
+.limitInfo.warning{
+  border-color:#8b3030;
+  background:#351818;
 }
 
-.expenseLimit.warning{
-border-color:#8b3030;
-background:#351818
+.limitInfo.warning strong{
+  color:#ff6868;
 }
 
-.expenseLimit.warning strong{
-color:#ff6868
+.preview strong{
+  font-size:17px;
 }
 
 .buttons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:9px;
-margin-top:20px
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:18px;
 }
 
 .buttons button{
-padding:14px;
-border:0;
-border-radius:13px;
-font-size:16px
+  padding:13px;
+  border:0;
+  border-radius:12px;
+  font-size:15px;
+  cursor:pointer;
 }
 
 .cancel{
-background:#292929;
-color:#eee
+  background:#292929;
+  color:#eee;
 }
 
 .save{
-background:#eee;
-color:#111
+  background:#eee;
+  color:#111;
 }
 
-@media(max-width:430px){
-
-.app{
-padding-left:14px;
-padding-right:14px
+.closeTop{
+  float:right;
+  border:0;
+  background:none;
+  color:#aaa;
+  font-size:24px;
+  cursor:pointer;
 }
 
-h1{
-font-size:28px
-}
+@media(max-width:480px){
+  .app{
+    padding:20px 14px 50px;
+  }
 
-.balance{
-font-size:39px
-}
+  h1{
+    font-size:27px;
+  }
 
+  .balance{
+    font-size:34px;
+  }
 }
 </style>
 </head>
-
 
 <body>
 
 <div class="app">
 
 <header>
+  <div>
+    <h1>Thomas's Tracker</h1>
+    <div class="month" id="month"></div>
+  </div>
 
-<div>
-
-<h1>Thomas's Tracker</h1>
-
-<div
-class="month"
-id="month">
-</div>
-
-</div>
-
-<div class="monthNav">
-
-<button
-type="button"
-onclick="changeMonth(-1)">
-‹
-</button>
-
-<button
-type="button"
-onclick="changeMonth(1)">
-›
-</button>
-
-</div>
-
+  <div class="monthNav">
+    <button type="button" onclick="changeMonth(-1)">‹</button>
+    <button type="button" onclick="changeMonth(1)">›</button>
+  </div>
 </header>
 
 
 <div class="card">
-
-<div class="label">
-Balance
-</div>
-
-<div
-class="balance"
-id="balance">
-₹0
-</div>
-
+  <div class="label">Balance</div>
+  <div class="balance" id="balance">₹0</div>
 </div>
 
 
 <div class="moneyRow">
 
-<div class="money">
+  <div class="money">
+    <div class="label">Income</div>
+    <strong class="income" id="income">₹0</strong>
+  </div>
 
-<div class="label">
-Income
-</div>
-
-<strong
-class="income"
-id="income">
-₹0
-</strong>
+  <div class="money">
+    <div class="label">Spent</div>
+    <strong class="spent" id="spent">₹0</strong>
+  </div>
 
 </div>
 
 
-<div class="money">
+<div class="daily" id="dailyBox">
 
-<div class="label">
-Spent
-</div>
+  <div class="dailyTop">
 
-<strong
-class="spent"
-id="spent">
-₹0
-</strong>
+    <div>
+      <div class="label">Daily Limit</div>
+      <div class="dailyValue" id="dailyLimit">—</div>
+    </div>
 
-</div>
+    <div class="dailyStatus">
+      Today's status
+      <strong id="dailyStatus">—</strong>
+    </div>
 
-</div>
+  </div>
 
-
-<div
-class="daily"
-id="dailyBox">
-
-<div class="dailyTop">
-
-<div>
-
-<div class="label">
-Daily Limit
-</div>
-
-<div
-class="dailyValue"
-id="dailyLimit">
-—
-</div>
+  <button type="button" class="update" onclick="updateDailyLimit()">
+    Update Daily Limit
+  </button>
 
 </div>
 
 
-<div class="dailyStatus">
-
-Today's status
-
-<strong
-id="dailyStatus">
-—
-</strong>
-
-</div>
-
-</div>
-
-
-<button
-type="button"
-class="update"
-onclick="updateDailyLimit()">
-
-Update Daily Limit
-
-</button>
-
-</div>
-
-
-<button
-type="button"
-class="add"
-onclick="openTransaction()">
-
-＋ Add Transaction
-
+<button type="button" class="add" onclick="openTransaction()">
+  ＋ Add Transaction
 </button>
 
 
-<div class="sectionTitle">
-Recent transactions
-</div>
-
-<div id="transactions">
-</div>
+<div class="sectionTitle">Recent transactions</div>
+<div id="transactions"></div>
 
 
-<div class="sectionTitle">
-Your spending on
-</div>
-
-<div id="categories">
-</div>
+<div class="sectionTitle">Your spending on</div>
+<div id="categories"></div>
 
 
 <div class="starting">
-
-Starting balance:
-
-<span id="startingBalance">
-₹0
-</span>
-
-·
-
-<button
-type="button"
-onclick="setStartingBalance()">
-
-Set / change
-
-</button>
-
+  Starting balance:
+  <span id="startingBalance">₹0</span>
+  ·
+  <button type="button" onclick="setStartingBalance()">
+    Set / change
+  </button>
 </div>
 
 </div>
 
 
+<!-- TRANSACTION MODAL -->
 
-<!-- =========================
-     TRANSACTION MODAL
-========================= -->
-
-<div
-class="modal"
-id="transactionModal">
+<div class="modal" id="transactionModal">
 
 <div class="sheet">
 
-<h2 id="formTitle">
-Add Transaction
-</h2>
+<button type="button" class="closeTop" onclick="closeTransaction()">×</button>
+
+<h2 id="modalTitle">Add Transaction</h2>
 
 
 <div class="tabs">
 
-<button
-type="button"
-id="expenseTab"
-class="active"
+<button type="button" id="expenseTab"
 onclick="setTransactionType('expense')">
-
 Expense
-
 </button>
 
-
-<button
-type="button"
-id="incomeTab"
+<button type="button" id="incomeTab"
 onclick="setTransactionType('income')">
-
 Income
-
 </button>
 
-
-<button
-type="button"
-id="transferTab"
+<button type="button" id="transferTab"
 onclick="setTransactionType('transfer')">
-
 Transfer
-
 </button>
 
 </div>
 
 
-
-<label>
-Amount
-</label>
+<label>Amount</label>
 
 <input
-id="amount"
-type="number"
-inputmode="decimal"
-min="0"
-step="0.01"
-placeholder="₹ 0"
+  id="amount"
+  type="number"
+  inputmode="decimal"
+  min="0"
+  step="0.01"
+  placeholder="₹ 0"
+  oninput="updateExpensePreview();showPreview()"
 >
 
 
-
-<!-- EXPENSE / INCOME -->
-
 <div id="normalFields">
 
-<label>
-Category
-</label>
+<label>Category</label>
 
-<select id="category">
-</select>
+<select id="category"></select>
 
 
-<label>
-Payment method
-</label>
+<label>Payment method</label>
 
 <select id="payment">
 
-<option value="cash">
-💵 Cash
-</option>
-
-<option value="gpay">
-📱 GPay
-</option>
-
-<option value="debit">
-💳 Debit Card
-</option>
+<option value="cash">💵 Cash</option>
+<option value="gpay">📱 GPay</option>
+<option value="debit">💳 Debit Card</option>
 
 </select>
 
-</div>
 
-
-
-<!-- EXPENSE DAILY LIMIT -->
-
-<div
-id="expenseLimitBox"
-class="expenseLimit hidden">
+<div id="expenseLimitInfo" class="limitInfo hidden">
 
 Today's available Daily Limit
 
-<strong id="expenseLimit">
-—
-</strong>
+<strong id="expenseAvailable">—</strong>
 
-<div id="expenseAfter">
-</div>
+<div id="expenseAfter"></div>
 
 </div>
 
+</div>
+
+
+<!-- TRANSFER -->
+
+<div id="transferFields" class="hidden">
+
+<label>From</label>
+
+<select id="from">
+
+<option value="cash">💵 Cash</option>
+<option value="gpay">📱 GPay</option>
+<option value="debit">💳 Debit Card</option>
+<option value="savings">🏦 Savings</option>
+
+</select>
+
+
+<label>To</label>
+
+<select id="to">
+
+<option value="gpay">📱 GPay</option>
+<option value="cash">💵 Cash</option>
+<option value="debit">💳 Debit Card</option>
+<option value="savings">🏦 Savings</option>
+
+</select>
+
+<div class="info">
+Transfers do not count as spending.
+A transfer to Savings reduces your available balance.
+</div>
+
+</div>
 
 
 <!-- SALARY -->
 
-<div
-id="salaryFields"
-class="hidden">
+<div id="salaryFields" class="hidden">
 
 <label class="check">
 
 <input
-id="calculateDailyLimit"
-type="checkbox"
-onchange="toggleSalaryFields()">
+  id="calculateDailyLimit"
+  type="checkbox"
+  onchange="toggleSalaryFields()"
+>
 
 Calculate Daily Limit
 
 </label>
 
 
-<div
-id="savingsField"
-class="hidden">
+<div id="savingsField" class="hidden">
 
-<label>
-Savings
-</label>
+<label>Savings</label>
 
 <input
-id="savings"
-type="number"
-inputmode="decimal"
-min="0"
-step="0.01"
-placeholder="₹ 0"
-oninput="showPreview()">
-
-
-<div class="preview">
-
-Calculated Daily Limit for next month
-
-<strong id="previewAmount">
-₹0
-</strong>
-
-</div>
-
-
-<div class="info">
-
-Salary minus Savings becomes the income available to spend.
-
-This salary creates the Daily Limit for the following month.
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<!-- TRANSFER -->
-
-<div
-id="transferFields"
-class="hidden">
-
-<label>
-From
-</label>
-
-<select id="from">
-
-<option value="cash">
-💵 Cash
-</option>
-
-<option value="gpay">
-📱 GPay
-</option>
-
-<option value="debit">
-💳 Debit Card
-</option>
-
-<option value="savings">
-🏦 Savings
-</option>
-
-</select>
-
-
-<label>
-To
-</label>
-
-<select id="to">
-
-<option value="gpay">
-📱 GPay
-</option>
-
-<option value="cash">
-💵 Cash
-</option>
-
-<option value="debit">
-💳 Debit Card
-</option>
-
-<option value="savings">
-🏦 Savings
-</option>
-
-</select>
-
-
-<div class="info">
-
-Transfers between Cash, GPay and Debit Card do not count as spending.
-
-Moving money to Savings reduces available balance.
-
-</div>
-
-</div>
-
-
-
-<label>
-Date
-</label>
-
-<input
-id="date"
-type="date"
+  id="savings"
+  type="number"
+  inputmode="decimal"
+  min="0"
+  step="0.01"
+  placeholder="₹ 0"
+  oninput="showPreview()"
 >
 
 
-<label>
-Note (optional)
-</label>
+<div class="preview" id="preview">
+
+Calculated Daily Limit
+
+<strong id="previewAmount">₹0</strong>
+
+</div>
+
+</div>
+
+</div>
+
+
+<label>Date</label>
 
 <input
-id="note"
-type="text"
-placeholder="What was it for?"
+  id="date"
+  type="date"
+>
+
+
+<label>Note (optional)</label>
+
+<input
+  id="note"
+  type="text"
+  placeholder="What was it for?"
 >
 
 
 <div class="buttons">
 
-<button
-type="button"
-class="cancel"
-onclick="closeTransaction()">
-
+<button type="button" class="cancel" onclick="closeTransaction()">
 Cancel
-
 </button>
 
-
-<button
-type="button"
-class="save"
-onclick="saveTransaction()">
-
+<button type="button" class="save" onclick="saveTransaction()">
 Save
-
 </button>
 
 </div>
 
 </div>
-
 </div>
-
 
 
 <script>
 
 /* =====================================================
-   STORAGE
+   DATA
 ===================================================== */
 
-const STORAGE_KEY =
-"thomasTrackerData_v5";
+const STORAGE_KEY = "thomasTrackerData";
 
+const defaultData = {
+  transactions: [],
+  startingBalance: 0,
+  dailyLimits: {}
+};
 
 let data;
 
-
 try{
-
-data =
-JSON.parse(
-localStorage.getItem(
-STORAGE_KEY
-)||"null"
-);
-
+  data = JSON.parse(
+    localStorage.getItem(STORAGE_KEY) ||
+    JSON.stringify(defaultData)
+  );
 }catch(e){
-
-data=null;
-
+  data = defaultData;
 }
 
+if(!data.transactions) data.transactions=[];
+if(!data.dailyLimits) data.dailyLimits={};
+if(data.startingBalance===undefined) data.startingBalance=0;
 
-if(
-!data ||
-typeof data!=="object"
-){
+let currentType = "expense";
+let editingId = null;
 
-data={
-transactions:[],
-startingBalance:0,
-dailyLimits:{}
-};
-
-}
-
-
-if(
-!Array.isArray(
-data.transactions
-)
-){
-
-data.transactions=[];
-
-}
-
-
-if(
-!data.dailyLimits
-){
-
-data.dailyLimits={};
-
-}
-
-
-if(
-typeof data.startingBalance!=="number"
-){
-
-data.startingBalance=
-Number(
-data.startingBalance
-)||0;
-
-}
-
-
-let currentType="expense";
-
-let editingId=null;
-
-let selectedMonth=
-new Date();
-
+let selectedMonth = new Date();
 selectedMonth.setDate(1);
-
 
 
 /* =====================================================
    CATEGORIES
 ===================================================== */
 
-const expenseCategories=[
-
-["Restaurant","🍽️"],
-["Fast Food","🍔"],
-["Juice & Ice Cream","🥤"],
-["Movies","🎬"],
-["Petrol","⛽"],
-["Apps & Digital","📱"],
-["Internet / Recharge","🌐"],
-["Parents","👨‍👩‍👦"],
-["Groceries","🛒"],
-["Clothing","👕"],
-["Personal & Cleaning","🧼"],
-["Kitchen","🍳"],
-["Scooty Service","🛵"],
-["Other","📦"]
-
+const expenseCategories = [
+  ["Restaurant","🍽️"],
+  ["Fast Food","🍔"],
+  ["Juice & Ice Cream","🥤"],
+  ["Movies","🎬"],
+  ["Petrol","⛽"],
+  ["Apps & Digital","📱"],
+  ["Internet / Recharge","🌐"],
+  ["Parents","👨‍👩‍👦"],
+  ["Groceries","🛒"],
+  ["Clothing","👕"],
+  ["Personal & Cleaning","🧼"],
+  ["Kitchen","🍳"],
+  ["Scooty Service","🛵"],
+  ["Other","📦"]
 ];
 
-
-const incomeCategories=[
-
-["Salary","💼"],
-["Other Income","💰"],
-["Refund","↩️"],
-["Other","📦"]
-
+const incomeCategories = [
+  ["Salary","💼"],
+  ["Other Income","💰"],
+  ["Refund","↩️"],
+  ["Other","📦"]
 ];
 
-
-const emoji={};
-
-[
-...expenseCategories,
-...incomeCategories
-].forEach(
-x=>{
-emoji[x[0]]=x[1];
-}
-);
-
-
-const payEmoji={
-
-cash:"💵",
-gpay:"📱",
-debit:"💳",
-savings:"🏦"
-
+const paymentEmoji = {
+  cash:"💵",
+  gpay:"📱",
+  debit:"💳"
 };
-
 
 
 /* =====================================================
@@ -1117,138 +819,69 @@ savings:"🏦"
 ===================================================== */
 
 function saveData(){
-
-localStorage.setItem(
-STORAGE_KEY,
-JSON.stringify(data)
-);
-
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
 }
 
 
 function money(value){
-
-return "₹"+
-Math.round(
-Number(value)||0
-).toLocaleString(
-"en-IN"
-);
-
+  return "₹" +
+    Math.round(Number(value)||0)
+    .toLocaleString("en-IN");
 }
 
 
 function today(){
+  const d = new Date();
 
-const d=new Date();
-
-return d.getFullYear()+
-"-"+
-String(
-d.getMonth()+1
-).padStart(2,"0")+
-"-"+
-String(
-d.getDate()
-).padStart(2,"0");
-
+  return d.getFullYear() +
+    "-" +
+    String(d.getMonth()+1).padStart(2,"0") +
+    "-" +
+    String(d.getDate()).padStart(2,"0");
 }
 
 
 function monthKey(date){
-
-return date.getFullYear()+
-"-"+
-String(
-date.getMonth()+1
-).padStart(2,"0");
-
+  return date.getFullYear() +
+    "-" +
+    String(date.getMonth()+1).padStart(2,"0");
 }
 
 
-function daysInMonth(
-year,
-month
-){
-
-return new Date(
-year,
-month+1,
-0
-).getDate();
-
+function daysInMonth(year,month){
+  return new Date(year,month+1,0).getDate();
 }
 
 
-function dateObj(value){
-
-return new Date(
-value+"T12:00:00"
-);
-
-}
-
-
-function escapeHtml(text){
-
-return String(
-text||""
-)
-.replace(
-/[&<>"']/g,
-function(c){
-
-return {
-
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#039;"
-
-}[c];
-
-}
-);
-
-}
-
-
-function nextMonthKey(
-monthString
-){
-
-const parts=
-monthString
-.split("-")
-.map(Number);
-
-return monthKey(
-new Date(
-parts[0],
-parts[1],
-1
-)
-);
-
+function dateText(value){
+  return new Date(value+"T12:00:00")
+    .toLocaleDateString(
+      "en-IN",
+      {
+        weekday:"long",
+        day:"numeric",
+        month:"short"
+      }
+    );
 }
 
 
 /* =====================================================
-   MONTH
+   MONTH NAVIGATION
 ===================================================== */
 
-function changeMonth(amount){
+function changeMonth(direction){
 
-selectedMonth=
-new Date(
-selectedMonth.getFullYear(),
-selectedMonth.getMonth()+amount,
-1
-);
+  selectedMonth = new Date(
+    selectedMonth.getFullYear(),
+    selectedMonth.getMonth()+direction,
+    1
+  );
 
-render();
-
+  render();
 }
 
 
@@ -1258,1274 +891,945 @@ render();
 
 function populateCategories(){
 
-const select=
-document.getElementById(
-"category"
-);
+  const select =
+    document.getElementById("category");
 
-select.innerHTML="";
+  select.innerHTML = "";
 
-const list=
-currentType==="income"
-?incomeCategories
-:expenseCategories;
+  const list =
+    currentType === "income"
+    ? incomeCategories
+    : expenseCategories;
 
+  list.forEach(item=>{
 
-list.forEach(
-item=>{
+    const option =
+      document.createElement("option");
 
-const option=
-document.createElement(
-"option"
-);
+    option.value = item[0];
+    option.textContent =
+      item[1] + " " + item[0];
 
-option.value=
-item[0];
+    select.appendChild(option);
 
-option.textContent=
-item[1]+" "+item[0];
-
-select.appendChild(
-option
-);
-
-}
-);
-
-
-if(
-currentType==="income"
-){
-
-select.value="Salary";
-
-}
+  });
 
 }
 
 
 /* =====================================================
-   TRANSACTION FORM
+   TRANSACTION MODAL
 ===================================================== */
-
-function setTransactionType(
-type
-){
-
-currentType=type;
-
-editingId=null;
-
-document.getElementById(
-"formTitle"
-).textContent=
-"Add Transaction";
-
-updateTransactionType();
-
-}
-
-
-function updateTransactionType(){
-
-document.getElementById(
-"expenseTab"
-)
-.classList.toggle(
-"active",
-currentType==="expense"
-);
-
-
-document.getElementById(
-"incomeTab"
-)
-.classList.toggle(
-"active",
-currentType==="income"
-);
-
-
-document.getElementById(
-"transferTab"
-)
-.classList.toggle(
-"active",
-currentType==="transfer"
-);
-
-
-document.getElementById(
-"normalFields"
-)
-.classList.toggle(
-"hidden",
-currentType==="transfer"
-);
-
-
-document.getElementById(
-"transferFields"
-)
-.classList.toggle(
-"hidden",
-currentType!=="transfer"
-);
-
-
-document.getElementById(
-"salaryFields"
-)
-.classList.toggle(
-"hidden",
-currentType!=="income"
-);
-
-
-document.getElementById(
-"expenseLimitBox"
-)
-.classList.toggle(
-"hidden",
-currentType!=="expense"
-);
-
-
-populateCategories();
-
-toggleSalaryFields();
-
-updateExpensePreview();
-
-}
-
 
 function openTransaction(){
 
-editingId=null;
+  editingId = null;
 
-document.getElementById(
-"formTitle"
-).textContent=
-"Add Transaction";
+  document.getElementById("modalTitle")
+    .textContent = "Add Transaction";
 
+  document.getElementById("transactionModal")
+    .classList.add("show");
 
-document.getElementById(
-"transactionModal"
-)
-.classList.add("show");
+  document.getElementById("amount").value="";
+  document.getElementById("date").value=today();
+  document.getElementById("date").max=today();
+  document.getElementById("note").value="";
+  document.getElementById("savings").value="";
 
+  document.getElementById("calculateDailyLimit")
+    .checked=false;
 
-document.getElementById(
-"amount"
-).value="";
+  currentType="expense";
 
+  updateTransactionType();
 
-document.getElementById(
-"date"
-).value=
-today();
-
-
-/*
-No future date allowed.
-*/
-
-document.getElementById(
-"date"
-).max=
-today();
-
-
-document.getElementById(
-"note"
-).value="";
-
-
-document.getElementById(
-"savings"
-).value="";
-
-
-document.getElementById(
-"calculateDailyLimit"
-).checked=false;
-
-
-currentType="expense";
-
-updateTransactionType();
-
-document.getElementById(
-"amount"
-).focus();
+  document.getElementById("amount").focus();
 
 }
 
 
 function closeTransaction(){
 
-document.getElementById(
-"transactionModal"
-)
-.classList.remove(
-"show"
-);
+  document.getElementById("transactionModal")
+    .classList.remove("show");
 
-editingId=null;
+  editingId=null;
+
+}
+
+
+function setTransactionType(type){
+
+  currentType=type;
+
+  updateTransactionType();
+
+}
+
+
+function updateTransactionType(){
+
+  document.getElementById("expenseTab")
+    .classList.toggle(
+      "active",
+      currentType==="expense"
+    );
+
+  document.getElementById("incomeTab")
+    .classList.toggle(
+      "active",
+      currentType==="income"
+    );
+
+  document.getElementById("transferTab")
+    .classList.toggle(
+      "active",
+      currentType==="transfer"
+    );
+
+  document.getElementById("normalFields")
+    .classList.toggle(
+      "hidden",
+      currentType==="transfer"
+    );
+
+  document.getElementById("transferFields")
+    .classList.toggle(
+      "hidden",
+      currentType!=="transfer"
+    );
+
+  document.getElementById("salaryFields")
+    .classList.toggle(
+      "hidden",
+      currentType!=="income"
+    );
+
+  populateCategories();
+
+  if(currentType==="income"){
+    document.getElementById("category").value="Salary";
+  }
+
+  updateExpensePreview();
 
 }
 
 
 /* =====================================================
-   SALARY OPTIONS
+   SALARY
 ===================================================== */
 
 function toggleSalaryFields(){
 
-const show=
-currentType==="income" &&
-document.getElementById(
-"category"
-).value==="Salary" &&
-document.getElementById(
-"calculateDailyLimit"
-).checked;
+  const checked =
+    document.getElementById(
+      "calculateDailyLimit"
+    ).checked;
 
+  document.getElementById("savingsField")
+    .classList.toggle(
+      "hidden",
+      !checked
+    );
 
-document.getElementById(
-"savingsField"
-)
-.classList.toggle(
-"hidden",
-!show
-);
-
-
-showPreview();
+  showPreview();
 
 }
 
 
 function showPreview(){
 
-const preview=
-document.getElementById(
-"previewAmount"
-);
+  const preview =
+    document.getElementById("preview");
 
+  const checked =
+    document.getElementById(
+      "calculateDailyLimit"
+    ).checked;
 
-if(
-currentType!=="income" ||
-document.getElementById(
-"category"
-).value!=="Salary" ||
-!document.getElementById(
-"calculateDailyLimit"
-).checked
-){
+  if(!checked){
+    preview.style.display="none";
+    return;
+  }
 
-document.getElementById(
-"preview"
-).style.display="none";
+  const salary =
+    Number(
+      document.getElementById("amount").value
+    ) || 0;
 
-return;
+  const savings =
+    Number(
+      document.getElementById("savings").value
+    ) || 0;
 
-}
+  const date =
+    document.getElementById("date").value;
 
+  if(!date){
+    preview.style.display="none";
+    return;
+  }
 
-const salary=
-Number(
-document.getElementById(
-"amount"
-).value
-)||0;
+  const d =
+    new Date(date+"T12:00:00");
 
+  /*
+    Salary received on 31 Aug
+    creates September's limit.
+  */
 
-const savings=
-Number(
-document.getElementById(
-"savings"
-).value
-)||0;
+  const nextMonth =
+    new Date(
+      d.getFullYear(),
+      d.getMonth()+1,
+      1
+    );
 
+  const days =
+    daysInMonth(
+      nextMonth.getFullYear(),
+      nextMonth.getMonth()
+    );
 
-const date=
-document.getElementById(
-"date"
-).value||
-today();
+  const spendable =
+    Math.max(0,salary-savings);
 
+  const limit =
+    spendable/days;
 
-const p=
-date
-.split("-")
-.map(Number);
+  document.getElementById("previewAmount")
+    .textContent = money(limit);
 
-
-const year=p[0];
-
-const month=p[1]-1;
-
-const days=
-daysInMonth(
-year,
-month
-);
-
-
-const spendable=
-Math.max(
-0,
-salary-savings
-);
-
-
-const limit=
-days>0
-?spendable/days
-:0;
-
-
-preview.textContent=
-money(limit);
-
-
-document.getElementById(
-"preview"
-).style.display=
-"block";
+  preview.style.display="block";
 
 }
 
 
 /* =====================================================
-   BASE DAILY LIMIT
+   DAILY LIMIT CALCULATION
 ===================================================== */
 
-function getBaseDailyLimit(
-targetMonth
-){
+function salaryForMonth(targetMonth){
 
-/*
-Manual update overrides
-calculated salary limit.
-*/
+  const salaries =
+    data.transactions
+      .filter(t =>
+        t.type==="income" &&
+        t.category==="Salary" &&
+        t.calculateDailyLimit===true
+      )
+      .sort(
+        (a,b)=>
+          a.date.localeCompare(b.date)
+      );
 
-if(
-Object.prototype.hasOwnProperty.call(
-data.dailyLimits,
-targetMonth
-)
-){
+  let result=null;
 
-return Number(
-data.dailyLimits[targetMonth]
-);
+  salaries.forEach(salary=>{
 
+    const d =
+      new Date(
+        salary.date+"T12:00:00"
+      );
+
+    const nextMonth =
+      new Date(
+        d.getFullYear(),
+        d.getMonth()+1,
+        1
+      );
+
+    const key =
+      monthKey(nextMonth);
+
+    if(key===targetMonth){
+      result=salary;
+    }
+
+  });
+
+  return result;
 }
 
 
-const salaries=
-data.transactions
-.filter(
-t=>
-t.type==="income" &&
-t.category==="Salary" &&
-t.calculateDailyLimit
-)
-.sort(
-(a,b)=>
-a.date.localeCompare(
-b.date
-)
-);
+function calculatedDailyLimit(targetMonth){
 
+  const salary =
+    salaryForMonth(targetMonth);
 
-let found=null;
+  if(!salary){
+    return null;
+  }
 
+  const [year,month] =
+    targetMonth.split("-").map(Number);
 
-salaries.forEach(
-salary=>{
+  const days =
+    daysInMonth(
+      year,
+      month-1
+    );
 
-const salaryMonth=
-salary.date.slice(
-0,
-7
-);
+  const spendable =
+    Math.max(
+      0,
+      Number(salary.amount) -
+      Number(salary.savings || 0)
+    );
 
-
-if(
-nextMonthKey(
-salaryMonth
-)===
-targetMonth
-){
-
-found=salary;
-
-}
-
-}
-);
-
-
-if(!found){
-
-return null;
-
+  return spendable/days;
 }
 
 
-const parts=
-targetMonth
-.split("-")
-.map(Number);
+function dailyLimitForMonth(targetMonth){
 
+  if(
+    data.dailyLimits[targetMonth] !== undefined
+  ){
+    return Number(
+      data.dailyLimits[targetMonth]
+    );
+  }
 
-const year=
-parts[0];
-
-const month=
-parts[1]-1;
-
-
-const days=
-daysInMonth(
-year,
-month
-);
-
-
-const spendable=
-Math.max(
-0,
-Number(found.amount)-
-Number(found.savings||0)
-);
-
-
-return days>0
-?spendable/days
-:null;
-
+  return calculatedDailyLimit(targetMonth);
 }
 
 
 /* =====================================================
-   DAILY LIMIT WITH CARRY FORWARD
+   DAILY AVAILABLE AMOUNT
 ===================================================== */
 
-function getDailyResult(
-forDate
-){
-
-const date=
-forDate||today();
-
-
-const d=
-dateObj(date);
-
-
-const key=
-monthKey(d);
-
-
-const base=
-getBaseDailyLimit(
-key
-);
-
-
-if(base===null){
-
-return null;
-
-}
-
-
-let available=
-Number(base);
-
-
-const currentDay=
-d.getDate();
-
-
 /*
-Go through previous days.
+  Example:
 
-Unused money carries forward.
+  Daily limit = ₹667
 
-If unused money is moved to Savings,
-it does NOT carry forward.
+  Day 1 spend = ₹500
+
+  Unused = ₹167
+
+  Day 2:
+
+  ₹667 + ₹167 = ₹834
+
+  This means unused daily allowance
+  carries forward.
 */
 
-for(
-let day=1;
-day<currentDay;
-day++
-){
+function dailyAvailableForDate(dateString){
 
-const dayDate=
-key+
-"-"+
-String(day)
-.padStart(2,"0");
+  const d =
+    new Date(dateString+"T12:00:00");
 
+  const key = monthKey(d);
 
-const spent=
-data.transactions
-.filter(
-t=>
-t.type==="expense" &&
-t.date===dayDate &&
-t.id!==editingId
-)
-.reduce(
-(sum,t)=>
-sum+
-Number(t.amount||0),
-0
-);
+  const base =
+    dailyLimitForMonth(key);
 
+  if(base===null || base===undefined){
+    return null;
+  }
 
-const saved=
-data.transactions
-.filter(
-t=>
-t.type==="transfer" &&
-t.date===dayDate &&
-t.to==="savings" &&
-t.id!==editingId
-)
-.reduce(
-(sum,t)=>
-sum+
-Number(t.amount||0),
-0
-);
+  const day =
+    d.getDate();
 
+  let available =
+    Number(base);
 
-/*
-If the user spent less than
-the available amount, the
-unused part carries forward.
+  for(let i=1;i<day;i++){
 
-If money was moved to Savings,
-that saved portion does not
-carry forward.
-*/
+    const previous =
+      new Date(
+        d.getFullYear(),
+        d.getMonth(),
+        i
+      );
 
-const unused=
-Math.max(
-0,
-available-spent
-);
+    const previousDate =
+      previous.getFullYear() +
+      "-" +
+      String(previous.getMonth()+1)
+        .padStart(2,"0") +
+      "-" +
+      String(previous.getDate())
+        .padStart(2,"0");
 
+    const spent =
+      data.transactions
+        .filter(t =>
+          t.type==="expense" &&
+          t.date===previousDate
+        )
+        .reduce(
+          (sum,t)=>
+            sum + Number(t.amount),
+          0
+        );
 
-if(saved>0){
+    /*
+      Carry unused amount forward.
+    */
 
-available=
-Number(base);
+    available =
+      available +
+      (Number(base)-spent);
 
-}else{
+    /*
+      If it becomes negative,
+      reset to zero rather than
+      carrying negative money.
+    */
 
-available=
-Number(base)+unused;
+    if(available<0){
+      available=0;
+    }
 
-}
+  }
 
-}
+  /*
+    If editing an existing expense,
+    don't count that same expense.
+  */
 
+  const spentToday =
+    data.transactions
+      .filter(t =>
+        t.type==="expense" &&
+        t.date===dateString &&
+        t.id!==editingId
+      )
+      .reduce(
+        (sum,t)=>
+          sum + Number(t.amount),
+        0
+      );
 
-const todaySpent=
-data.transactions
-.filter(
-t=>
-t.type==="expense" &&
-t.date===date &&
-t.id!==editingId
-)
-.reduce(
-(sum,t)=>
-sum+
-Number(t.amount||0),
-0
-);
-
-
-return{
-
-base:Number(base),
-
-limit:available,
-
-spent:todaySpent,
-
-remaining:
-available-todaySpent
-
-};
+  return {
+    base:Number(base),
+    available:available,
+    spentToday:spentToday,
+    remaining:available-spentToday
+  };
 
 }
 
 
 /* =====================================================
-   EXPENSE LIMIT PREVIEW
+   EXPENSE PREVIEW
 ===================================================== */
 
 function updateExpensePreview(){
 
-const box=
-document.getElementById(
-"expenseLimitBox"
-);
+  const box =
+    document.getElementById(
+      "expenseLimitInfo"
+    );
 
+  if(currentType!=="expense"){
+    box.classList.add("hidden");
+    return;
+  }
 
-if(
-currentType!=="expense"
-){
+  const date =
+    document.getElementById("date").value;
 
-box.classList.add(
-"hidden"
-);
+  if(!date){
+    box.classList.add("hidden");
+    return;
+  }
 
-return;
+  const result =
+    dailyAvailableForDate(date);
 
-}
+  if(!result){
+    box.classList.remove("hidden");
+    box.classList.remove("warning");
 
+    document.getElementById(
+      "expenseAvailable"
+    ).textContent="—";
 
-const date=
-document.getElementById(
-"date"
-).value||
-today();
+    document.getElementById(
+      "expenseAfter"
+    ).textContent=
+      "No salary-based daily limit is set for this month.";
 
+    return;
+  }
 
-const result=
-getDailyResult(
-date
-);
+  box.classList.remove("hidden");
 
+  const amount =
+    Number(
+      document.getElementById("amount").value
+    ) || 0;
 
-if(!result){
+  const after =
+    result.remaining-amount;
 
-box.classList.add(
-"hidden"
-);
+  document.getElementById(
+    "expenseAvailable"
+  ).textContent =
+    money(result.remaining);
 
-return;
+  if(amount>0){
 
-}
+    if(after<0){
 
+      box.classList.add("warning");
 
-box.classList.remove(
-"hidden",
-"warning",
-"good"
-);
+      document.getElementById(
+        "expenseAfter"
+      ).textContent =
+        "After this expense: Over by " +
+        money(Math.abs(after));
 
+    }else{
 
-const amount=
-Number(
-document.getElementById(
-"amount"
-).value
-)||0;
+      box.classList.remove("warning");
 
+      document.getElementById(
+        "expenseAfter"
+      ).textContent =
+        "After this expense: " +
+        money(after) +
+        " remaining";
 
-const after=
-result.remaining-
-amount;
+    }
 
+  }else{
 
-document.getElementById(
-"expenseLimit"
-).textContent=
-money(
-result.remaining
-);
+    box.classList.remove("warning");
 
+    document.getElementById(
+      "expenseAfter"
+    ).textContent =
+      "Enter an amount to see what remains.";
 
-document.getElementById(
-"expenseAfter"
-).textContent=
-amount
-?
-(
-after<0
-?
-"After this expense: Over by "+
-money(
-Math.abs(after)
-)
-:
-"After this expense: "+
-money(after)+
-" remaining"
-)
-:
-"";
-
-
-box.classList.add(
-after<0
-?"warning"
-:"good"
-);
-
-
-/*
-If future date somehow gets selected,
-show no daily limit.
-*/
-
-if(
-date>today()
-){
-
-box.classList.add(
-"hidden"
-);
-
-}
+  }
 
 }
 
 
 /* =====================================================
-   SAVE
+   SAVE TRANSACTION
 ===================================================== */
 
 function saveTransaction(){
 
-const amount=
-Number(
-document.getElementById(
-"amount"
-).value
-);
+  const amount =
+    Number(
+      document.getElementById("amount").value
+    );
 
+  if(!amount || amount<=0){
 
-if(
-!amount ||
-amount<=0
-){
+    alert("Please enter a valid amount.");
+    return;
 
-alert(
-"Please enter a valid amount."
-);
+  }
 
-return;
+  const date =
+    document.getElementById("date").value;
 
-}
+  if(!date){
 
+    alert("Please select a date.");
+    return;
 
-const date=
-document.getElementById(
-"date"
-).value||
-today();
+  }
 
+  /*
+    Future dates are never allowed.
+  */
 
-/*
-Hard validation:
-future transactions are not allowed.
-*/
+  if(date>today()){
 
-if(
-date>today()
-){
+    alert(
+      "Future dates are not allowed. " +
+      "Please select today or an earlier date."
+    );
 
-alert(
-"Future-dated transactions are not allowed."
-);
+    return;
+  }
 
-return;
+  const note =
+    document.getElementById("note")
+      .value.trim();
 
-}
 
+  /* =========================================
+     EDIT EXISTING TRANSACTION
+  ========================================= */
 
-const note=
-document.getElementById(
-"note"
-).value.trim();
+  if(editingId!==null){
 
+    const index =
+      data.transactions.findIndex(
+        t=>t.id===editingId
+      );
 
-let transaction;
+    if(index!==-1){
 
+      const old =
+        data.transactions[index];
 
-/* TRANSFER */
+      /*
+        Keep the original transaction type
+        unless user deliberately changes it.
+      */
 
-if(
-currentType==="transfer"
-){
+      if(currentType==="transfer"){
 
-const from=
-document.getElementById(
-"from"
-).value;
+        const from =
+          document.getElementById("from").value;
 
+        const to =
+          document.getElementById("to").value;
 
-const to=
-document.getElementById(
-"to"
-).value;
+        if(from===to){
 
+          alert(
+            "From and To must be different."
+          );
 
-if(from===to){
+          return;
+        }
 
-alert(
-"From and To must be different."
-);
+        data.transactions[index]={
+          id:editingId,
+          type:"transfer",
+          amount:amount,
+          from:from,
+          to:to,
+          date:date,
+          note:note
+        };
 
-return;
+      }else if(currentType==="income"){
 
-}
+        const category =
+          document.getElementById("category").value;
 
+        const calculate =
+          category==="Salary" &&
+          document.getElementById(
+            "calculateDailyLimit"
+          ).checked;
 
-transaction={
+        const savings =
+          calculate
+          ? Number(
+              document.getElementById("savings").value
+            ) || 0
+          : 0;
 
-type:"transfer",
+        if(savings>amount){
 
-amount:amount,
+          alert(
+            "Savings cannot be greater than salary."
+          );
 
-from:from,
+          return;
+        }
 
-to:to,
+        data.transactions[index]={
+          id:editingId,
+          type:"income",
+          amount:amount,
+          category:category,
+          payment:
+            document.getElementById("payment").value,
+          date:date,
+          note:note,
+          savings:savings,
+          calculateDailyLimit:calculate
+        };
 
-date:date,
+      }else{
 
-note:note
+        data.transactions[index]={
+          id:editingId,
+          type:"expense",
+          amount:amount,
+          category:
+            document.getElementById("category").value,
+          payment:
+            document.getElementById("payment").value,
+          date:date,
+          note:note
+        };
 
-};
+      }
 
-}
+    }
 
+  }
 
-/* INCOME */
 
-else if(
-currentType==="income"
-){
+  /* =========================================
+     NEW TRANSACTION
+  ========================================= */
 
-const category=
-document.getElementById(
-"category"
-).value;
+  else{
 
+    if(currentType==="transfer"){
 
-const calculate=
-category==="Salary" &&
-document.getElementById(
-"calculateDailyLimit"
-).checked;
+      const from =
+        document.getElementById("from").value;
 
+      const to =
+        document.getElementById("to").value;
 
-const savings=
-calculate
-?
-Number(
-document.getElementById(
-"savings"
-).value
-)||0
-:0;
+      if(from===to){
 
+        alert(
+          "From and To must be different."
+        );
 
-if(
-savings>amount
-){
+        return;
+      }
 
-alert(
-"Savings cannot be greater than salary."
-);
+      data.transactions.push({
 
-return;
+        id:Date.now(),
 
-}
+        type:"transfer",
 
+        amount:amount,
 
-transaction={
+        from:from,
 
-type:"income",
+        to:to,
 
-amount:amount,
+        date:date,
 
-category:category,
+        note:note
 
-payment:
-document.getElementById(
-"payment"
-).value,
+      });
 
-date:date,
+    }
 
-note:note,
 
-savings:savings,
+    else if(currentType==="income"){
 
-calculateDailyLimit:
-calculate
+      const category =
+        document.getElementById("category").value;
 
-};
+      const calculate =
+        category==="Salary" &&
+        document.getElementById(
+          "calculateDailyLimit"
+        ).checked;
 
-}
+      const savings =
+        calculate
+        ? Number(
+            document.getElementById("savings").value
+          ) || 0
+        : 0;
 
+      if(savings>amount){
 
-/* EXPENSE */
+        alert(
+          "Savings cannot be greater than salary."
+        );
 
-else{
+        return;
+      }
 
-transaction={
+      data.transactions.push({
 
-type:"expense",
+        id:Date.now(),
 
-amount:amount,
+        type:"income",
 
-category:
-document.getElementById(
-"category"
-).value,
+        amount:amount,
 
-payment:
-document.getElementById(
-"payment"
-).value,
+        category:category,
 
-date:date,
+        payment:
+          document.getElementById("payment").value,
 
-note:note
+        date:date,
 
-};
+        note:note,
 
-}
+        savings:savings,
 
+        calculateDailyLimit:calculate
 
-/*
-EDIT existing transaction
-or create new one.
-*/
+      });
 
-if(
-editingId!==null
-){
+    }
 
-const index=
-data.transactions.findIndex(
-t=>t.id===editingId
-);
 
+    else{
 
-if(index>=0){
+      data.transactions.push({
 
-data.transactions[index]=
-{
+        id:Date.now(),
 
-...data.transactions[index],
+        type:"expense",
 
-...transaction
+        amount:amount,
 
-};
+        category:
+          document.getElementById("category").value,
 
-}
+        payment:
+          document.getElementById("payment").value,
 
-}else{
+        date:date,
 
-transaction.id=
-Date.now();
+        note:note
 
-data.transactions.push(
-transaction
-);
+      });
 
-}
+    }
 
+  }
 
-saveData();
 
-closeTransaction();
+  saveData();
 
-render();
+  closeTransaction();
+
+  render();
 
 }
 
 
 /* =====================================================
-   EDIT
+   EDIT TRANSACTION
 ===================================================== */
 
 function editTransaction(id){
 
-const t=
-data.transactions.find(
-x=>x.id===id
-);
+  const t =
+    data.transactions.find(
+      x=>x.id===id
+    );
 
+  if(!t) return;
 
-if(!t){
+  editingId=id;
 
-return;
+  document.getElementById(
+    "modalTitle"
+  ).textContent="Edit Transaction";
 
-}
+  document.getElementById(
+    "transactionModal"
+  ).classList.add("show");
 
+  document.getElementById(
+    "amount"
+  ).value=t.amount;
 
-editingId=id;
+  document.getElementById(
+    "date"
+  ).value=t.date;
 
-currentType=t.type;
+  document.getElementById(
+    "date"
+  ).max=today();
 
+  document.getElementById(
+    "note"
+  ).value=t.note || "";
 
-document.getElementById(
-"formTitle"
-).textContent=
-"Edit Transaction";
+  currentType=t.type;
 
+  updateTransactionType();
 
-document.getElementById(
-"transactionModal"
-)
-.classList.add("show");
+  if(t.type==="expense"){
 
+    document.getElementById(
+      "category"
+    ).value=t.category;
 
-document.getElementById(
-"amount"
-).value=
-t.amount;
+    document.getElementById(
+      "payment"
+    ).value=t.payment;
 
+  }
 
-document.getElementById(
-"date"
-).value=
-t.date;
+  if(t.type==="income"){
 
+    document.getElementById(
+      "category"
+    ).value=t.category;
 
-document.getElementById(
-"date"
-).max=
-today();
+    document.getElementById(
+      "payment"
+    ).value=t.payment;
 
+    const calculate =
+      t.calculateDailyLimit===true;
 
-document.getElementById(
-"note"
-).value=
-t.note||"";
+    document.getElementById(
+      "calculateDailyLimit"
+    ).checked=calculate;
 
+    document.getElementById(
+      "savings"
+    ).value=t.savings || "";
 
-updateTransactionType();
+    toggleSalaryFields();
 
+  }
 
-if(
-t.type==="transfer"
-){
+  if(t.type==="transfer"){
 
-document.getElementById(
-"from"
-).value=
-t.from;
+    document.getElementById(
+      "from"
+    ).value=t.from;
 
+    document.getElementById(
+      "to"
+    ).value=t.to;
 
-document.getElementById(
-"to"
-).value=
-t.to;
+  }
 
-}
-
-
-else{
-
-document.getElementById(
-"category"
-).value=
-t.category;
-
-
-document.getElementById(
-"payment"
-).value=
-t.payment||
-"cash";
-
-
-if(
-t.type==="income" &&
-t.category==="Salary" &&
-t.calculateDailyLimit
-){
-
-document.getElementById(
-"calculateDailyLimit"
-).checked=
-true;
-
-
-document.getElementById(
-"savings"
-).value=
-t.savings||0;
-
-}
-
-}
-
-
-toggleSalaryFields();
-
-updateExpensePreview();
+  updateExpensePreview();
 
 }
 
 
 /* =====================================================
-   DELETE
+   DELETE TRANSACTION
 ===================================================== */
 
 function deleteTransaction(id){
 
-const transaction=
-data.transactions.find(
-t=>t.id===id
-);
+  const t =
+    data.transactions.find(
+      x=>x.id===id
+    );
 
+  if(!t) return;
 
-if(!transaction){
+  const ok =
+    confirm(
+      "Delete this transaction?\n\n" +
+      (t.category || "Transfer") +
+      " — " +
+      money(t.amount)
+    );
 
-return;
+  if(!ok) return;
 
-}
+  data.transactions =
+    data.transactions.filter(
+      x=>x.id!==id
+    );
 
+  saveData();
 
-const confirmed=
-confirm(
-"Delete this transaction?"
-);
-
-
-if(!confirmed){
-
-return;
-
-}
-
-
-data.transactions=
-data.transactions.filter(
-t=>t.id!==id
-);
-
-
-saveData();
-
-render();
-
-}
-
-
-/* =====================================================
-   BALANCE
-===================================================== */
-
-function balanceUntil(
-endDate
-){
-
-let balance=
-Number(
-data.startingBalance
-)||0;
-
-
-const transactions=
-data.transactions
-.filter(
-t=>t.date<=endDate
-)
-.sort(
-(a,b)=>
-a.date.localeCompare(b.date) ||
-a.id-b.id
-);
-
-
-transactions.forEach(
-t=>{
-
-if(
-t.type==="income"
-){
-
-/*
-Salary:
-
-₹40,000 income
-₹20,000 savings
-
-Available income:
-₹20,000
-*/
-
-balance+=
-Number(t.amount||0)-
-Number(t.savings||0);
-
-}
-
-
-else if(
-t.type==="expense"
-){
-
-balance-=
-Number(t.amount||0);
-
-}
-
-
-else if(
-t.type==="transfer"
-){
-
-/*
-Normal account-to-account
-transfer:
-
-Cash → GPay
-GPay → Debit
-
-does not change total balance.
-
-Savings is treated separately.
-*/
-
-if(
-t.to==="savings" &&
-t.from!=="savings"
-){
-
-balance-=
-Number(t.amount||0);
-
-}
-
-
-else if(
-t.from==="savings" &&
-t.to!=="savings"
-){
-
-balance+=
-Number(t.amount||0);
-
-}
-
-}
-
-});
-
-
-return balance;
+  render();
 
 }
 
@@ -2536,45 +1840,267 @@ return balance;
 
 function setStartingBalance(){
 
-const value=
-prompt(
-"Enter your starting balance:",
-data.startingBalance
-);
+  const value =
+    prompt(
+      "Enter your starting balance:",
+      String(
+        data.startingBalance || 0
+      )
+    );
 
+  if(value===null){
+    return;
+  }
 
-if(value===null){
+  const amount =
+    Number(value);
 
-return;
+  if(amount<0 || Number.isNaN(amount)){
+
+    alert(
+      "Please enter a valid amount."
+    );
+
+    return;
+  }
+
+  data.startingBalance=amount;
+
+  saveData();
+
+  render();
 
 }
 
 
-const number=
-Number(value);
+/* =====================================================
+   MANUAL DAILY LIMIT
+===================================================== */
 
+function updateDailyLimit(){
 
-if(
-!Number.isFinite(number) ||
-number<0
-){
+  const key =
+    monthKey(selectedMonth);
 
-alert(
-"Please enter a valid amount."
-);
+  const current =
+    dailyLimitForMonth(key);
 
-return;
+  const value =
+    prompt(
+      "Enter the daily limit for " +
+      selectedMonth.toLocaleDateString(
+        "en-IN",
+        {
+          month:"long",
+          year:"numeric"
+        }
+      ) +
+      ":",
+      current!==null && current!==undefined
+      ? Math.round(current)
+      : ""
+    );
+
+  if(value===null){
+    return;
+  }
+
+  const amount =
+    Number(value);
+
+  if(amount<0 || Number.isNaN(amount)){
+
+    alert(
+      "Please enter a valid amount."
+    );
+
+    return;
+  }
+
+  data.dailyLimits[key]=amount;
+
+  saveData();
+
+  render();
 
 }
 
 
-data.startingBalance=
-number;
+/* =====================================================
+   BALANCE
+===================================================== */
+
+function closingBalanceUntil(endDate){
+
+  let balance =
+    Number(data.startingBalance) || 0;
+
+  const transactions =
+    [...data.transactions]
+      .filter(t=>t.date<=endDate)
+      .sort(
+        (a,b)=>
+          a.date.localeCompare(b.date) ||
+          a.id-b.id
+      );
+
+  transactions.forEach(t=>{
+
+    if(t.type==="income"){
+
+      /*
+        Savings portion is removed
+        from spendable balance.
+      */
+
+      balance +=
+        Number(t.amount) -
+        Number(t.savings || 0);
+
+    }
+
+    else if(t.type==="expense"){
+
+      balance -=
+        Number(t.amount);
+
+    }
+
+    else if(t.type==="transfer"){
+
+      /*
+        Moving money into Savings
+        reduces available balance.
+      */
+
+      if(
+        t.from!=="savings" &&
+        t.to==="savings"
+      ){
+
+        balance -=
+          Number(t.amount);
+
+      }
+
+      /*
+        Moving money back from Savings
+        increases available balance.
+      */
+
+      if(
+        t.from==="savings" &&
+        t.to!=="savings"
+      ){
+
+        balance +=
+          Number(t.amount);
+
+      }
+
+    }
+
+  });
+
+  return balance;
+
+}
 
 
-saveData();
+/* =====================================================
+   RENDER
+===================================================== */
 
-render();
+function render(){
+
+  const key =
+    monthKey(selectedMonth);
+
+  document.getElementById("month")
+    .textContent =
+      selectedMonth.toLocaleDateString(
+        "en-IN",
+        {
+          month:"long",
+          year:"numeric"
+        }
+      );
+
+
+  const monthTransactions =
+    data.transactions.filter(
+      t=>t.date.startsWith(key)
+    );
+
+
+  /*
+    Income shown is the amount actually
+    available after salary savings.
+  */
+
+  const income =
+    monthTransactions
+      .filter(t=>t.type==="income")
+      .reduce(
+        (sum,t)=>
+          sum +
+          Number(t.amount) -
+          Number(t.savings || 0),
+        0
+      );
+
+
+  const spent =
+    monthTransactions
+      .filter(t=>t.type==="expense")
+      .reduce(
+        (sum,t)=>
+          sum + Number(t.amount),
+        0
+      );
+
+
+  const lastDay =
+    new Date(
+      selectedMonth.getFullYear(),
+      selectedMonth.getMonth()+1,
+      0
+    );
+
+  const lastDate =
+    lastDay.getFullYear() +
+    "-" +
+    String(lastDay.getMonth()+1)
+      .padStart(2,"0") +
+    "-" +
+    String(lastDay.getDate())
+      .padStart(2,"0");
+
+
+  document.getElementById("balance")
+    .textContent =
+      money(
+        closingBalanceUntil(lastDate)
+      );
+
+  document.getElementById("income")
+    .textContent =
+      money(income);
+
+  document.getElementById("spent")
+    .textContent =
+      money(spent);
+
+  document.getElementById("startingBalance")
+    .textContent =
+      money(data.startingBalance);
+
+
+  renderDaily();
+
+  renderTransactions(monthTransactions);
+
+  renderCategories(monthTransactions);
 
 }
 
@@ -2585,113 +2111,50 @@ render();
 
 function renderDaily(){
 
-const box=
-document.getElementById(
-"dailyBox"
-);
+  /*
+    Daily display is based on TODAY,
+    not the month currently being viewed.
+  */
 
+  const result =
+    dailyAvailableForDate(today());
 
-const currentMonth=
-monthKey(
-new Date()
-);
+  const box =
+    document.getElementById("dailyBox");
 
+  if(!result){
 
-if(
-monthKey(selectedMonth)!==
-currentMonth
-){
+    document.getElementById(
+      "dailyLimit"
+    ).textContent="—";
 
-const base=
-getBaseDailyLimit(
-monthKey(selectedMonth)
-);
+    document.getElementById(
+      "dailyStatus"
+    ).textContent="No salary plan";
 
+    box.classList.remove("over");
 
-document.getElementById(
-"dailyLimit"
-).textContent=
-base===null
-?"—"
-:money(base);
+    return;
+  }
 
+  document.getElementById(
+    "dailyLimit"
+  ).textContent =
+    money(result.available);
 
-document.getElementById(
-"dailyStatus"
-).textContent=
-base===null
-?"No salary plan"
-:"Monthly base";
+  document.getElementById(
+    "dailyStatus"
+  ).textContent =
+    result.remaining<0
+    ? "Over by " +
+      money(Math.abs(result.remaining))
+    : money(result.remaining) +
+      " remaining";
 
-
-box.classList.remove(
-"over"
-);
-
-return;
-
-}
-
-
-const result=
-getDailyResult(
-today()
-);
-
-
-if(!result){
-
-document.getElementById(
-"dailyLimit"
-).textContent=
-"—";
-
-
-document.getElementById(
-"dailyStatus"
-).textContent=
-"No salary plan";
-
-
-box.classList.remove(
-"over"
-);
-
-return;
-
-}
-
-
-document.getElementById(
-"dailyLimit"
-).textContent=
-money(
-result.limit
-);
-
-
-document.getElementById(
-"dailyStatus"
-).textContent=
-result.remaining<0
-?
-"Over by "+
-money(
-Math.abs(
-result.remaining
-)
-)
-:
-money(
-result.remaining
-)+
-" remaining";
-
-
-box.classList.toggle(
-"over",
-result.remaining<0
-);
+  box.classList.toggle(
+    "over",
+    result.remaining<0
+  );
 
 }
 
@@ -2700,286 +2163,214 @@ result.remaining<0
    TRANSACTIONS DISPLAY
 ===================================================== */
 
-function renderTransactions(
-list
-){
+function renderTransactions(transactions){
 
-const box=
-document.getElementById(
-"transactions"
-);
+  const box =
+    document.getElementById("transactions");
 
+  if(!transactions.length){
 
-if(!list.length){
+    box.innerHTML =
+      '<div class="empty">No transactions yet.</div>';
 
-box.innerHTML=
-'<div class="empty">No transactions yet.</div>';
+    return;
+  }
 
-return;
+  const list =
+    [...transactions]
+      .sort(
+        (a,b)=>
+          b.date.localeCompare(a.date) ||
+          b.id-a.id
+      );
 
-}
+  let html="";
+  let currentDay="";
 
+  list.forEach(t=>{
 
-const sorted=
-[...list].sort(
-(a,b)=>
-b.date.localeCompare(a.date) ||
-b.id-a.id
-);
+    if(t.date!==currentDay){
 
+      currentDay=t.date;
 
-let html="";
+      html +=
+        '<div class="day">' +
+        dateText(t.date) +
+        '</div>';
+    }
 
-let lastDate="";
 
+    if(t.type==="transfer"){
 
-sorted.forEach(
-t=>{
+      const label =
+        "Transfer";
 
-if(
-t.date!==lastDate
-){
+      const text =
+        (t.from==="savings"
+          ? "🏦 Savings"
+          : t.from) +
+        " → " +
+        (t.to==="savings"
+          ? "🏦 Savings"
+          : t.to);
 
-html+=
-'<div class="day">'+
-dateObj(t.date)
-.toLocaleDateString(
-"en-IN",
-{
-weekday:"long",
-day:"numeric",
-month:"short"
-}
-)+
-'</div>';
+      html += `
+        <div class="transaction transfer">
 
-lastDate=t.date;
+          <div class="txTop">
 
-}
+            <div>
+              <div class="txName">
+                ↔️ ${label}
+              </div>
 
+              <div class="txNote">
+                ${text}
+                ${t.note ? " · "+escapeHtml(t.note) : ""}
+              </div>
+            </div>
 
-/* EXPENSE */
+            <div class="txRight">
+              <div class="txAmount">
+                ${money(t.amount)}
+              </div>
+            </div>
 
-if(
-t.type==="expense"
-){
+          </div>
 
-const method=
-t.payment||
-"cash";
+          <div class="txActions">
 
+            <button type="button"
+              onclick="editTransaction(${t.id})">
+              Edit
+            </button>
 
-html+=
+            <button type="button"
+              class="deleteBtn"
+              onclick="deleteTransaction(${t.id})">
+              Delete
+            </button>
 
-'<div class="transaction '+
-method+
-'">'+
+          </div>
 
-'<div class="txLeft">'+
+        </div>
+      `;
 
-'<div class="txName">'+
-(
-emoji[t.category]||
-"📦"
-)+
-" "+
-escapeHtml(
-t.category
-)+
-'</div>'+
+      return;
+    }
 
-(
-t.note
-?
-'<div class="txNote">'+
-escapeHtml(t.note)+
-'</div>'
-:
-''
-)+
 
-'</div>'+
+    if(t.type==="income"){
 
-'<div class="txRight">'+
-
-'<div class="txAmount" style="color:#ff6868">'+
-"-"+
-money(t.amount)+
-'<span style="margin-left:4px">'+
-(
-payEmoji[method]||
-""
-)+
-'</span>'+
-'</div>'+
+      const payment =
+        paymentEmoji[t.payment] || "💰";
 
-'<div class="txActions">'+
+      html += `
+        <div class="transaction cash">
 
-'<button type="button" onclick="editTransaction('+
-t.id+
-')">✏️ Edit</button>'+
+          <div class="txTop">
 
-'<button type="button" onclick="deleteTransaction('+
-t.id+
-')">🗑️ Delete</button>'+
+            <div>
 
-'</div>'+
+              <div class="txName">
+                💼 ${escapeHtml(t.category)}
+              </div>
 
-'</div>'+
+              <div class="txNote">
+                ${payment}
+                ${t.note ? " · "+escapeHtml(t.note) : ""}
+                ${t.savings
+                  ? " · Savings "+money(t.savings)
+                  : ""}
+              </div>
 
-'</div>';
+            </div>
 
-}
+            <div class="txRight">
 
+              <div class="txAmount income">
+                +${money(t.amount)}
+              </div>
 
-/* INCOME */
+            </div>
 
-else if(
-t.type==="income"
-){
+          </div>
 
-const method=
-t.payment||
-"cash";
+          <div class="txActions">
 
+            <button type="button"
+              onclick="editTransaction(${t.id})">
+              Edit
+            </button>
 
-html+=
+            <button type="button"
+              class="deleteBtn"
+              onclick="deleteTransaction(${t.id})">
+              Delete
+            </button>
 
-'<div class="transaction cash">'+
-
-'<div class="txLeft">'+
-
-'<div class="txName">'+
-(
-emoji[t.category]||
-"💰"
-)+
-" "+
-escapeHtml(
-t.category
-)+
-'</div>'+
+          </div>
 
-(
-t.savings>0
-?
-'<div class="txNote">'+
-money(t.savings)+
-' moved to Savings'+
-'</div>'
-:
-(
-t.note
-?
-'<div class="txNote">'+
-escapeHtml(t.note)+
-'</div>'
-:
-''
-)
-)+
+        </div>
+      `;
 
-'</div>'+
+      return;
+    }
 
-'<div class="txRight">'+
 
-'<div class="txAmount" style="color:#55c98a">'+
-"+"+
-money(t.amount)+
-'<span style="margin-left:4px">'+
-(
-payEmoji[method]||
-""
-)+
-'</span>'+
-'</div>'+
+    const payment =
+      paymentEmoji[t.payment] || "";
 
-'<div class="txActions">'+
+    html += `
+      <div class="transaction ${t.payment}">
 
-'<button type="button" onclick="editTransaction('+
-t.id+
-')">✏️ Edit</button>'+
+        <div class="txTop">
 
-'<button type="button" onclick="deleteTransaction('+
-t.id+
-')">🗑️ Delete</button>'+
+          <div>
 
-'</div>'+
+            <div class="txName">
+              ${getCategoryEmoji(t.category)}
+              ${escapeHtml(t.category)}
+            </div>
 
-'</div>'+
+            <div class="txNote">
+              ${payment}
+              ${t.note ? " · "+escapeHtml(t.note) : ""}
+            </div>
 
-'</div>';
+          </div>
 
-}
+          <div class="txRight">
 
+            <div class="txAmount spent">
+              -${money(t.amount)}
+            </div>
 
-/* TRANSFER */
+          </div>
 
-else{
+        </div>
 
-html+=
+        <div class="txActions">
 
-'<div class="transaction transfer">'+
+          <button type="button"
+            onclick="editTransaction(${t.id})">
+            Edit
+          </button>
 
-'<div class="txLeft">'+
+          <button type="button"
+            class="deleteBtn"
+            onclick="deleteTransaction(${t.id})">
+            Delete
+          </button>
 
-'<div class="txName">'+
-"↔️ Transfer"+
-'</div>'+
+        </div>
 
-'<div class="txNote">'+
-(
-payEmoji[t.from]||
-"🏦"
-)+
-" "+
-t.from+
-" → "+
-(
-payEmoji[t.to]||
-"🏦"
-)+
-" "+
-t.to+
-(
-t.note
-?
-" · "+
-escapeHtml(t.note)
-:
-""
-)+
-'</div>'+
+      </div>
+    `;
 
-'</div>'+
+  });
 
-'<div class="txRight">'+
-
-'<div class="txAmount" style="color:#b88cff">'+
-money(t.amount)+
-'</div>'+
-
-'<div class="txActions">'+
-
-'<button type="button" onclick="editTransaction('+
-t.id+
-')">✏️ Edit</button>'+
-
-'<button type="button" onclick="deleteTransaction('+
-t.id+
-')">🗑️ Delete</button>'+
-
-'</div>'+
-
-'</div>'+
-
-'</div>';
-
-}
-
-});
-
-box.innerHTML=html;
+  box.innerHTML=html;
 
 }
 
@@ -2988,260 +2379,180 @@ box.innerHTML=html;
    CATEGORY DISPLAY
 ===================================================== */
 
-function renderCategories(
-list
-){
+function renderCategories(transactions){
 
-const box=
-document.getElementById(
-"categories"
-);
+  const box =
+    document.getElementById("categories");
 
+  const expenses =
+    transactions.filter(
+      t=>t.type==="expense"
+    );
 
-const totals={};
+  if(!expenses.length){
 
+    box.innerHTML =
+      '<div class="empty">No spending this month.</div>';
 
-list
-.filter(
-t=>t.type==="expense"
-)
-.forEach(
-t=>{
+    return;
+  }
 
-if(!totals[t.category]){
+  const totals={};
 
-totals[t.category]=0;
+  expenses.forEach(t=>{
 
-}
+    totals[t.category] =
+      (totals[t.category] || 0) +
+      Number(t.amount);
 
-totals[t.category]+=
-Number(t.amount||0);
+  });
 
-}
-);
+  const sorted =
+    Object.entries(totals)
+      .sort((a,b)=>b[1]-a[1]);
 
+  const max =
+    sorted[0][1];
 
-const entries=
-Object.entries(totals)
-.sort(
-(a,b)=>b[1]-a[1]
-);
+  box.innerHTML =
+    sorted.map(([category,total])=>{
 
+      const percent =
+        max>0
+        ? (total/max)*100
+        : 0;
 
-if(!entries.length){
+      return `
+        <div class="category">
 
-box.innerHTML=
-'<div class="empty">No spending this month.</div>';
+          <div class="catRow">
 
-return;
+            <span>
+              ${getCategoryEmoji(category)}
+              ${escapeHtml(category)}
+            </span>
 
-}
+            <strong>
+              ${money(total)}
+            </strong>
 
+          </div>
 
-const max=
-entries[0][1];
+          <div class="bar">
+            <div
+              class="fill"
+              style="width:${percent}%">
+            </div>
+          </div>
 
+        </div>
+      `;
 
-let html="";
-
-
-entries.forEach(
-([category,total])=>{
-
-const percent=
-max>0
-?
-(total/max)*100
-:
-0;
-
-
-html+=
-
-'<div class="category">'+
-
-'<div class="catRow">'+
-
-'<span>'+
-(
-emoji[category]||
-"📦"
-)+
-" "+
-escapeHtml(category)+
-'</span>'+
-
-'<strong>'+
-money(total)+
-'</strong>'+
-
-'</div>'+
-
-'<div class="bar">'+
-
-'<div class="fill" style="width:'+
-percent+
-'%"></div>'+
-
-'</div>'+
-
-'</div>';
-
-});
-
-
-box.innerHTML=html;
+    }).join("");
 
 }
 
 
 /* =====================================================
-   MAIN RENDER
+   HELPERS
 ===================================================== */
 
-function render(){
+function getCategoryEmoji(category){
 
-const key=
-monthKey(
-selectedMonth
-);
+  const all =
+    expenseCategories
+      .concat(incomeCategories);
 
+  const found =
+    all.find(
+      x=>x[0]===category
+    );
 
-document.getElementById(
-"month"
-).textContent=
-selectedMonth
-.toLocaleDateString(
-"en-IN",
-{
-month:"long",
-year:"numeric"
+  return found ? found[1] : "📦";
+
 }
-);
 
 
-const list=
-data.transactions.filter(
-t=>t.date.startsWith(key)
-);
+function escapeHtml(text){
 
-
-const parts=
-key
-.split("-")
-.map(Number);
-
-
-const endDate=
-key+
-"-"+
-String(
-daysInMonth(
-parts[0],
-parts[1]-1
-)
-)
-.padStart(
-2,
-"0"
-);
-
-
-document.getElementById(
-"balance"
-).textContent=
-money(
-balanceUntil(
-endDate
-)
-);
-
-
-document.getElementById(
-"income"
-).textContent=
-money(
-list
-.filter(
-t=>t.type==="income"
-)
-.reduce(
-(sum,t)=>
-sum+
-Number(t.amount||0)-
-Number(t.savings||0),
-0
-)
-);
-
-
-document.getElementById(
-"spent"
-).textContent=
-money(
-list
-.filter(
-t=>t.type==="expense"
-)
-.reduce(
-(sum,t)=>
-sum+
-Number(t.amount||0),
-0
-)
-);
-
-
-document.getElementById(
-"startingBalance"
-).textContent=
-money(
-data.startingBalance
-);
-
-
-renderDaily();
-
-renderTransactions(list);
-
-renderCategories(list);
+  return String(text || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
 /* =====================================================
-   MODAL OUTSIDE CLICK
+   DATE CHANGE
 ===================================================== */
 
-document
-.getElementById(
-"transactionModal"
-)
-.addEventListener(
-"click",
-function(e){
+document.getElementById("date")
+  .addEventListener(
+    "change",
+    function(){
 
-if(
-e.target===this
-){
+      if(this.value>today()){
 
-closeTransaction();
+        alert(
+          "Future dates are not allowed."
+        );
 
-}
+        this.value=today();
 
-}
-);
+      }
+
+      updateExpensePreview();
+
+      showPreview();
+
+    }
+  );
 
 
 /* =====================================================
-   INITIALISE
+   AMOUNT CHANGE
 ===================================================== */
 
-document.getElementById(
-"date"
-).max=
-today();
+document.getElementById("amount")
+  .addEventListener(
+    "input",
+    function(){
 
+      updateExpensePreview();
+
+      showPreview();
+
+    }
+  );
+
+
+/* =====================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+===================================================== */
+
+document.getElementById("transactionModal")
+  .addEventListener(
+    "click",
+    function(e){
+
+      if(e.target===this){
+        closeTransaction();
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+document.getElementById("date").max=today();
+
+populateCategories();
 
 render();
 
