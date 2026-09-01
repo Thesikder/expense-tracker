@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Thomas's Tracker</title>
 
 <style>
@@ -10,13 +10,12 @@
 
 body{
 margin:0;
-background:#111;
+background:#101010;
 color:#eee;
 font-family:Arial,sans-serif
 }
 
 button,input,select{font:inherit}
-button{cursor:pointer}
 
 .app{
 max-width:620px;
@@ -57,9 +56,7 @@ color:#eee;
 font-size:22px
 }
 
-.card,
-.money,
-.daily{
+.card,.money,.daily{
 background:#1b1b1b;
 border:1px solid #292929
 }
@@ -124,10 +121,6 @@ font-weight:bold;
 margin-top:5px
 }
 
-.daily.over .dailyValue{
-color:#ff6868
-}
-
 .dailyStatus{
 color:#888;
 font-size:12px;
@@ -140,22 +133,23 @@ color:#eee;
 margin-top:5px
 }
 
-.update{
+.update,.add{
 width:100%;
+border-radius:12px
+}
+
+.update{
 margin-top:12px;
 padding:11px;
 border:1px solid #333;
-border-radius:11px;
 background:#222;
 color:#ddd
 }
 
 .add{
-width:100%;
 margin:15px 0 28px;
 padding:16px;
 border:0;
-border-radius:15px;
 background:#eee;
 color:#111;
 font-size:17px;
@@ -163,7 +157,7 @@ font-weight:bold
 }
 
 .sectionTitle{
-font-size:18px;
+font-size:19px;
 font-weight:bold;
 margin:22px 0 12px
 }
@@ -189,25 +183,10 @@ align-items:center;
 gap:10px
 }
 
-.transaction.cash{
-border-left-color:#55c98a
-}
-
-.transaction.gpay{
-border-left-color:#5ca9ff
-}
-
-.transaction.debit{
-border-left-color:#e4c44f
-}
-
-.transaction.transfer{
-border-left-color:#b88cff
-}
-
-.txLeft{
-min-width:0
-}
+.transaction.cash{border-left-color:#55c98a}
+.transaction.gpay{border-left-color:#5ca9ff}
+.transaction.debit{border-left-color:#e4c44f}
+.transaction.transfer{border-left-color:#b88cff}
 
 .txName{
 font-weight:bold;
@@ -217,9 +196,7 @@ font-size:15px
 .txNote{
 color:#777;
 font-size:12px;
-margin-top:4px;
-overflow:hidden;
-text-overflow:ellipsis
+margin-top:4px
 }
 
 .txRight{
@@ -227,23 +204,7 @@ text-align:right;
 white-space:nowrap
 }
 
-.txAmount{
-font-weight:bold
-}
-
-.method{
-font-size:15px;
-margin-left:4px
-}
-
-.empty{
-background:#191919;
-border:1px solid #292929;
-border-radius:14px;
-padding:22px;
-text-align:center;
-color:#777
-}
+.txAmount{font-weight:bold}
 
 .category{
 background:#191919;
@@ -255,8 +216,7 @@ margin-bottom:8px
 
 .catRow{
 display:flex;
-justify-content:space-between;
-gap:10px
+justify-content:space-between
 }
 
 .bar{
@@ -270,6 +230,15 @@ margin-top:8px
 height:100%;
 background:#777;
 border-radius:5px
+}
+
+.empty{
+background:#191919;
+border:1px solid #292929;
+border-radius:14px;
+padding:22px;
+text-align:center;
+color:#777
 }
 
 .starting{
@@ -295,7 +264,7 @@ inset:0;
 background:#000b;
 align-items:flex-end;
 justify-content:center;
-z-index:20
+z-index:100
 }
 
 .modal.show{
@@ -364,8 +333,7 @@ display:flex;
 align-items:center;
 gap:9px;
 color:#ddd;
-font-size:14px;
-margin-top:12px
+font-size:14px
 }
 
 .check input{
@@ -373,8 +341,7 @@ width:18px;
 height:18px
 }
 
-.info,
-.preview{
+.info,.preview{
 background:#202020;
 border:1px solid #303030;
 border-radius:12px;
@@ -406,8 +373,7 @@ margin-top:18px
 .buttons button{
 padding:13px;
 border:0;
-border-radius:12px;
-font-size:15px
+border-radius:12px
 }
 
 .cancel{
@@ -419,27 +385,6 @@ color:#eee
 background:#eee;
 color:#111
 }
-
-.smallHint{
-color:#777;
-font-size:11px;
-margin-top:6px
-}
-
-@media(max-width:380px){
-.app{
-padding-left:12px;
-padding-right:12px
-}
-
-h1{
-font-size:26px
-}
-
-.balance{
-font-size:32px
-}
-}
 </style>
 </head>
 
@@ -448,65 +393,34 @@ font-size:32px
 <div class="app">
 
 <header>
-
 <div>
 <h1>Thomas's Tracker</h1>
 <div class="month" id="month"></div>
 </div>
 
 <div class="monthNav">
-
-<button type="button" id="prevMonth">
-‹
-</button>
-
-<button type="button" id="nextMonth">
-›
-</button>
-
+<button type="button" id="prev">‹</button>
+<button type="button" id="next">›</button>
 </div>
-
 </header>
 
 
 <div class="card">
-
-<div class="label">
-Balance
-</div>
-
-<div class="balance" id="balance">
-₹0
-</div>
-
+<div class="label">Balance</div>
+<div class="balance" id="balance">₹0</div>
 </div>
 
 
 <div class="moneyRow">
 
 <div class="money">
-
-<div class="label">
-Income
+<div class="label">Income</div>
+<strong class="income" id="income">₹0</strong>
 </div>
-
-<strong class="income" id="income">
-₹0
-</strong>
-
-</div>
-
 
 <div class="money">
-
-<div class="label">
-Spent
-</div>
-
-<strong class="spent" id="spent">
-₹0
-</strong>
-
+<div class="label">Spent</div>
+<strong class="spent" id="spent">₹0</strong>
 </div>
 
 </div>
@@ -517,37 +431,25 @@ Spent
 <div class="dailyTop">
 
 <div>
-
-<div class="label">
-Daily Limit
-</div>
-
-<div class="dailyValue" id="dailyLimit">
-—
-</div>
-
+<div class="label">Daily Limit</div>
+<div class="dailyValue" id="dailyLimit">—</div>
 </div>
 
 <div class="dailyStatus">
-
 Today's status
-
-<strong id="dailyStatus">
-—
-</strong>
-
+<strong id="dailyStatus">—</strong>
 </div>
 
 </div>
 
-<button type="button" class="update" id="updateDaily">
+<button type="button" class="update" id="updateLimit">
 Update Daily Limit
 </button>
 
 </div>
 
 
-<button type="button" class="add" id="addTransaction">
+<button type="button" class="add" id="add">
 ＋ Add Transaction
 </button>
 
@@ -556,45 +458,35 @@ Update Daily Limit
 Recent transactions
 </div>
 
-<div id="transactions">
-</div>
+<div id="transactions"></div>
 
 
 <div class="sectionTitle">
 Your spending on
 </div>
 
-<div id="categories">
-</div>
+<div id="categories"></div>
 
 
 <div class="starting">
-
 Starting balance:
-<span id="startingBalance">
-₹0
-</span>
-
+<span id="starting">₹0</span>
 ·
-
 <button type="button" id="setStarting">
 Set / change
 </button>
-
 </div>
 
 </div>
 
 
-<!-- TRANSACTION MODAL -->
+<!-- TRANSACTION FORM -->
 
-<div class="modal" id="transactionModal">
+<div class="modal" id="modal">
 
 <div class="sheet">
 
-<h2>
-Add Transaction
-</h2>
+<h2>Add Transaction</h2>
 
 
 <div class="tabs">
@@ -614,125 +506,87 @@ Transfer
 </div>
 
 
-<label>
-Amount
-</label>
+<label>Amount</label>
 
 <input
 id="amount"
 type="number"
 inputmode="decimal"
 min="0"
-step="0.01"
 placeholder="₹ 0"
 >
 
 
+<!-- EXPENSE / INCOME -->
+
 <div id="normalFields">
 
-<label>
-Category
-</label>
+<label>Category</label>
 
-<select id="category">
-</select>
+<select id="category"></select>
 
 
-<label>
-Payment method
-</label>
+<label>Payment method</label>
 
 <select id="payment">
 
-<option value="cash">
-💵 Cash
-</option>
-
-<option value="gpay">
-📱 GPay
-</option>
-
-<option value="debit">
-💳 Debit Card
-</option>
+<option value="cash">💵 Cash</option>
+<option value="gpay">📱 GPay</option>
+<option value="debit">💳 Debit Card</option>
 
 </select>
 
 </div>
 
 
+<!-- TRANSFER -->
+
 <div id="transferFields" class="hidden">
 
-<label>
-From
-</label>
+<label>From</label>
 
 <select id="from">
 
-<option value="cash">
-💵 Cash
-</option>
-
-<option value="gpay">
-📱 GPay
-</option>
-
-<option value="debit">
-💳 Debit Card
-</option>
-
-<option value="savings">
-🏦 Savings
-</option>
+<option value="cash">💵 Cash</option>
+<option value="gpay">📱 GPay</option>
+<option value="debit">💳 Debit Card</option>
+<option value="savings">🏦 Savings</option>
 
 </select>
 
 
-<label>
-To
-</label>
+<label>To</label>
 
 <select id="to">
 
-<option value="gpay">
-📱 GPay
-</option>
-
-<option value="cash">
-💵 Cash
-</option>
-
-<option value="debit">
-💳 Debit Card
-</option>
-
-<option value="savings">
-🏦 Savings
-</option>
+<option value="gpay">📱 GPay</option>
+<option value="cash">💵 Cash</option>
+<option value="debit">💳 Debit Card</option>
+<option value="savings">🏦 Savings</option>
 
 </select>
 
 
 <div class="info">
 
-Transfers between Cash, GPay and Debit Card do not change your total balance.
+Transfers between Cash, GPay and Debit Card do not count as spending.
 
-Moving money to Savings reduces your available balance.
-
-Moving money from Savings back to a spending account increases your available balance.
+Moving money to Savings removes it from your available balance.
 
 </div>
 
 </div>
 
+
+<!-- SALARY OPTIONS -->
 
 <div id="salaryFields" class="hidden">
 
 <label class="check">
 
 <input
-id="calculateDailyLimit"
 type="checkbox"
+id="dailyCheck"
 >
 
 Calculate Daily Limit
@@ -740,47 +594,43 @@ Calculate Daily Limit
 </label>
 
 
-<div id="savingsField" class="hidden">
+<div id="savingsArea" class="hidden">
 
-<label>
-Savings
-</label>
+<label>Savings</label>
 
 <input
 id="savings"
 type="number"
 inputmode="decimal"
 min="0"
-step="0.01"
 placeholder="₹ 0"
 >
 
 
 <div class="preview" id="preview">
 
-Calculated Daily Limit
+Next month's Daily Limit
 
-<strong id="previewAmount">
-₹0
-</strong>
+<strong id="previewValue">₹0</strong>
+
+</div>
+
+<div class="info">
+
+The salary is recorded as income after Savings.
+
+Example: ₹40,000 salary − ₹20,000 Savings = ₹20,000 available income.
+
+This salary creates the Daily Limit for the following month.
+
+</div>
+
+</div>
 
 </div>
 
 
-<div class="smallHint">
-
-This salary will calculate the Daily Limit for the following month.
-
-</div>
-
-</div>
-
-</div>
-
-
-<label>
-Date
-</label>
+<label>Date</label>
 
 <input
 id="date"
@@ -788,9 +638,7 @@ type="date"
 >
 
 
-<label>
-Note (optional)
-</label>
+<label>Note (optional)</label>
 
 <input
 id="note"
@@ -801,26 +649,17 @@ placeholder="What was it for?"
 
 <div class="buttons">
 
-<button
-type="button"
-class="cancel"
-id="cancelTransaction"
->
+<button type="button" class="cancel" id="cancel">
 Cancel
 </button>
 
-<button
-type="button"
-class="save"
-id="saveTransaction"
->
+<button type="button" class="save" id="save">
 Save
 </button>
 
 </div>
 
 </div>
-
 </div>
 
 
@@ -830,272 +669,148 @@ Save
 
 
 /* =========================
-   STORAGE
+   DATA
 ========================= */
 
-const STORAGE_KEY =
-"thomasTrackerData";
-
-
-function freshData(){
-
-return {
-transactions:[],
-startingBalance:0,
-dailyLimits:{}
-};
-
-}
-
+const KEY="thomasTrackerData";
 
 let data;
 
 try{
-
-data =
-JSON.parse(
-localStorage.getItem(
-STORAGE_KEY
-) || ""
-);
-
-}
-catch(e){
-
+data=JSON.parse(localStorage.getItem(KEY));
+}catch(e){
 data=null;
-
 }
 
-
-if(
-!data ||
-!Array.isArray(
-data.transactions
-)
-){
-
-data=freshData();
-
-}
-
-
-if(
-typeof data.startingBalance !== "number"
-){
-
-data.startingBalance =
-Number(
-data.startingBalance
-)||0;
-
-}
-
-
-if(
-!data.dailyLimits ||
-typeof data.dailyLimits !== "object"
-){
-
-data.dailyLimits={};
-
-}
-
-
-let currentType =
-"expense";
-
-
-let selectedMonth =
-new Date();
-
-selectedMonth.setDate(1);
-
-
-/* =========================
-   CATEGORIES
-========================= */
-
-const expenseCategories=[
-
-["Restaurant","🍽️"],
-
-["Fast Food","🍔"],
-
-["Juice & Ice Cream","🥤"],
-
-["Movies","🎬"],
-
-["Petrol","⛽"],
-
-["Apps & Digital","📱"],
-
-["Internet / Recharge","🌐"],
-
-["Parents","👨‍👩‍👦"],
-
-["Groceries","🛒"],
-
-["Clothing","👕"],
-
-["Personal & Cleaning","🧼"],
-
-["Kitchen","🍳"],
-
-["Scooty Service","🛵"],
-
-["Other","📦"]
-
-];
-
-
-const incomeCategories=[
-
-["Salary","💼"],
-
-["Other Income","💰"],
-
-["Refund","↩️"],
-
-["Other","📦"]
-
-];
-
-
-const paymentEmoji={
-
-cash:"💵",
-
-gpay:"📱",
-
-debit:"💳",
-
-savings:"🏦"
-
+if(!data || !Array.isArray(data.transactions)){
+data={
+transactions:[],
+startingBalance:0,
+dailyLimits:{}
 };
+}
+
+if(typeof data.startingBalance!=="number"){
+data.startingBalance=Number(data.startingBalance)||0;
+}
+
+if(!data.dailyLimits){
+data.dailyLimits={};
+}
+
+
+let currentType="expense";
+
+let selectedMonth=new Date();
+selectedMonth.setDate(1);
 
 
 /* =========================
    HELPERS
 ========================= */
 
-const $ =
-id =>
-document.getElementById(id);
-
-
-function saveData(){
-
-localStorage.setItem(
-STORAGE_KEY,
-JSON.stringify(data)
-);
-
+function $(id){
+return document.getElementById(id);
 }
 
 
-function money(value){
+function save(){
+localStorage.setItem(KEY,JSON.stringify(data));
+}
 
-return "₹"+
-Math.round(
-Number(value)||0
-).toLocaleString(
-"en-IN"
-);
 
+function money(n){
+return "₹"+Math.round(Number(n)||0).toLocaleString("en-IN");
 }
 
 
 function today(){
 
-const d =
-new Date();
+const d=new Date();
 
-return d.getFullYear()+
-"-"+
-String(
-d.getMonth()+1
-).padStart(2,"0")+
-"-"+
-String(
-d.getDate()
-).padStart(2,"0");
+return d.getFullYear()+"-"+
+String(d.getMonth()+1).padStart(2,"0")+"-"+
+String(d.getDate()).padStart(2,"0");
 
 }
 
 
-function monthKey(date){
+function monthKey(d){
 
-return date.getFullYear()+
-"-"+
-String(
-date.getMonth()+1
-).padStart(2,"0");
+return d.getFullYear()+"-"+
+String(d.getMonth()+1).padStart(2,"0");
 
 }
 
 
-function daysInMonth(
-year,
-monthIndex
-){
+function nextMonth(key){
 
-return new Date(
-year,
-monthIndex+1,
-0
-).getDate();
+const p=key.split("-").map(Number);
 
-}
-
-
-function addMonths(
-key,
-amount
-){
-
-const parts =
-key.split("-")
-.map(Number);
-
-const d =
-new Date(
-parts[0],
-parts[1]-1+amount,
-1
-);
+const d=new Date(p[0],p[1],1);
 
 return monthKey(d);
 
 }
 
 
-function formatDate(value){
+function daysInMonth(key){
 
-return new Date(
-value+"T12:00:00"
-).toLocaleDateString(
-"en-IN",
-{
-weekday:"long",
-day:"numeric",
-month:"short"
-}
-);
+const p=key.split("-").map(Number);
+
+return new Date(p[0],p[1],0).getDate();
 
 }
 
 
-function isSameMonth(
-a,
-b
-){
+function escapeHTML(s){
 
-return (
-monthKey(a) ===
-monthKey(b)
-);
+return String(s||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+const expenses=[
+["Restaurant","🍽️"],
+["Fast Food","🍔"],
+["Juice & Ice Cream","🥤"],
+["Movies","🎬"],
+["Petrol","⛽"],
+["Apps & Digital","📱"],
+["Internet / Recharge","🌐"],
+["Parents","👨‍👩‍👦"],
+["Groceries","🛒"],
+["Clothing","👕"],
+["Personal & Cleaning","🧼"],
+["Kitchen","🍳"],
+["Scooty Service","🛵"],
+["Other","📦"]
+];
+
+
+const incomes=[
+["Salary","💼"],
+["Other Income","💰"],
+["Refund","↩️"],
+["Other","📦"]
+];
+
+
+const paymentEmoji={
+cash:"💵",
+gpay:"📱",
+debit:"💳",
+savings:"🏦"
+};
 
 
 /* =========================
@@ -1104,174 +819,127 @@ monthKey(b)
 
 function populateCategories(){
 
-const select =
-$("category");
+const list=currentType==="income"
+?incomes
+:expenses;
 
-select.innerHTML="";
+$("category").innerHTML="";
 
-const list =
-currentType==="income"
-?incomeCategories
-:expenseCategories;
+list.forEach(item=>{
 
+const option=document.createElement("option");
 
-list.forEach(
-item=>{
+option.value=item[0];
+option.textContent=item[1]+" "+item[0];
 
-const option =
-document.createElement(
-"option"
-);
-
-option.value =
-item[0];
-
-option.textContent =
-item[1]+" "+item[0];
-
-select.appendChild(
-option
-);
+$("category").appendChild(option);
 
 });
 
-if(
-currentType==="income"
-){
-
-select.value="Salary";
-
+if(currentType==="income"){
+$("category").value="Salary";
 }
 
 }
 
 
-function openTransaction(){
+function openForm(){
 
-$("transactionModal")
-.classList.add("show");
-
+$("modal").classList.add("show");
 
 $("amount").value="";
-
 $("date").value=today();
-
 $("note").value="";
-
 $("savings").value="";
+$("dailyCheck").checked=false;
 
-$("calculateDailyLimit")
-.checked=false;
-
-$("savingsField")
-.classList.add("hidden");
-
-$("preview")
-.style.display="none";
-
+$("savingsArea").classList.add("hidden");
+$("preview").style.display="none";
 
 currentType="expense";
 
-updateTransactionType();
+updateForm();
 
-
-setTimeout(
-()=>$("amount").focus(),
-100
-);
+setTimeout(function(){
+$("amount").focus();
+},100);
 
 }
 
 
-function closeTransaction(){
-
-$("transactionModal")
-.classList.remove("show");
-
+function closeForm(){
+$("modal").classList.remove("show");
 }
 
 
-function setTransactionType(
-type
-){
+function setType(type){
 
 currentType=type;
-
-updateTransactionType();
+updateForm();
 
 }
 
 
-function updateTransactionType(){
+function updateForm(){
 
-$("expenseTab")
-.classList.toggle(
+$("expenseTab").classList.toggle(
 "active",
 currentType==="expense"
 );
 
-$("incomeTab")
-.classList.toggle(
+$("incomeTab").classList.toggle(
 "active",
 currentType==="income"
 );
 
-$("transferTab")
-.classList.toggle(
+$("transferTab").classList.toggle(
 "active",
 currentType==="transfer"
 );
 
 
-$("normalFields")
-.classList.toggle(
+$("normalFields").classList.toggle(
 "hidden",
 currentType==="transfer"
 );
 
-
-$("transferFields")
-.classList.toggle(
+$("transferFields").classList.toggle(
 "hidden",
 currentType!=="transfer"
 );
 
-
-$("salaryFields")
-.classList.toggle(
+$("salaryFields").classList.toggle(
 "hidden",
 currentType!=="income"
 );
 
-
 populateCategories();
 
-
-if(
-currentType==="income"
-){
-
-$("category").value =
-"Salary";
-
-}
-
 }
 
 
-function toggleSalaryFields(){
+function salaryOptions(){
 
-const checked =
-$("calculateDailyLimit")
-.checked;
+const show=
+currentType==="income" &&
+$("category").value==="Salary";
+
+$("salaryFields").classList.toggle(
+"hidden",
+!show
+);
+
+}
 
 
-$("savingsField")
-.classList.toggle(
+function toggleSavings(){
+
+const checked=$("dailyCheck").checked;
+
+$("savingsArea").classList.toggle(
 "hidden",
 !checked
 );
-
 
 showPreview();
 
@@ -1281,145 +949,74 @@ showPreview();
 function showPreview(){
 
 if(
-!$("calculateDailyLimit")
-.checked
+!$("dailyCheck").checked ||
+$("category").value!=="Salary"
 ){
-
-$("preview")
-.style.display="none";
-
+$("preview").style.display="none";
 return;
-
 }
 
+const salary=Number($("amount").value)||0;
+const savings=Number($("savings").value)||0;
 
-const salary =
-Number(
-$("amount").value
-)||0;
+if(!salary){
+$("preview").style.display="none";
+return;
+}
 
+const date=$("date").value||today();
 
-const savings =
-Number(
-$("savings").value
-)||0;
+const salaryMonth=date.slice(0,7);
+const plannedMonth=nextMonth(salaryMonth);
 
+const limit=
+Math.max(0,salary-savings)/
+daysInMonth(plannedMonth);
 
-const spendable =
-Math.max(
-0,
-salary-savings
-);
-
-
-const date =
-$("date").value;
-
-
-if(!date)return;
-
-
-const d =
-new Date(
-date+"T12:00:00"
-);
-
-
-const days =
-daysInMonth(
-d.getFullYear(),
-d.getMonth()
-);
-
-
-$("previewAmount")
-.textContent =
-money(
-spendable/days
-);
-
-
-$("preview")
-.style.display="block";
+$("previewValue").textContent=money(limit);
+$("preview").style.display="block";
 
 }
 
 
 /* =========================
-   SAVE TRANSACTION
+   SAVE
 ========================= */
 
 function saveTransaction(){
 
-const amount =
-Number(
-$("amount").value
-);
+const amount=Number($("amount").value);
 
-
-if(
-!amount ||
-amount<=0
-){
-
-alert(
-"Please enter a valid amount."
-);
-
+if(!amount || amount<=0){
+alert("Please enter a valid amount.");
 return;
-
 }
 
+const date=$("date").value||today();
 
-const date =
-$("date").value ||
-today();
-
-
-const note =
-$("note").value.trim();
+const note=$("note").value.trim();
 
 
 /* TRANSFER */
 
-if(
-currentType==="transfer"
-){
+if(currentType==="transfer"){
 
-const from =
-$("from").value;
+const from=$("from").value;
+const to=$("to").value;
 
-const to =
-$("to").value;
-
-
-if(
-from===to
-){
-
-alert(
-"From and To must be different."
-);
-
+if(from===to){
+alert("From and To must be different.");
 return;
-
 }
-
 
 data.transactions.push({
 
 id:Date.now(),
-
 type:"transfer",
-
 amount:amount,
-
 from:from,
-
 to:to,
-
 date:date,
-
 note:note
 
 });
@@ -1429,64 +1026,35 @@ note:note
 
 /* INCOME */
 
-else if(
-currentType==="income"
-){
+else if(currentType==="income"){
 
-const category =
-$("category").value;
+const category=$("category").value;
 
-
-const calculate =
+const calculate=
 category==="Salary" &&
-$("calculateDailyLimit")
-.checked;
+$("dailyCheck").checked;
 
-
-const savings =
+const savings=
 calculate
-?
-Number(
-$("savings").value
-)||0
-:
-0;
+?Number($("savings").value)||0
+:0;
 
-
-if(
-savings>amount
-){
-
-alert(
-"Savings cannot be greater than salary."
-);
-
+if(savings>amount){
+alert("Savings cannot be greater than salary.");
 return;
-
 }
-
 
 data.transactions.push({
 
 id:Date.now(),
-
 type:"income",
-
 amount:amount,
-
 category:category,
-
-payment:
-$("payment").value,
-
+payment:$("payment").value,
 date:date,
-
 note:note,
-
 savings:savings,
-
-calculateDailyLimit:
-calculate
+calculateDailyLimit:calculate
 
 });
 
@@ -1500,19 +1068,11 @@ else{
 data.transactions.push({
 
 id:Date.now(),
-
 type:"expense",
-
 amount:amount,
-
-category:
-$("category").value,
-
-payment:
-$("payment").value,
-
+category:$("category").value,
+payment:$("payment").value,
 date:date,
-
 note:note
 
 });
@@ -1520,308 +1080,156 @@ note:note
 }
 
 
-saveData();
-
-closeTransaction();
-
+save();
+closeForm();
 render();
 
 }
 
 
 /* =========================
-   SALARY / DAILY LIMIT
+   DAILY LIMIT
 ========================= */
 
 /*
-A salary entered in August
-plans September.
+Salary in August
+      ↓
+plans September
 
-A salary entered in September
-plans October.
-
-This keeps every salary cycle
-independent.
+Salary in September
+      ↓
+plans October
 */
 
-function salaryForMonth(
-targetMonth
-){
 
-const salaries =
+function salaryForMonth(key){
+
+let result=null;
+
 data.transactions
-
-.filter(
-t=>
+.filter(t=>
 t.type==="income" &&
 t.category==="Salary" &&
 t.calculateDailyLimit
 )
+.sort((a,b)=>a.date.localeCompare(b.date))
+.forEach(t=>{
 
-.sort(
-(a,b)=>
-a.date.localeCompare(
-b.date
-)
-);
-
-
-let result=null;
-
-
-salaries.forEach(
-salary=>{
-
-const salaryMonth =
-salary.date.slice(0,7);
-
-
-const plannedMonth =
-addMonths(
-salaryMonth,
-1
-);
-
-
-if(
-plannedMonth===targetMonth
-){
-
-result=salary;
-
+if(nextMonth(t.date.slice(0,7))===key){
+result=t;
 }
 
 });
-
 
 return result;
 
 }
 
 
-function calculatedDailyLimit(
-targetMonth
-){
-
-const salary =
-salaryForMonth(
-targetMonth
-);
-
-
-if(!salary){
-
-return null;
-
-}
-
-
-const parts =
-targetMonth
-.split("-")
-.map(Number);
-
-
-const days =
-daysInMonth(
-parts[0],
-parts[1]-1
-);
-
-
-return Math.max(
-0,
-salary.amount-
-(salary.savings||0)
-)/days;
-
-}
-
-
-function dailyLimitForMonth(
-targetMonth
-){
+function baseLimit(key){
 
 if(
 Object.prototype.hasOwnProperty.call(
 data.dailyLimits,
-targetMonth
+key
 )
 ){
+return Number(data.dailyLimits[key]);
+}
 
-return Number(
-data.dailyLimits[targetMonth]
-);
+const salary=salaryForMonth(key);
+
+if(!salary){
+return null;
+}
+
+return Math.max(
+0,
+salary.amount-(salary.savings||0)
+)/
+daysInMonth(key);
 
 }
 
-
-return calculatedDailyLimit(
-targetMonth
-);
-
-}
-
-
-/* =========================
-   DAILY CARRY FORWARD
-========================= */
 
 /*
-Example:
+Calculate today's available Daily Limit.
 
-Daily Limit = ₹1000
+Unused money carries forward.
 
-Day 1:
-Spend ₹800
-Unused = ₹200
-
-Day 2:
-₹1000 + ₹200
-= ₹1200 available
-
-If ₹200 is transferred
-to Savings on Day 1:
-
-Day 2:
-₹1000
-
-So saved money does NOT
-carry into tomorrow.
+If unused money is moved to Savings,
+that portion does not carry forward.
 */
 
-function dailyAvailableForDate(
-dateString
-){
+function dailyForToday(){
 
-const d =
-new Date(
-dateString+"T12:00:00"
-);
+const key=monthKey(new Date());
 
+const base=baseLimit(key);
 
-const key =
-monthKey(d);
-
-
-const base =
-dailyLimitForMonth(
-key
-);
-
-
-if(
-base===null ||
-base===undefined
-){
-
+if(base===null){
 return null;
-
 }
 
+let available=base;
 
-let available =
-Number(base);
+const day=new Date().getDate();
 
+for(let i=1;i<day;i++){
 
-for(
-let day=1;
-day<d.getDate();
-day++
-){
-
-const ds =
-key+
-"-"+
-String(day)
-.padStart(2,"0");
+const date=
+key+"-"+
+String(i).padStart(2,"0");
 
 
-const spent =
-data.transactions
-
-.filter(
-t=>
+const spent=data.transactions
+.filter(t=>
 t.type==="expense" &&
-t.date===ds
+t.date===date
 )
-
-.reduce(
-(sum,t)=>
-sum+
-Number(t.amount||0),
-0
-);
+.reduce((s,t)=>s+t.amount,0);
 
 
-const movedToSavings =
-data.transactions
-
-.filter(
-t=>
+const movedSavings=data.transactions
+.filter(t=>
 t.type==="transfer" &&
-t.date===ds &&
+t.date===date &&
 t.to==="savings"
 )
-
-.reduce(
-(sum,t)=>
-sum+
-Number(t.amount||0),
-0
-);
+.reduce((s,t)=>s+t.amount,0);
 
 
 /*
-Only unused money carries forward.
+First remove spending and money
+deliberately moved to Savings.
 
-Money deliberately moved to
-Savings is removed first.
+Whatever is left can carry forward.
 */
 
-const leftover =
+const leftover=
 Math.max(
 0,
-available-
-spent-
-movedToSavings
+available-spent-movedSavings
 );
 
 
-available =
-Number(base)+
-leftover;
+available=
+base+leftover;
 
 }
 
 
-const spentToday =
-data.transactions
-
-.filter(
-t=>
+const todaySpent=data.transactions
+.filter(t=>
 t.type==="expense" &&
-t.date===dateString
+t.date===today()
 )
-
-.reduce(
-(sum,t)=>
-sum+
-Number(t.amount||0),
-0
-);
+.reduce((s,t)=>s+t.amount,0);
 
 
-return {
-
+return{
 limit:available,
-
-remaining:
-available-
-spentToday,
-
-base:Number(base)
-
+remaining:available-todaySpent
 };
 
 }
@@ -1831,103 +1239,64 @@ base:Number(base)
    BALANCE
 ========================= */
 
-function closingBalanceUntil(
-endDate
-){
+function balanceUntil(endDate){
 
-let balance =
-Number(
-data.startingBalance
-)||0;
+let balance=
+Number(data.startingBalance)||0;
 
-
-const transactions =
+const list=
 data.transactions
-
-.filter(
-t=>
-t.date<=endDate
-)
-
-.sort(
-(a,b)=>
+.filter(t=>t.date<=endDate)
+.sort((a,b)=>
 a.date.localeCompare(b.date) ||
 a.id-b.id
 );
 
 
-transactions.forEach(
-t=>{
+list.forEach(t=>{
 
-const amount =
-Number(t.amount)||0;
-
-
-if(
-t.type==="income"
-){
+if(t.type==="income"){
 
 /*
-Salary minus Savings
-becomes available balance.
+Only the amount after Savings
+is available to spend.
 */
 
-balance +=
-amount-
+balance+=
+t.amount-
 Number(t.savings||0);
 
 }
 
+else if(t.type==="expense"){
 
-else if(
-t.type==="expense"
-){
-
-balance -=
-amount;
+balance-=t.amount;
 
 }
 
-
-else if(
-t.type==="transfer"
-){
-
-/*
-Spending account -> Savings
-reduces available balance.
-*/
+else if(t.type==="transfer"){
 
 if(
-t.from!=="savings" &&
-t.to==="savings"
+t.to==="savings" &&
+t.from!=="savings"
 ){
 
-balance -=
-amount;
+balance-=t.amount;
 
 }
-
-
-/*
-Savings -> spending account
-returns money to available balance.
-*/
 
 else if(
 t.from==="savings" &&
 t.to!=="savings"
 ){
 
-balance +=
-amount;
+balance+=t.amount;
 
 }
 
 }
 
 });
-
 
 return balance;
 
@@ -1940,14 +1309,9 @@ return balance;
 
 function render(){
 
-const key =
-monthKey(
-selectedMonth
-);
+const key=monthKey(selectedMonth);
 
-
-$("month")
-.textContent =
+$("month").textContent=
 selectedMonth.toLocaleDateString(
 "en-IN",
 {
@@ -1957,100 +1321,48 @@ year:"numeric"
 );
 
 
-const monthTransactions =
-data.transactions.filter(
-t=>
-t.date.startsWith(key)
+const list=data.transactions.filter(
+t=>t.date.startsWith(key)
 );
 
 
-const income =
-monthTransactions
-
-.filter(
-t=>
-t.type==="income"
-)
-
+const income=list
+.filter(t=>t.type==="income")
 .reduce(
-(sum,t)=>
-sum+
-Number(t.amount||0)-
-Number(t.savings||0),
+(s,t)=>
+s+t.amount-(t.savings||0),
 0
 );
 
 
-const spent =
-monthTransactions
-
-.filter(
-t=>
-t.type==="expense"
-)
-
+const spent=list
+.filter(t=>t.type==="expense")
 .reduce(
-(sum,t)=>
-sum+
-Number(t.amount||0),
+(s,t)=>s+t.amount,
 0
 );
 
 
-const parts =
-key.split("-")
-.map(Number);
+const last=daysInMonth(key);
+
+const lastDate=
+key+"-"+String(last).padStart(2,"0");
 
 
-const last =
-daysInMonth(
-parts[0],
-parts[1]-1
-);
+$("balance").textContent=
+money(balanceUntil(lastDate));
 
+$("income").textContent=money(income);
 
-const lastDate =
-key+
-"-"+
-String(last)
-.padStart(2,"0");
+$("spent").textContent=money(spent);
 
-
-$("balance")
-.textContent =
-money(
-closingBalanceUntil(
-lastDate
-)
-);
-
-
-$("income")
-.textContent =
-money(income);
-
-
-$("spent")
-.textContent =
-money(spent);
-
-
-$("startingBalance")
-.textContent =
-money(
-data.startingBalance
-);
+$("starting").textContent=
+money(data.startingBalance);
 
 
 renderDaily();
-
-renderTransactions(
-monthTransactions
-);
-
-renderCategories(
-monthTransactions
-);
+renderTransactions(list);
+renderCategories(list);
 
 }
 
@@ -2061,42 +1373,243 @@ monthTransactions
 
 function renderDaily(){
 
-const now =
-new Date();
+const box=$("dailyBox");
+
+const current=
+monthKey(new Date());
+
+if(monthKey(selectedMonth)!==current){
+
+const base=baseLimit(
+monthKey(selectedMonth)
+);
+
+$("dailyLimit").textContent=
+base===null?"—":money(base);
+
+$("dailyStatus").textContent=
+base===null
+?"No salary plan"
+:"Monthly base";
+
+box.classList.remove("over");
+
+return;
+
+}
 
 
-/*
-If viewing another month,
-show that month's base Daily Limit.
-*/
+const result=dailyForToday();
 
-if(
-!isSameMonth(
-selectedMonth,
-now
-)
-){
+if(!result){
 
-const key =
-monthKey(
-selectedMonth
+$("dailyLimit").textContent="—";
+$("dailyStatus").textContent="No salary plan";
+
+box.classList.remove("over");
+
+return;
+
+}
+
+
+$("dailyLimit").textContent=
+money(result.limit);
+
+$("dailyStatus").textContent=
+result.remaining<0
+?
+"Over by "+money(Math.abs(result.remaining))
+:
+money(result.remaining)+" remaining";
+
+
+box.classList.toggle(
+"over",
+result.remaining<0
+);
+
+}
+
+
+/* =========================
+   TRANSACTIONS
+========================= */
+
+function renderTransactions(list){
+
+const box=$("transactions");
+
+if(!list.length){
+
+box.innerHTML=
+'<div class="empty">No transactions yet.</div>';
+
+return;
+
+}
+
+
+const sorted=[...list].sort(
+(a,b)=>
+b.date.localeCompare(a.date) ||
+b.id-a.id
 );
 
 
-const base =
-dailyLimitForMonth(
-key
+let html="";
+let last="";
+
+
+sorted.forEach(t=>{
+
+if(t.date!==last){
+
+html+=
+'<div class="day">'+
+new Date(t.date+"T12:00:00")
+.toLocaleDateString(
+"en-IN",
+{
+weekday:"long",
+day:"numeric",
+month:"short"
+}
+)+
+'</div>';
+
+last=t.date;
+
+}
+
+
+let cls="transaction";
+let name="";
+let emoji="";
+let amount="";
+let note=t.note||"";
+let method="";
+
+
+if(t.type==="expense"){
+
+cls+=" "+t.payment;
+
+name=t.category;
+
+const item=expenses.find(
+x=>x[0]===t.category
 );
 
+emoji=item?item[1]:"📦";
 
-$("dailyLimit")
-.textContent =
-base===null
-?"—"
-:money(base);
+amount="-"+money(t.amount);
+
+method=paymentEmoji[t.payment]||"";
+
+}
 
 
-$("dailyStatus")
-.textContent =
-base===null
-?"No sal
+else if(t.type==="income"){
+
+cls+=" "+t.payment;
+
+name=t.category;
+
+const item=incomes.find(
+x=>x[0]===t.category
+);
+
+emoji=item?item[1]:"💰";
+
+amount="+"+money(t.amount);
+
+method=paymentEmoji[t.payment]||"";
+
+if(t.savings){
+
+note=
+(note?note+" · ":"")+
+"Savings "+money(t.savings);
+
+}
+
+}
+
+
+else{
+
+cls+=" transfer";
+
+name="Transfer";
+
+emoji="↔️";
+
+amount=money(t.amount);
+
+method="";
+
+note=
+(t.from||"")+" → "+(t.to||"")+
+(note?" · "+note:"");
+
+}
+
+
+html+=
+
+'<div class="'+cls+'">'+
+
+'<div>'+
+
+'<div class="txName">'+
+emoji+" "+
+escapeHTML(name)+
+'</div>'+
+
+(note?
+'<div class="txNote">'+
+escapeHTML(note)+
+'</div>'
+:"")+
+
+'</div>'+
+
+'<div class="txRight">'+
+
+'<div class="txAmount">'+
+amount+
+" "+
+method+
+'</div>'+
+
+'</div>'+
+
+'</div>';
+
+});
+
+
+box.innerHTML=html;
+
+}
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+function renderCategories(list){
+
+const box=$("categories");
+
+const totals={};
+
+list
+.filter(t=>t.type==="expense")
+.forEach(t=>{
+
+totals[t.category]=
+(totals[t.category]||0)+t.amount;
+
+   
