@@ -438,8 +438,9 @@ header{
   background:transparent;
   color:#777;
   padding:9px 5px;
-  font-size:12px;
+  font-size:11px;
   cursor:pointer;
+  transition:.2s;
 }
 
 .toggleRow button.active{
@@ -447,23 +448,113 @@ header{
   color:#111;
 }
 
+.statsMiniRow{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:6px;
+  margin-top:8px;
+}
+
+.statsMini{
+  background:#191a1d;
+  border:1px solid #292a2e;
+  border-radius:10px;
+  padding:8px;
+}
+
+.statsMini span{
+  display:block;
+  color:#686970;
+  font-size:8px;
+}
+
+.statsMini strong{
+  display:block;
+  margin-top:3px;
+  font-size:12px;
+}
+
 .chartWrap{
   display:none;
-  margin-top:10px;
-  background:var(--panel);
+  margin-top:9px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.018),transparent 60%),
+    var(--panel);
   border:1px solid var(--border);
   border-radius:15px;
-  padding:15px;
+  padding:12px 10px 9px;
 }
 
 .chartWrap.show{display:block}
 
-canvas{
-  width:100%;
-  height:260px;
-  display:block;
+.chartHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:10px;
+  padding:2px 3px 4px;
 }
 
+.chartEyebrow{
+  color:#66676d;
+  font-size:8px;
+  letter-spacing:.7px;
+}
+
+.chartHeading{
+  color:#ddd;
+  font-size:12px;
+  font-weight:700;
+  margin-top:3px;
+}
+
+.chartTotal{
+  color:#999aa0;
+  font-size:9px;
+  white-space:nowrap;
+}
+
+canvas{
+  width:100%;
+  height:220px;
+  display:block;
+  margin-top:4px;
+}
+
+.chartLegend{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px 10px;
+  margin:4px 3px 1px;
+}
+
+.legendItem{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+  color:#88898f;
+  font-size:8px;
+}
+
+.legendDot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  flex:none;
+}
+
+.legendName{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.legendAmount{
+  margin-left:auto;
+  color:#ddd;
+  white-space:nowrap;
+}
 .starting{
   text-align:center;
   color:#66676c;
@@ -700,12 +791,37 @@ input:focus,select:focus{outline:1px solid #888}
 
 <div class="statsToggle">
   <div class="sectionTitle" style="margin-top:0">Statistics</div>
+
   <div class="toggleRow">
     <button type="button" id="barToggle" onclick="setChart('bar')">▥ Bar Chart</button>
     <button type="button" id="pieToggle" onclick="setChart('pie')">◉ Pie Chart</button>
   </div>
+
+  <div class="statsMiniRow">
+    <div class="statsMini">
+      <span>Income</span>
+      <strong class="income" id="statsIncome">₹0</strong>
+    </div>
+    <div class="statsMini">
+      <span>Spent</span>
+      <strong class="spent" id="statsSpent">₹0</strong>
+    </div>
+    <div class="statsMini">
+      <span>Categories</span>
+      <strong id="statsCategoryCount">0</strong>
+    </div>
+  </div>
+
   <div class="chartWrap" id="chartWrap">
+    <div class="chartHeader">
+      <div>
+        <div class="chartEyebrow" id="chartEyebrow">MONTHLY OVERVIEW</div>
+        <div class="chartHeading" id="chartHeading">Income vs Expense</div>
+      </div>
+      <div class="chartTotal" id="chartTotal">₹0 spent</div>
+    </div>
     <canvas id="chart"></canvas>
+    <div id="chartLegend" class="chartLegend"></div>
   </div>
 </div>
 
@@ -1039,6 +1155,7 @@ function render(){
   document.getElementById("spent").textContent=money(spent);
   document.getElementById("startingBalance").textContent=money(data.startingBalance);
   renderDaily();renderTransactions(tx);renderCategories(tx);
+  const st=getChartStats(tx);document.getElementById('statsIncome').textContent=money(st.income);document.getElementById('statsSpent').textContent=money(st.expense);document.getElementById('statsCategoryCount').textContent=Object.keys(st.categories).length;
   if(chartMode)drawChart(chartMode,tx);
 }
 
@@ -1204,53 +1321,198 @@ function renderCategories(tx){
   }).join("");
 }
 
+function getChartStats(tx){
+  const income=tx.filter(t=>t.type==="income")
+    .reduce((s,t)=>s+Number(t.amount||0)-Number(t.savings||0),0);
+
+  const expense=tx.filter(t=>t.type==="expense")
+    .reduce((s,t)=>s+Number(t.amount||0),0);
+
+  const savings=tx.filter(t=>t.type==="income")
+    .reduce((s,t)=>s+Number(t.savings||0),0);
+
+  const categories={};
+  tx.filter(t=>t.type==="expense").forEach(t=>{
+    categories[t.category]=(categories[t.category]||0)+Number(t.amount||0);
+  });
+
+  return {income,expense,savings,categories};
+}
+
 function setChart(mode){
-  if(chartMode===mode){chartMode=null}else chartMode=mode;
+  if(chartMode===mode){
+    chartMode=null;
+  }else{
+    chartMode=mode;
+  }
+
   document.getElementById("barToggle").classList.toggle("active",chartMode==="bar");
   document.getElementById("pieToggle").classList.toggle("active",chartMode==="pie");
   document.getElementById("chartWrap").classList.toggle("show",!!chartMode);
-  if(chartMode)drawChart(chartMode,data.transactions.filter(t=>t.date.startsWith(monthKey(selectedMonth))));
+
+  if(chartMode){
+    drawChart(chartMode,data.transactions.filter(t=>t.date.startsWith(monthKey(selectedMonth))));
+  }
 }
 
 function drawChart(mode,tx){
-  const canvas=document.getElementById("chart"),ctx=canvas.getContext("2d");
-  const rect=canvas.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
-  canvas.width=rect.width*dpr;canvas.height=260*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
-  const w=rect.width,h=260;ctx.clearRect(0,0,w,h);
-  ctx.font="12px Manrope, Arial";ctx.textBaseline="middle";
+  const canvas=document.getElementById("chart");
+  const ctx=canvas.getContext("2d");
+  const rect=canvas.getBoundingClientRect();
+  const dpr=window.devicePixelRatio||1;
+  const w=Math.max(280,rect.width);
+  const h=220;
 
-  const income=tx.filter(t=>t.type==="income").reduce((s,t)=>s+Number(t.amount)-Number(t.savings||0),0);
-  const expense=tx.filter(t=>t.type==="expense").reduce((s,t)=>s+Number(t.amount),0);
-  const savings=tx.filter(t=>t.type==="income").reduce((s,t)=>s+Number(t.savings||0),0);
-  const totals={};
-  tx.filter(t=>t.type==="expense").forEach(t=>totals[t.category]=(totals[t.category]||0)+Number(t.amount));
+  canvas.width=Math.round(w*dpr);
+  canvas.height=Math.round(h*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,w,h);
+
+  const s=getChartStats(tx);
+  document.getElementById("statsIncome").textContent=money(s.income);
+  document.getElementById("statsSpent").textContent=money(s.expense);
+  document.getElementById("statsCategoryCount").textContent=Object.keys(s.categories).length;
+  document.getElementById("chartTotal").textContent=money(s.expense)+" spent";
+
+  const palette=["#f0c84b","#5ca9ff","#55c98a","#ff6868","#b88cff","#e59a62","#7fc8a9","#d978a8","#8fa8ff","#c4c4c4","#70b7b0","#d18cff"];
 
   if(mode==="bar"){
-    const vals=[income,expense,savings],labels=["Income","Expense","Savings"],max=Math.max(...vals,1);
-    const base=h-48,barW=Math.min(70,w/5),gap=(w-barW*3)/4;
-    vals.forEach((v,i)=>{
-      const bh=(v/max)*(h-95),x=gap+i*(barW+gap),y=base-bh;
-      ctx.fillStyle="#777";ctx.fillRect(x,y,barW,bh);
-      ctx.fillStyle="#aaa";ctx.textAlign="center";ctx.fillText(labels[i],x+barW/2,base+18);
-      ctx.fillStyle="#eee";ctx.fillText(money(v),x+barW/2,Math.max(12,y-10));
-    });
-    ctx.fillStyle="#666";ctx.textAlign="center";ctx.fillText("Monthly overview",w/2,15);
+    document.getElementById("chartEyebrow").textContent="MONTHLY OVERVIEW";
+    document.getElementById("chartHeading").textContent="Income vs Expense";
+
+    drawOverviewBars(ctx,w,h,s);
+    renderLegend([
+      ["Income",s.income,palette[2]],
+      ["Expense",s.expense,palette[3]],
+      ["Savings",s.savings,palette[0]]
+    ]);
   }else{
-    const entries=Object.entries(totals).sort((a,b)=>b[1]-a[1]);
-    const total=entries.reduce((s,x)=>s+x[1],0);
-    if(!total){ctx.fillStyle="#777";ctx.textAlign="center";ctx.fillText("No expenses to display",w/2,h/2);return}
-    const cx=w*.34,cy=h/2,r=Math.min(90,w*.25),palette=["#777","#8d8d8d","#a3a3a3","#696969","#b8b8b8","#5f5f5f"];
-    let start=-Math.PI/2;
-    entries.forEach((e,i)=>{
-      const angle=e[1]/total*Math.PI*2;
-      ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,start+angle);ctx.closePath();
-      ctx.fillStyle=palette[i%palette.length];ctx.fill();start+=angle;
-    });
-    ctx.font="11px Manrope, Arial";ctx.textAlign="left";
-    entries.slice(0,7).forEach((e,i)=>{
-      const y=30+i*29;ctx.fillStyle="#888";ctx.fillRect(w*.58,y-6,9,9);ctx.fillStyle="#ddd";ctx.fillText(e[0]+"  "+money(e[1]),w*.58+16,y);
-    });
+    document.getElementById("chartEyebrow").textContent="EXPENSE BREAKDOWN";
+    document.getElementById("chartHeading").textContent="Where your money went";
+
+    const entries=Object.entries(s.categories).sort((a,b)=>b[1]-a[1]);
+    drawCategoryPie(ctx,w,h,entries,palette);
+    renderLegend(entries.slice(0,8).map((e,i)=>[e[0],e[1],palette[i%palette.length]]));
   }
+}
+
+function drawOverviewBars(ctx,w,h,s){
+  const vals=[
+    ["Income",s.income],
+    ["Expense",s.expense],
+    ["Savings",s.savings]
+  ];
+
+  const max=Math.max(...vals.map(x=>x[1]),1);
+  const left=36,right=10,top=22,bottom=36;
+  const chartH=h-top-bottom;
+  const usableW=w-left-right;
+  const barW=Math.min(58,usableW/5.2);
+  const gap=(usableW-barW*3)/4;
+
+  ctx.font="9px Arial";
+  ctx.textAlign="right";
+  ctx.textBaseline="middle";
+
+  for(let i=0;i<4;i++){
+    const y=top+chartH-(chartH*i/3);
+    ctx.strokeStyle="#292a2e";
+    ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(left,y);
+    ctx.lineTo(w-right,y);
+    ctx.stroke();
+
+    ctx.fillStyle="#62636a";
+    ctx.fillText(money(max*i/3),left-5,y);
+  }
+
+  vals.forEach((item,i)=>{
+    const x=left+gap+i*(barW+gap);
+    const bh=(item[1]/max)*chartH;
+    const y=top+chartH-bh;
+    const colors=["#55c98a","#ff6868","#f0c84b"];
+
+    ctx.fillStyle=colors[i];
+    roundRect(ctx,x,y,barW,Math.max(bh,2),6);
+    ctx.fill();
+
+    ctx.fillStyle="#eee";
+    ctx.textAlign="center";
+    ctx.font="bold 9px Arial";
+    ctx.fillText(money(item[1]),x+barW/2,Math.max(11,y-9));
+
+    ctx.fillStyle="#77787e";
+    ctx.font="8px Arial";
+    ctx.fillText(item[0],x+barW/2,h-12);
+  });
+}
+
+function drawCategoryPie(ctx,w,h,entries,palette){
+  const total=entries.reduce((s,e)=>s+e[1],0);
+
+  if(!total){
+    ctx.fillStyle="#77787e";
+    ctx.font="11px Arial";
+    ctx.textAlign="center";
+    ctx.textBaseline="middle";
+    ctx.fillText("No expenses to display",w/2,h/2);
+    renderLegend([]);
+    return;
+  }
+
+  const cx=w*.34;
+  const cy=h*.51;
+  const r=Math.min(78,w*.245);
+
+  let start=-Math.PI/2;
+  entries.forEach((e,i)=>{
+    const angle=e[1]/total*Math.PI*2;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,start,start+angle);
+    ctx.closePath();
+    ctx.fillStyle=palette[i%palette.length];
+    ctx.fill();
+    start+=angle;
+  });
+
+  ctx.beginPath();
+  ctx.arc(cx,cy,r*.48,0,Math.PI*2);
+  ctx.fillStyle="#1b1c1f";
+  ctx.fill();
+
+  ctx.fillStyle="#eee";
+  ctx.font="bold 11px Arial";
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+  ctx.fillText(money(total),cx,cy-5);
+
+  ctx.fillStyle="#686970";
+  ctx.font="8px Arial";
+  ctx.fillText("spent",cx,cy+9);
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  r=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+
+function renderLegend(items){
+  const box=document.getElementById("chartLegend");
+  box.innerHTML=items.map(x=>`
+    <div class="legendItem">
+      <span class="legendDot" style="background:${x[2]}"></span>
+      <span class="legendName">${escapeHtml(x[0])}</span>
+      <span class="legendAmount">${money(x[1])}</span>
+    </div>
+  `).join("");
 }
 
 function setStartingBalance(){
