@@ -270,14 +270,19 @@ header{
 }
 
 .transaction{
-  background:var(--panel2);
+  background:linear-gradient(145deg,rgba(255,255,255,.018),transparent 55%),var(--panel2);
   border:1px solid var(--border);
-  border-left:4px solid #777;
-  border-radius:13px;
-  padding:12px;
+  border-left:3px solid #777;
+  border-radius:14px;
+  padding:12px 11px;
   margin-bottom:7px;
+  position:relative;
+  transition:transform .18s ease,border-color .18s ease;
 }
-
+.transaction:hover{
+  transform:translateY(-1px);
+  border-color:#3a3b40;
+}
 .transaction.cash{border-left-color:var(--green)}
 .transaction.gpay{border-left-color:var(--blue)}
 .transaction.debit{border-left-color:#e3c44f}
@@ -288,44 +293,82 @@ header{
   justify-content:space-between;
   align-items:center;
   gap:12px;
+  padding-right:34px;
 }
-
+.txInfo{min-width:0}
 .txName{
-  font-size:14px;
-  font-weight:700;
-}
-
-.txAmount{
-  font-size:14px;
+  font-size:13px;
   font-weight:700;
   white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
-
 .txMeta{
-  color:#73747a;
-  font-size:10px;
+  color:#6f7076;
+  font-size:9px;
+  margin-top:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.txNote{
+  color:#85868c;
+  font-size:9px;
   margin-top:4px;
 }
-
-.txActions{
-  display:flex;
-  gap:5px;
-  margin-top:7px;
+.txAmount{
+  font-size:13px;
+  font-weight:700;
+  white-space:nowrap;
+  align-self:flex-start;
 }
-
-.txActions button{
-  padding:4px 8px;
-  border:1px solid #303136;
-  border-radius:7px;
+.txMenuBtn{
+  position:absolute;
+  top:9px;
+  right:8px;
+  width:28px;
+  height:28px;
+  border:1px solid transparent;
+  border-radius:8px;
+  background:transparent;
+  color:#77787e;
+  font-size:17px;
+  line-height:24px;
+  cursor:pointer;
+}
+.txMenuBtn:hover,
+.txMenuBtn.open{
+  background:#242529;
+  border-color:#303136;
+  color:#eee;
+}
+.txMenu{
+  display:none;
+  position:absolute;
+  right:8px;
+  top:39px;
+  min-width:110px;
+  z-index:10;
+  padding:4px;
   background:#202125;
-  color:#8d8e94;
+  border:1px solid #36373b;
+  border-radius:10px;
+  box-shadow:0 10px 25px rgba(0,0,0,.35);
+}
+.txMenu.show{display:block}
+.txMenu button{
+  width:100%;
+  border:0;
+  border-radius:7px;
+  background:transparent;
+  color:#ddd;
+  text-align:left;
+  padding:8px 9px;
   font-size:10px;
   cursor:pointer;
 }
-
-.txActions .deleteBtn{
-  color:#b36b6b;
-}
+.txMenu button:hover{background:#2a2b2f}
+.txMenu .deleteItem{color:#d27777}
 
 .day{
   color:#696a70;
@@ -1060,24 +1103,96 @@ function renderDaily(){
     status.textContent=money(spent)+" spent of "+money(r.limit);
   }
 }
-function renderTransactions(tx){
-  const box=document.getElementById("transactions");
-  if(!tx.length){box.innerHTML='<div class="empty">No transactions yet.</div>';return}
-  const list=[...tx].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
-  let html="",last="";
-  list.forEach(t=>{
-    if(t.date!==last){html+='<div class="day">'+dateText(t.date)+'</div>';last=t.date}
-    if(t.type==="transfer"){
-      html+=`<div class="transaction transfer"><div class="txMain"><div><div class="txName">↔️ Transfer</div><div class="txMeta">${paymentEmoji[t.from]||""} ${t.from} → ${paymentEmoji[t.to]||""} ${t.to}${t.note?" · "+escapeHtml(t.note):""}</div></div><div><div class="txAmount">${money(t.amount)}</div></div></div><div class="txActions"><button onclick="editTransaction(${t.id})">Edit</button><button class="deleteBtn" onclick="deleteTransaction(${t.id})">Delete</button></div></div>`;
-    }else{
-      const emoji=t.type==="income"?"💼":(expenseCategories.find(x=>x[0]===t.category)||["","📦"])[1];
-      const color=t.type==="income"?"income":"spent";
-      html+=`<div class="transaction ${t.payment||"cash"}"><div class="txMain"><div><div class="txName">${emoji} ${escapeHtml(t.category)}</div><div class="txMeta">${t.type==="income"?"Income":"Expense"} · ${paymentEmoji[t.payment]||""}${t.note?" · "+escapeHtml(t.note):""}${t.savings?" · Savings "+money(t.savings):""}</div></div><div class="txAmount ${color}">${t.type==="income"?"+":"-"}${money(t.amount)}</div></div><div class="txActions"><button onclick="editTransaction(${t.id})">Edit</button><button class="deleteBtn" onclick="deleteTransaction(${t.id})">Delete</button></div></div>`;
+function closeTransactionMenus(exceptId){
+  document.querySelectorAll(".txMenu.show").forEach(menu=>{
+    if(menu.dataset.id!==String(exceptId)){
+      menu.classList.remove("show");
+      const btn=document.querySelector(`.txMenuBtn[data-id="${menu.dataset.id}"]`);
+      if(btn)btn.classList.remove("open");
     }
   });
-  box.innerHTML=html;
 }
 
+function toggleTransactionMenu(id){
+  const menu=document.getElementById("txMenu-"+id);
+  const btn=document.querySelector(`.txMenuBtn[data-id="${id}"]`);
+  if(!menu)return;
+  const opening=!menu.classList.contains("show");
+  closeTransactionMenus(id);
+  menu.classList.toggle("show",opening);
+  if(btn)btn.classList.toggle("open",opening);
+}
+
+document.addEventListener("click",e=>{
+  if(!e.target.closest(".txMenu")&&!e.target.closest(".txMenuBtn")){
+    closeTransactionMenus(null);
+  }
+});
+
+function renderTransactions(tx){
+  const box=document.getElementById("transactions");
+  if(!tx.length){
+    box.innerHTML='<div class="empty">No transactions yet.</div>';
+    return;
+  }
+
+  const list=[...tx].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+  let out="",last="";
+
+  list.forEach(t=>{
+    if(t.date!==last){
+      out+='<div class="day">'+dateText(t.date)+'</div>';
+      last=t.date;
+    }
+
+    const menu=`
+      <button type="button" onclick="editTransaction(${t.id});closeTransactionMenus(null)">✏ Edit</button>
+      <button type="button" class="deleteItem" onclick="deleteTransaction(${t.id});closeTransactionMenus(null)">🗑 Delete</button>
+    `;
+
+    if(t.type==="transfer"){
+      out+=`
+      <div class="transaction transfer">
+        <div class="txMain">
+          <div class="txInfo">
+            <div class="txName">↔️ Transfer</div>
+            <div class="txMeta">${paymentEmoji[t.from]||""} ${escapeHtml(t.from)} → ${paymentEmoji[t.to]||""} ${escapeHtml(t.to)}</div>
+            ${t.note?`<div class="txNote">${escapeHtml(t.note)}</div>`:""}
+          </div>
+          <div class="txAmount">${money(t.amount)}</div>
+        </div>
+        <button type="button" class="txMenuBtn" data-id="${t.id}" onclick="toggleTransactionMenu(${t.id})">⋮</button>
+        <div class="txMenu" id="txMenu-${t.id}" data-id="${t.id}">${menu}</div>
+      </div>`;
+    }else{
+      const emoji=t.type==="income"
+        ?"💼"
+        :(expenseCategories.find(x=>x[0]===t.category)||["","📦"])[1];
+      const color=t.type==="income"?"income":"spent";
+      const meta=t.type==="income"
+        ?"Income"
+        :"Expense";
+      const payment=paymentEmoji[t.payment]||"";
+      const savings=t.savings?` · Savings ${money(t.savings)}`:"";
+
+      out+=`
+      <div class="transaction ${t.payment||"cash"}">
+        <div class="txMain">
+          <div class="txInfo">
+            <div class="txName">${emoji} ${escapeHtml(t.category)}</div>
+            <div class="txMeta">${meta} · ${payment}${savings}</div>
+            ${t.note?`<div class="txNote">${escapeHtml(t.note)}</div>`:""}
+          </div>
+          <div class="txAmount ${color}">${t.type==="income"?"+":"-"}${money(t.amount)}</div>
+        </div>
+        <button type="button" class="txMenuBtn" data-id="${t.id}" onclick="toggleTransactionMenu(${t.id})">⋮</button>
+        <div class="txMenu" id="txMenu-${t.id}" data-id="${t.id}">${menu}</div>
+      </div>`;
+    }
+  });
+
+  box.innerHTML=out;
+}
 function renderCategories(tx){
   const box=document.getElementById("categories"),expenses=tx.filter(t=>t.type==="expense");
   if(!expenses.length){box.innerHTML='<div class="empty">No spending this month.</div>';return}
