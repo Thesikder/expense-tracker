@@ -1,51 +1,2338 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Button Test</title>
+<title>Thomas's Tracker</title>
+
 <style>
+*{box-sizing:border-box}
+
 body{
-background:#111;
-color:white;
-font-family:Arial;
-padding:30px;
+  margin:0;
+  background:#101010;
+  color:#eee;
+  font-family:Arial,sans-serif;
 }
-button{
-width:100%;
-padding:20px;
-font-size:20px;
-margin-top:30px;
+
+.app{
+  max-width:620px;
+  margin:auto;
+  padding:24px 16px 70px;
 }
-#box{
-display:none;
-background:#222;
-padding:30px;
-margin-top:20px;
-border-radius:15px;
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:24px;
 }
-#box.show{
-display:block;
+
+h1{
+  margin:0;
+  font-size:30px;
+}
+
+.month{
+  color:#888;
+  margin-top:6px;
+  font-size:15px;
+}
+
+.monthNav{
+  display:flex;
+  gap:8px;
+}
+
+.monthNav button{
+  width:46px;
+  height:46px;
+  border:1px solid #292929;
+  border-radius:14px;
+  background:#191919;
+  color:#eee;
+  font-size:24px;
+}
+
+.card,
+.money,
+.daily{
+  background:#191919;
+  border:1px solid #292929;
+}
+
+.card{
+  border-radius:22px;
+  padding:22px;
+  margin-bottom:10px;
+}
+
+.label{
+  color:#888;
+  font-size:14px;
+}
+
+.balance{
+  font-size:42px;
+  font-weight:bold;
+  margin-top:7px;
+}
+
+.moneyRow{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.money{
+  border-radius:18px;
+  padding:17px;
+}
+
+.money strong{
+  display:block;
+  font-size:22px;
+  margin-top:7px;
+}
+
+.income{
+  color:#55c98a;
+}
+
+.spent{
+  color:#ff6868;
+}
+
+.daily{
+  border-radius:18px;
+  padding:18px;
+  margin-top:10px;
+}
+
+.daily.over{
+  background:#351818;
+  border-color:#8b3030;
+}
+
+.dailyTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+.dailyValue{
+  font-size:25px;
+  font-weight:bold;
+  margin-top:6px;
+}
+
+.daily.over .dailyValue{
+  color:#ff6868;
+}
+
+.dailyStatus{
+  color:#888;
+  font-size:13px;
+  text-align:right;
+}
+
+.dailyStatus strong{
+  display:block;
+  color:#eee;
+  font-size:17px;
+  margin-top:6px;
+}
+
+.update{
+  width:100%;
+  margin-top:14px;
+  padding:12px;
+  border:1px solid #333;
+  border-radius:12px;
+  background:#222;
+  color:#ddd;
+  font-size:14px;
+}
+
+.add{
+  width:100%;
+  margin:16px 0 30px;
+  padding:17px;
+  border:0;
+  border-radius:17px;
+  background:#eee;
+  color:#111;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.sectionTitle{
+  font-size:21px;
+  font-weight:bold;
+  margin:24px 0 12px;
+}
+
+.day{
+  color:#777;
+  font-size:12px;
+  font-weight:bold;
+  margin:20px 5px 8px;
+  text-transform:uppercase;
+}
+
+.transaction{
+  background:#191919;
+  border:1px solid #292929;
+  border-left:5px solid #777;
+  border-radius:15px;
+  padding:14px;
+  margin-bottom:8px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.transaction.cash{
+  border-left-color:#55c98a;
+}
+
+.transaction.gpay{
+  border-left-color:#5ca9ff;
+}
+
+.transaction.debit{
+  border-left-color:#e4c44f;
+}
+
+.transaction.transfer{
+  border-left-color:#b88cff;
+}
+
+.transaction.savings{
+  border-left-color:#9b7cff;
+}
+
+.txLeft{
+  min-width:0;
+}
+
+.txName{
+  font-weight:bold;
+  font-size:16px;
+}
+
+.txNote{
+  color:#777;
+  font-size:12px;
+  margin-top:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.txRight{
+  text-align:right;
+  white-space:nowrap;
+}
+
+.txAmount{
+  font-weight:bold;
+  font-size:16px;
+}
+
+.method{
+  font-size:15px;
+  margin-left:4px;
+}
+
+.empty{
+  background:#191919;
+  border:1px solid #292929;
+  border-radius:15px;
+  padding:24px;
+  text-align:center;
+  color:#777;
+}
+
+.category{
+  background:#191919;
+  border:1px solid #292929;
+  border-radius:15px;
+  padding:14px;
+  margin-bottom:9px;
+}
+
+.catRow{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.bar{
+  height:6px;
+  background:#292929;
+  border-radius:6px;
+  margin-top:9px;
+}
+
+.fill{
+  height:100%;
+  background:#777;
+  border-radius:6px;
+}
+
+.starting{
+  text-align:center;
+  color:#777;
+  font-size:13px;
+  margin-top:26px;
+}
+
+.starting button{
+  background:none;
+  border:0;
+  color:#aaa;
+  text-decoration:underline;
+  cursor:pointer;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000b;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:100;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.sheet{
+  width:100%;
+  max-width:620px;
+  max-height:94vh;
+  overflow-y:auto;
+  background:#181818;
+  border:1px solid #303030;
+  border-radius:24px 24px 0 0;
+  padding:22px 16px 30px;
+}
+
+.sheet h2{
+  margin:0 0 20px;
+  font-size:24px;
+}
+
+.tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+  margin-bottom:18px;
+}
+
+.tabs button{
+  padding:13px 5px;
+  border:1px solid #333;
+  border-radius:13px;
+  background:#222;
+  color:#aaa;
+  font-size:15px;
+}
+
+.tabs button.active{
+  background:#eee;
+  color:#111;
+}
+
+label{
+  display:block;
+  color:#888;
+  font-size:14px;
+  margin:13px 0 7px;
+}
+
+input,
+select{
+  width:100%;
+  padding:14px;
+  border:1px solid #333;
+  border-radius:13px;
+  background:#222;
+  color:#eee;
+  font-size:16px;
+  outline:none;
+}
+
+input:focus,
+select:focus{
+  border-color:#777;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.check{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#ddd;
+  font-size:14px;
+  margin-top:14px;
+}
+
+.check input{
+  width:19px;
+  height:19px;
+}
+
+.info{
+  background:#202020;
+  border:1px solid #303030;
+  border-radius:13px;
+  padding:12px;
+  margin-top:12px;
+  color:#aaa;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.preview{
+  background:#202020;
+  border:1px solid #303030;
+  border-radius:13px;
+  padding:12px;
+  margin-top:10px;
+  color:#aaa;
+  font-size:12px;
+}
+
+.preview strong{
+  display:block;
+  color:#eee;
+  font-size:18px;
+  margin-top:5px;
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:20px;
+}
+
+.buttons button{
+  padding:14px;
+  border:0;
+  border-radius:13px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.cancel{
+  background:#292929;
+  color:#eee;
+}
+
+.save{
+  background:#eee;
+  color:#111;
+}
+
+.smallHint{
+  color:#777;
+  font-size:11px;
+  margin-top:7px;
+  line-height:1.4;
+}
+
+@media(max-width:430px){
+  .app{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  h1{
+    font-size:28px;
+  }
+
+  .balance{
+    font-size:39px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<h1>Thomas's Tracker Test</h1>
+<div class="app">
 
-<button id="testButton">
-＋ Add Transaction
-</button>
+<header>
+  <div>
+    <h1>Thomas's Tracker</h1>
+    <div class="month" id="month"></div>
+  </div>
 
-<div id="box">
-<h2>IT WORKS! 🎉</h2>
-<p>The button is working correctly.</p>
+  <div class="monthNav">
+    <button type="button" onclick="changeMonth(-1)">‹</button>
+    <button type="button" onclick="changeMonth(1)">›</button>
+  </div>
+</header>
+
+
+<div class="card">
+  <div class="label">Balance</div>
+  <div class="balance" id="balance">₹0</div>
 </div>
 
+
+<div class="moneyRow">
+
+  <div class="money">
+    <div class="label">Income</div>
+    <strong class="income" id="income">₹0</strong>
+  </div>
+
+  <div class="money">
+    <div class="label">Spent</div>
+    <strong class="spent" id="spent">₹0</strong>
+  </div>
+
+</div>
+
+
+<div class="daily" id="dailyBox">
+
+  <div class="dailyTop">
+
+    <div>
+      <div class="label">Daily Limit</div>
+      <div class="dailyValue" id="dailyLimit">—</div>
+    </div>
+
+    <div class="dailyStatus">
+      Today's status
+      <strong id="dailyStatus">—</strong>
+    </div>
+
+  </div>
+
+  <button type="button" class="update" onclick="updateDailyLimit()">
+    Update Daily Limit
+  </button>
+
+</div>
+
+
+<button type="button" class="add" onclick="openTransaction()">
+  ＋ Add Transaction
+</button>
+
+
+<div class="sectionTitle">
+  Recent transactions
+</div>
+
+<div id="transactions"></div>
+
+
+<div class="sectionTitle">
+  Your spending on
+</div>
+
+<div id="categories"></div>
+
+
+<div class="starting">
+  Starting balance:
+  <span id="startingBalance">₹0</span>
+  ·
+  <button type="button" onclick="setStartingBalance()">
+    Set / change
+  </button>
+</div>
+
+</div>
+
+
+<!-- TRANSACTION MODAL -->
+
+<div class="modal" id="transactionModal">
+
+  <div class="sheet">
+
+    <h2>Add Transaction</h2>
+
+    <div class="tabs">
+
+      <button
+        type="button"
+        id="expenseTab"
+        class="active"
+        onclick="setTransactionType('expense')">
+        Expense
+      </button>
+
+      <button
+        type="button"
+        id="incomeTab"
+        onclick="setTransactionType('income')">
+        Income
+      </button>
+
+      <button
+        type="button"
+        id="transferTab"
+        onclick="setTransactionType('transfer')">
+        Transfer
+      </button>
+
+    </div>
+
+
+    <label for="amount">Amount</label>
+
+    <input
+      id="amount"
+      type="number"
+      inputmode="decimal"
+      min="0"
+      step="0.01"
+      placeholder="₹ 0"
+    >
+
+
+    <!-- NORMAL EXPENSE / INCOME -->
+
+    <div id="normalFields">
+
+      <label for="category">Category</label>
+
+      <select id="category"></select>
+
+
+      <label for="payment">Payment method</label>
+
+      <select id="payment">
+
+        <option value="cash">💵 Cash</option>
+
+        <option value="gpay">📱 GPay</option>
+
+        <option value="debit">💳 Debit Card</option>
+
+      </select>
+
+    </div>
+
+
+    <!-- SALARY OPTIONS -->
+
+    <div id="salaryFields" class="hidden">
+
+      <label class="check">
+
+        <input
+          id="calculateDailyLimit"
+          type="checkbox"
+          onchange="toggleSalaryFields()"
+        >
+
+        Calculate Daily Limit
+
+      </label>
+
+
+      <div id="savingsField" class="hidden">
+
+        <label for="savings">
+          Savings
+        </label>
+
+        <input
+          id="savings"
+          type="number"
+          inputmode="decimal"
+          min="0"
+          step="0.01"
+          placeholder="₹ 0"
+          oninput="showPreview()"
+        >
+
+        <div class="smallHint">
+          This amount is moved to your separate Savings account and is not counted as Income available to spend.
+        </div>
+
+        <div class="preview" id="preview">
+
+          Calculated Daily Limit
+
+          <strong id="previewAmount">
+            ₹0
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- TRANSFER -->
+
+    <div id="transferFields" class="hidden">
+
+      <label for="from">From</label>
+
+      <select id="from">
+
+        <option value="cash">💵 Cash</option>
+
+        <option value="gpay">📱 GPay</option>
+
+        <option value="debit">💳 Debit Card</option>
+
+        <option value="savings">🏦 Savings</option>
+
+      </select>
+
+
+      <label for="to">To</label>
+
+      <select id="to">
+
+        <option value="gpay">📱 GPay</option>
+
+        <option value="cash">💵 Cash</option>
+
+        <option value="debit">💳 Debit Card</option>
+
+        <option value="savings">🏦 Savings</option>
+
+      </select>
+
+
+      <div class="info">
+        Transfers between Cash, GPay and Debit Card do not count as spending.
+        A transfer to Savings moves money out of your available balance.
+      </div>
+
+    </div>
+
+
+    <label for="date">Date</label>
+
+    <input
+      id="date"
+      type="date"
+    >
+
+
+    <label for="note">
+      Note (optional)
+    </label>
+
+    <input
+      id="note"
+      type="text"
+      placeholder="What was it for?"
+    >
+
+
+    <div class="buttons">
+
+      <button
+        type="button"
+        class="cancel"
+        onclick="closeTransaction()">
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="save"
+        onclick="saveTransaction()">
+        Save
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <script>
-document.getElementById("testButton").addEventListener("click", function(){
-document.getElementById("box").classList.add("show");
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+const STORAGE_KEY = "thomasTrackerData_v3";
+
+let data;
+
+try{
+  data = JSON.parse(
+    localStorage.getItem(STORAGE_KEY)
+  );
+}catch(e){
+  data = null;
+}
+
+if(!data || typeof data !== "object"){
+  data = {
+    transactions:[],
+    startingBalance:0,
+    dailyLimits:{}
+  };
+}
+
+if(!Array.isArray(data.transactions)){
+  data.transactions=[];
+}
+
+if(!data.dailyLimits){
+  data.dailyLimits={};
+}
+
+if(typeof data.startingBalance !== "number"){
+  data.startingBalance=0;
+}
+
+let currentType="expense";
+
+let selectedMonth=new Date();
+selectedMonth.setDate(1);
+
+
+/* =====================================================
+   CATEGORIES
+===================================================== */
+
+const expenseCategories=[
+
+  ["Restaurant","🍽️"],
+  ["Fast Food","🍔"],
+  ["Juice & Ice Cream","🥤"],
+  ["Movies","🎬"],
+  ["Petrol","⛽"],
+  ["Apps & Digital","📱"],
+  ["Internet / Recharge","🌐"],
+  ["Parents","👨‍👩‍👦"],
+  ["Groceries","🛒"],
+  ["Clothing","👕"],
+  ["Personal & Cleaning","🧼"],
+  ["Kitchen","🍳"],
+  ["Scooty Service","🛵"],
+  ["Other","📦"]
+
+];
+
+const incomeCategories=[
+
+  ["Salary","💼"],
+  ["Other Income","💰"],
+  ["Refund","↩️"],
+  ["Other","📦"]
+
+];
+
+const categoryEmoji={};
+
+expenseCategories.forEach(x=>{
+  categoryEmoji[x[0]]=x[1];
 });
+
+incomeCategories.forEach(x=>{
+  categoryEmoji[x[0]]=x[1];
+});
+
+const paymentEmoji={
+  cash:"💵",
+  gpay:"📱",
+  debit:"💳",
+  savings:"🏦"
+};
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+function saveData(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+
+}
+
+
+function money(value){
+
+  return "₹"+
+    Math.round(Number(value)||0)
+    .toLocaleString("en-IN");
+
+}
+
+
+function today(){
+
+  const d=new Date();
+
+  return d.getFullYear()+
+    "-"+
+    String(d.getMonth()+1).padStart(2,"0")+
+    "-"+
+    String(d.getDate()).padStart(2,"0");
+
+}
+
+
+function monthKey(date){
+
+  return date.getFullYear()+
+    "-"+
+    String(date.getMonth()+1).padStart(2,"0");
+
+}
+
+
+function daysInMonth(year,month){
+
+  return new Date(
+    year,
+    month+1,
+    0
+  ).getDate();
+
+}
+
+
+function dateToObj(value){
+
+  return new Date(
+    value+"T12:00:00"
+  );
+
+}
+
+
+function formatDate(value){
+
+  return dateToObj(value)
+    .toLocaleDateString(
+      "en-IN",
+      {
+        weekday:"long",
+        day:"numeric",
+        month:"short",
+        year:"numeric"
+      }
+    );
+
+}
+
+
+function shortDay(value){
+
+  return dateToObj(value)
+    .toLocaleDateString(
+      "en-IN",
+      {
+        weekday:"long",
+        day:"2-digit",
+        month:"short"
+      }
+    );
+
+}
+
+
+function previousMonthKey(key){
+
+  const parts=key.split("-").map(Number);
+
+  const d=new Date(
+    parts[0],
+    parts[1]-2,
+    1
+  );
+
+  return monthKey(d);
+
+}
+
+
+/* =====================================================
+   MONTH NAVIGATION
+===================================================== */
+
+function changeMonth(amount){
+
+  selectedMonth.setMonth(
+    selectedMonth.getMonth()+amount
+  );
+
+  render();
+
+}
+
+
+/* =====================================================
+   TRANSACTION MODAL
+===================================================== */
+
+function populateCategories(){
+
+  const select=document.getElementById("category");
+
+  select.innerHTML="";
+
+  const list=
+    currentType==="income"
+    ? incomeCategories
+    : expenseCategories;
+
+  list.forEach(item=>{
+
+    const option=document.createElement("option");
+
+    option.value=item[0];
+
+    option.textContent=
+      item[1]+" "+item[0];
+
+    select.appendChild(option);
+
+  });
+
+}
+
+
+function openTransaction(){
+
+  document
+    .getElementById("transactionModal")
+    .classList.add("show");
+
+  document.getElementById("amount").value="";
+  document.getElementById("date").value=today();
+  document.getElementById("note").value="";
+  document.getElementById("savings").value="";
+  document.getElementById("calculateDailyLimit").checked=false;
+
+  currentType="expense";
+
+  updateTransactionType();
+
+  document.getElementById("amount").focus();
+
+}
+
+
+function closeTransaction(){
+
+  document
+    .getElementById("transactionModal")
+    .classList.remove("show");
+
+}
+
+
+function setTransactionType(type){
+
+  currentType=type;
+
+  updateTransactionType();
+
+}
+
+
+function updateTransactionType(){
+
+  document
+    .getElementById("expenseTab")
+    .classList.toggle(
+      "active",
+      currentType==="expense"
+    );
+
+  document
+    .getElementById("incomeTab")
+    .classList.toggle(
+      "active",
+      currentType==="income"
+    );
+
+  document
+    .getElementById("transferTab")
+    .classList.toggle(
+      "active",
+      currentType==="transfer"
+    );
+
+
+  document
+    .getElementById("normalFields")
+    .classList.toggle(
+      "hidden",
+      currentType==="transfer"
+    );
+
+
+  document
+    .getElementById("transferFields")
+    .classList.toggle(
+      "hidden",
+      currentType!=="transfer"
+    );
+
+
+  document
+    .getElementById("salaryFields")
+    .classList.toggle(
+      "hidden",
+      currentType!=="income"
+    );
+
+
+  populateCategories();
+
+
+  if(currentType==="income"){
+
+    document.getElementById("category").value="Salary";
+
+  }
+
+  toggleSalaryFields();
+
+}
+
+
+function toggleSalaryFields(){
+
+  const category=
+    document.getElementById("category").value;
+
+  const checked=
+    document.getElementById(
+      "calculateDailyLimit"
+    ).checked;
+
+  const show=
+    currentType==="income" &&
+    category==="Salary" &&
+    checked;
+
+  document
+    .getElementById("savingsField")
+    .classList.toggle(
+      "hidden",
+      !show
+    );
+
+  showPreview();
+
+}
+
+
+document
+  .getElementById("category")
+  .addEventListener(
+    "change",
+    toggleSalaryFields
+  );
+
+
+function showPreview(){
+
+  const category=
+    document.getElementById("category").value;
+
+  const checked=
+    document.getElementById(
+      "calculateDailyLimit"
+    ).checked;
+
+  const preview=
+    document.getElementById("preview");
+
+  if(
+    currentType!=="income" ||
+    category!=="Salary" ||
+    !checked
+  ){
+
+    preview.style.display="none";
+
+    return;
+
+  }
+
+  const salary=
+    Number(
+      document.getElementById("amount").value
+    )||0;
+
+  const savings=
+    Number(
+      document.getElementById("savings").value
+    )||0;
+
+  const spendable=
+    Math.max(
+      0,
+      salary-savings
+    );
+
+  const date=
+    document.getElementById("date").value;
+
+  if(!date){
+
+    preview.style.display="none";
+
+    return;
+
+  }
+
+  const d=dateToObj(date);
+
+  const days=
+    daysInMonth(
+      d.getFullYear(),
+      d.getMonth()
+    );
+
+  const limit=
+    days>0
+    ? spendable/days
+    : 0;
+
+  document.getElementById(
+    "previewAmount"
+  ).textContent=money(limit);
+
+  preview.style.display="block";
+
+}
+
+
+/* =====================================================
+   SAVE TRANSACTION
+===================================================== */
+
+function saveTransaction(){
+
+  const amount=
+    Number(
+      document.getElementById("amount").value
+    );
+
+  if(!amount || amount<=0){
+
+    alert("Please enter a valid amount.");
+
+    return;
+
+  }
+
+  const date=
+    document.getElementById("date").value ||
+    today();
+
+  const note=
+    document.getElementById("note").value.trim();
+
+
+  /* TRANSFER */
+
+  if(currentType==="transfer"){
+
+    const from=
+      document.getElementById("from").value;
+
+    const to=
+      document.getElementById("to").value;
+
+    if(from===to){
+
+      alert("From and To must be different.");
+
+      return;
+
+    }
+
+    data.transactions.push({
+
+      id:Date.now(),
+
+      type:"transfer",
+
+      amount:amount,
+
+      from:from,
+
+      to:to,
+
+      date:date,
+
+      note:note
+
+    });
+
+  }
+
+
+  /* INCOME */
+
+  else if(currentType==="income"){
+
+    const category=
+      document.getElementById("category").value;
+
+    const calculate=
+      category==="Salary" &&
+      document.getElementById(
+        "calculateDailyLimit"
+      ).checked;
+
+    const savings=
+      calculate
+      ? Number(
+          document.getElementById("savings").value
+        )||0
+      : 0;
+
+    if(savings>amount){
+
+      alert(
+        "Savings cannot be greater than salary."
+      );
+
+      return;
+
+    }
+
+    data.transactions.push({
+
+      id:Date.now(),
+
+      type:"income",
+
+      amount:amount,
+
+      category:category,
+
+      payment:
+        document.getElementById("payment").value,
+
+      date:date,
+
+      note:note,
+
+      savings:savings,
+
+      calculateDailyLimit:calculate
+
+    });
+
+  }
+
+
+  /* EXPENSE */
+
+  else{
+
+    data.transactions.push({
+
+      id:Date.now(),
+
+      type:"expense",
+
+      amount:amount,
+
+      category:
+        document.getElementById("category").value,
+
+      payment:
+        document.getElementById("payment").value,
+
+      date:date,
+
+      note:note
+
+    });
+
+  }
+
+
+  saveData();
+
+  closeTransaction();
+
+  render();
+
+}
+
+
+/* =====================================================
+   SALARY CYCLE
+=====================================================
+
+   Salary on the last working day of a month
+   creates the Daily Limit for the NEXT month.
+
+   Example:
+
+   Salary received:
+   31 Aug
+
+   Daily Limit applies:
+   September
+
+===================================================== */
+
+function salaryForMonth(targetMonth){
+
+  const salaries=
+    data.transactions
+      .filter(t=>
+        t.type==="income" &&
+        t.category==="Salary" &&
+        t.calculateDailyLimit
+      )
+      .sort(
+        (a,b)=>
+          a.date.localeCompare(b.date)
+      );
+
+  let result=null;
+
+  salaries.forEach(salary=>{
+
+    const d=
+      dateToObj(salary.date);
+
+    const next=
+      new Date(
+        d.getFullYear(),
+        d.getMonth()+1,
+        1
+      );
+
+    const key=
+      monthKey(next);
+
+    if(key===targetMonth){
+
+      result=salary;
+
+    }
+
+  });
+
+  return result;
+
+}
+
+
+function calculatedDailyLimit(targetMonth){
+
+  const salary=
+    salaryForMonth(targetMonth);
+
+  if(!salary){
+
+    return null;
+
+  }
+
+  const parts=
+    targetMonth.split("-").map(Number);
+
+  const days=
+    daysInMonth(
+      parts[0],
+      parts[1]-1
+    );
+
+  const spendable=
+    Math.max(
+      0,
+      Number(salary.amount)-
+      Number(salary.savings||0)
+    );
+
+  return days>0
+    ? spendable/days
+    : null;
+
+}
+
+
+function dailyLimitForMonth(targetMonth){
+
+  if(
+    data.dailyLimits[targetMonth] !== undefined
+  ){
+
+    return Number(
+      data.dailyLimits[targetMonth]
+    );
+
+  }
+
+  return calculatedDailyLimit(targetMonth);
+
+}
+
+
+/* =====================================================
+   DAILY LIMIT UPDATE
+===================================================== */
+
+function updateDailyLimit(){
+
+  const key=monthKey(new Date());
+
+  const current=
+    dailyLimitForMonth(key);
+
+  if(
+    current===null ||
+    current===undefined
+  ){
+
+    alert(
+      "No salary-based Daily Limit exists for this month yet."
+    );
+
+    return;
+
+  }
+
+  const value=
+    prompt(
+      "Enter your new Daily Limit:",
+      Math.round(current)
+    );
+
+  if(value===null){
+
+    return;
+
+  }
+
+  const number=Number(value);
+
+  if(
+    !Number.isFinite(number) ||
+    number<0
+  ){
+
+    alert(
+      "Please enter a valid Daily Limit."
+    );
+
+    return;
+
+  }
+
+  data.dailyLimits[key]=number;
+
+  saveData();
+
+  render();
+
+}
+
+
+/* =====================================================
+   DAILY SPENDING / CARRY FORWARD
+=====================================================
+
+   Base Daily Limit:
+   Salary minus Savings
+   divided by days in the month.
+
+   Unused Daily Limit carries forward.
+
+   Example:
+
+   Day 1 limit = ₹667
+   Spend = ₹500
+
+   Unused = ₹167
+
+   Day 2 available =
+   ₹667 + ₹167 = ₹834
+
+   If the ₹167 is transferred to Savings,
+   it does NOT carry forward.
+
+===================================================== */
+
+function getDailyResult(){
+
+  const now=new Date();
+
+  const key=monthKey(now);
+
+  const base=
+    dailyLimitForMonth(key);
+
+  if(
+    base===null ||
+    base===undefined
+  ){
+
+    return null;
+
+  }
+
+  let available=Number(base);
+
+  const currentDay=now.getDate();
+
+  for(
+    let day=1;
+    day<currentDay;
+    day++
+  ){
+
+    const d=new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      day
+    );
+
+    const date=
+      d.getFullYear()+
+      "-"+
+      String(d.getMonth()+1).padStart(2,"0")+
+      "-"+
+      String(d.getDate()).padStart(2,"0");
+
+
+    const spent=
+      data.transactions
+        .filter(t=>
+          t.type==="expense" &&
+          t.date===date
+        )
+        .reduce(
+          (sum,t)=>
+            sum+Number(t.amount||0),
+          0
+        );
+
+
+    const movedToSavings=
+      data.transactions
+        .filter(t=>
+          t.type==="transfer" &&
+          t.date===date &&
+          t.to==="savings"
+        )
+        .reduce(
+          (sum,t)=>
+            sum+Number(t.amount||0),
+          0
+        );
+
+
+    const unused=
+      Math.max(
+        0,
+        available-spent
+      );
+
+
+    /*
+      If money was moved to Savings,
+      the unused amount is considered
+      saved and therefore does not carry.
+    */
+
+    if(movedToSavings>0){
+
+      available=Number(base);
+
+    }else{
+
+      available=
+        Number(base)+unused;
+
+    }
+
+  }
+
+
+  const todayDate=today();
+
+  const todaySpent=
+    data.transactions
+      .filter(t=>
+        t.type==="expense" &&
+        t.date===todayDate
+      )
+      .reduce(
+        (sum,t)=>
+          sum+Number(t.amount||0),
+        0
+      );
+
+
+  const remaining=
+    available-todaySpent;
+
+
+  return {
+
+    base:Number(base),
+
+    limit:available,
+
+    spent:todaySpent,
+
+    remaining:remaining
+
+  };
+
+}
+
+
+/* =====================================================
+   BALANCE
+=====================================================
+
+   Income:
+   Salary - Savings
+
+   Expense:
+   subtract
+
+   Transfer:
+   Cash -> GPay = no change
+   GPay -> Debit = no change
+   Cash -> Savings = subtract
+   Savings -> Cash = add
+
+===================================================== */
+
+function balanceUntil(endDate){
+
+  let balance=
+    Number(data.startingBalance)||0;
+
+  const transactions=
+    data.transactions
+      .filter(t=>t.date<=endDate)
+      .sort(
+        (a,b)=>
+          a.date.localeCompare(b.date)
+      );
+
+
+  transactions.forEach(t=>{
+
+    if(t.type==="income"){
+
+      balance +=
+        Number(t.amount||0)-
+        Number(t.savings||0);
+
+    }
+
+
+    else if(t.type==="expense"){
+
+      balance -=
+        Number(t.amount||0);
+
+    }
+
+
+    else if(t.type==="transfer"){
+
+      if(
+        t.to==="savings" &&
+        t.from!=="savings"
+      ){
+
+        balance -=
+          Number(t.amount||0);
+
+      }
+
+
+      else if(
+        t.from==="savings" &&
+        t.to!=="savings"
+      ){
+
+        balance +=
+          Number(t.amount||0);
+
+      }
+
+    }
+
+  });
+
+  return balance;
+
+}
+
+
+/* =====================================================
+   STARTING BALANCE
+===================================================== */
+
+function setStartingBalance(){
+
+  const current=
+    Number(data.startingBalance)||0;
+
+  const value=
+    prompt(
+      "Enter your starting balance:",
+      current
+    );
+
+  if(value===null){
+
+    return;
+
+  }
+
+  const number=Number(value);
+
+  if(
+    !Number.isFinite(number) ||
+    number<0
+  ){
+
+    alert(
+      "Please enter a valid amount."
+    );
+
+    return;
+
+  }
+
+  data.startingBalance=number;
+
+  saveData();
+
+  render();
+
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function render(){
+
+  const key=
+    monthKey(selectedMonth);
+
+
+  document.getElementById(
+    "month"
+  ).textContent=
+    selectedMonth.toLocaleDateString(
+      "en-IN",
+      {
+        month:"long",
+        year:"numeric"
+      }
+    );
+
+
+  const monthTransactions=
+    data.transactions.filter(
+      t=>t.date.startsWith(key)
+    );
+
+
+  const income=
+    monthTransactions
+      .filter(t=>t.type==="income")
+      .reduce(
+        (sum,t)=>
+          sum+
+          Number(t.amount||0)-
+          Number(t.savings||0),
+        0
+      );
+
+
+  const spent=
+    monthTransactions
+      .filter(t=>t.type==="expense")
+      .reduce(
+        (sum,t)=>
+          sum+Number(t.amount||0),
+        0
+      );
+
+
+  const parts=
+    key.split("-").map(Number);
+
+  const lastDate=
+    parts[0]+
+    "-"+
+    String(parts[1]).padStart(2,"0")+
+    "-"+
+    String(
+      daysInMonth(
+        parts[0],
+        parts[1]-1
+      )
+    ).padStart(2,"0");
+
+
+  document.getElementById(
+    "balance"
+  ).textContent=
+    money(
+      balanceUntil(lastDate)
+    );
+
+
+  document.getElementById(
+    "income"
+  ).textContent=
+    money(income);
+
+
+  document.getElementById(
+    "spent"
+  ).textContent=
+    money(spent);
+
+
+  document.getElementById(
+    "startingBalance"
+  ).textContent=
+    money(
+      data.startingBalance
+    );
+
+
+  renderDaily();
+
+  renderTransactions(
+    monthTransactions
+  );
+
+  renderCategories(
+    monthTransactions
+  );
+
+}
+
+
+/* =====================================================
+   DAILY DISPLAY
+===================================================== */
+
+function renderDaily(){
+
+  const result=
+    getDailyResult();
+
+  const box=
+    document.getElementById(
+      "dailyBox"
+    );
+
+
+  if(!result){
+
+    document.getElementById(
+      "dailyLimit"
+    ).textContent="—";
+
+    document.getElementById(
+      "dailyStatus"
+    ).textContent=
+      "No salary plan";
+
+    box.classList.remove("over");
+
+    return;
+
+  }
+
+
+  document.getElementById(
+    "dailyLimit"
+  ).textContent=
+    money(result.limit);
+
+
+  document.getElementById(
+    "dailyStatus"
+  ).textContent=
+    result.remaining<0
+    ? "Over by "+
+      money(
+        Math.abs(result.remaining)
+      )
+    : money(
+        result.remaining
+      )+
+      " remaining";
+
+
+  box.classList.toggle(
+    "over",
+    result.remaining<0
+  );
+
+}
+
+
+/* =====================================================
+   TRANSACTIONS
+===================================================== */
+
+function renderTransactions(transactions){
+
+  const box=
+    document.getElementById(
+      "transactions"
+    );
+
+
+  if(!transactions.length){
+
+    box.innerHTML=
+      '<div class="empty">No transactions yet.</div>';
+
+    return;
+
+  }
+
+
+  const list=
+    [...transactions].sort(
+      (a,b)=>
+        b.date.localeCompare(a.date) ||
+        b.id-a.id
+    );
+
+
+  let html="";
+
+  let currentDate="";
+
+
+  list.forEach(t=>{
+
+    if(t.date!==currentDate){
+
+      currentDate=t.date;
+
+      html+=
+        '<div class="day">'+
+        shortDay(t.date)+
+        '</div>';
+
+    }
+
+
+    if(t.type==="expense"){
+
+      const method=
+        t.payment||"cash";
+
+      html+=
+        '<div class="transaction '+method+'">'+
+
+          '<div class="txLeft">'+
+
+            '<div class="txName">'+
+              (categoryEmoji[t.category]||"📦")+
+              " "+
+              t.category+
+            '</div>'+
+
+            (
+              t.note
+              ? '<div class="txNote">'+
+                  escapeHtml(t.note)+
+                '</div>'
+              : ''
+            )+
+
+          '</div>'+
+
+          '<div class="txRight">'+
+
+            '<div class="txAmount" style="color:#ff6868">'+
+              "-"+money(t.amount)+
+              '<span class="method">'+
+                (paymentEmoji[method]||"")+
+              '</span>'+
+            '</div>'+
+
+          '</div>'+
+
+        '</div>';
+
+    }
+
+
+    else if(t.type==="income"){
+
+      const method=
+        t.payment||"cash";
+
+      html+=
+        '<div class="transaction debit">'+
+
+          '<div class="txLeft">'+
+
+            '<div class="txName">'+
+              (categoryEmoji[t.category]||"💰")+
+              " "+
+              t.category+
+            '</div>'+
+
+            (
+              t.savings>0
+              ? '<div class="txNote">'+
+                  money(t.savings)+
+                  ' moved to Savings'+
+                '</div>'
+              : ''
+            )+
+
+          '</div>'+
+
+          '<div class="txRight">'+
+
+            '<div class="txAmount" style="color:#55c98a">'+
+              "+"+money(t.amount)+
+              '<span class="method">'+
+                (paymentEmoji[method]||"")+
+              '</span>'+
+            '</div>'+
+
+          '</div>'+
+
+        '</div>';
+
+    }
+
+
+    else if(t.type==="transfer"){
+
+      html+=
+        '<div class="transaction transfer">'+
+
+          '<div class="txLeft">'+
+
+            '<div class="txName">'+
+              "↔️ Transfer"+
+            '</div>'+
+
+            '<div class="txNote">'+
+              paymentEmoji[t.from]||"🏦"+
+              " "+
+              t.from+
+              " → "+
+              paymentEmoji[t.to]||"🏦"+
+              " "+
+              t.to+
+            '</div>'+
+
+          '</div>'+
+
+          '<div class="txRight">'+
+
+            '<div class="txAmount" style="color:#b88cff">'+
+              money(t.amount)+
+            '</div>'+
+
+          '</div>'+
+
+        '</div>';
+
+    }
+
+  });
+
+
+  box.innerHTML=html;
+
+}
+
+
+/* =====================================================
+   CATEGORIES
+===================================================== */
+
+function renderCategories(transactions){
+
+  const box=
+    document.getElementById(
+      "categories"
+    );
+
+
+  const expenses=
+    transactions.filter(
+      t=>t.type==="expense"
+    );
+
+
+  if(!expenses.length){
+
+    box.innerHTML=
+      '<div class="empty">No spending this month.</div>';
+
+    return;
+
+  }
+
+
+  const totals={};
+
+
+  expenses.forEach(t=>{
+
+    if(!totals[t.category]){
+
+      totals[t.category]=0;
+
+    }
+
+    totals[t.category]+=
+      Number(t.amount||0);
+
+  });
+
+
+  const entries=
+    Object.entries(totals)
+      .sort(
+        (a,b)=>b[1]-a[1]
+      );
+
+
+  const max=
+    entries[0][1];
+
+
+  let html="";
+
+
+  entries.forEach(
+    ([category,total])=>{
+
+      const percent=
+        max>0
+        ? (total/max)*100
+        : 0;
+
+
+      html+=
+        '<div class="category">'+
+
+          '<div class="catRow">'+
+
+            '<span>'+
+              (categoryEmoji[category]||"📦")+
+              " "+
+              category+
+            '</span>'+
+
+            '<strong>'+
+              money(total)+
+            '</strong>'+
+
+          '</div>'+
+
+          '<div class="bar">'+
+
+            '<div class="fill" style="width:'+
+              percent+
+              '%"></div>'+
+
+          '</div>'+
+
+        '</div>';
+
+    }
+  );
+
+
+  box.innerHTML=html;
+
+}
+
+
+/* =====================================================
+   HTML ESCAPE
+===================================================== */
+
+function escapeHtml(text){
+
+  return String(text)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =====================================================
+   CLOSE MODAL WHEN TAPPING OUTSIDE
+===================================================== */
+
+document
+  .getElementById("transactionModal")
+  .addEventListener(
+    "click",
+    function(e){
+
+      if(e.target===this){
+
+        closeTransaction();
+
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+render();
+
 </script>
 
 </body>
