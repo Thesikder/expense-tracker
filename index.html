@@ -864,10 +864,34 @@ input:focus,select:focus{outline:1px solid #888}
 </div>
 
 <div class="starting">
-  Starting balance: <span id="startingBalance">₹0</span> ·
-  <button type="button" onclick="setStartingBalance()">Set / change</button>
+  <button type="button" class="resetDataBtn" onclick="openResetData()">Reset / Update Data</button>
 </div>
 
+</div>
+
+<div class="modal" id="resetDataModal">
+<div class="sheet resetSheet">
+<h2>Reset All Data</h2>
+<div class="resetIntro">
+  This will clear all transactions and create a fresh starting state. Enter at least one value below.
+</div>
+
+<label>Balance</label>
+<input id="resetBalance" type="number" inputmode="decimal" min="0" step="0.01" placeholder="₹ 0">
+
+<label>Savings</label>
+<input id="resetSavings" type="number" inputmode="decimal" min="0" step="0.01" placeholder="₹ 0">
+
+<label>Income</label>
+<input id="resetIncome" type="number" inputmode="decimal" min="0" step="0.01" placeholder="₹ 0">
+
+<div class="resetWarning" id="resetWarning">Enter at least one number to continue.</div>
+
+<div class="modalActions">
+  <button type="button" onclick="closeResetData()">Cancel</button>
+  <button type="button" onclick="saveResetData()">Save</button>
+</div>
+</div>
 </div>
 
 <div class="modal" id="transactionModal">
@@ -1221,13 +1245,17 @@ function closingBalanceUntil(endDate){
 }
 
 function totalSavings(){
-  let total=0;
+  // Savings entered through "Reset All Data" is the starting savings amount.
+  // Transaction-based savings are then added/subtracted on top of it.
+  let total=Number(data.savings)||0;
+
   data.transactions.forEach(t=>{
     if(t.type==="income")total+=Number(t.savings||0);
-    if(t.type==="transfer"&&t.to==="savings"&&t.from!=="savings")total+=Number(t.amount);
-    if(t.type==="transfer"&&t.from==="savings"&&t.to!=="savings")total-=Number(t.amount);
+    if(t.type==="transfer"&&t.to==="savings"&&t.from!=="savings")total+=Number(t.amount||0);
+    if(t.type==="transfer"&&t.from==="savings"&&t.to!=="savings")total-=Number(t.amount||0);
   });
-  return total;
+
+  return Math.max(0,total);
 }
 
 function render(){
@@ -1241,7 +1269,6 @@ function render(){
   document.getElementById("savingsTotal").textContent=money(totalSavings());
   document.getElementById("income").textContent=money(income);
   document.getElementById("spent").textContent=money(spent);
-  document.getElementById("startingBalance").textContent=money(data.startingBalance);
   renderDaily();renderTransactions(tx);renderCategories(tx);
   const st=getChartStats(tx);document.getElementById('statsIncome').textContent=money(st.income);document.getElementById('statsSpent').textContent=money(st.expense);document.getElementById('statsCategoryCount').textContent=Object.keys(st.categories).length;
   if(chartMode)drawChart(chartMode,tx);
@@ -1615,10 +1642,57 @@ function renderLegend(items){
   `).join("");
 }
 
-function setStartingBalance(){
-  const v=prompt("Enter your starting balance:",String(data.startingBalance||0));if(v===null)return;
-  const n=Number(v);if(!Number.isFinite(n)||n<0){alert("Please enter a valid amount.");return}
-  data.startingBalance=n;saveData();render();
+function openResetData(){
+  document.getElementById("resetBalance").value="";
+  document.getElementById("resetSavings").value="";
+  document.getElementById("resetIncome").value="";
+  document.getElementById("resetWarning").classList.remove("show");
+  document.getElementById("resetDataModal").classList.add("show");
+}
+
+function closeResetData(){
+  document.getElementById("resetDataModal").classList.remove("show");
+}
+
+function saveResetData(){
+  const b=document.getElementById("resetBalance").value.trim();
+  const s=document.getElementById("resetSavings").value.trim();
+  const i=document.getElementById("resetIncome").value.trim();
+  const warning=document.getElementById("resetWarning");
+
+  const hasAny=[b,s,i].some(v=>v!=="");
+  if(!hasAny){
+    warning.textContent="Enter at least one number to continue.";
+    warning.classList.add("show");
+    return;
+  }
+
+  if([b,s,i].some(v=>v!=="" && (!Number.isFinite(Number(v)) || Number(v)<0))){
+    warning.textContent="Please enter valid numbers (0 or more).";
+    warning.classList.add("show");
+    return;
+  }
+
+  /*
+    This is intentionally an explicit reset/update action.
+    Existing transactions are removed so the three entered values become
+    the new clean starting state rather than being double-counted.
+  */
+  const newBalance=b==="" ? 0 : Number(b);
+  const newSavings=s==="" ? 0 : Number(s);
+  const newIncome=i==="" ? 0 : Number(i);
+
+  data.transactions=[];
+  data.dailyLimits={};
+  data.salaryPlans={};
+  data.savings=newSavings;
+  data.startingBalance=newBalance;
+  data.startingIncome=newIncome;
+  data.updatedAt=Date.now();
+
+  saveData();
+  closeResetData();
+  render();
 }
 
 function updateDailyLimit(){
@@ -1706,5 +1780,60 @@ render();
     column-gap:10px !important;
     row-gap:10px !important;
   }
+}
+</style>
+<style id="reset-data-ui">
+.resetDataBtn{
+  background:transparent;
+  border:1px solid #34353a;
+  color:#777;
+  border-radius:9px;
+  padding:7px 11px;
+  font-size:9px;
+  cursor:pointer;
+}
+.resetDataBtn:hover{
+  color:#aaa;
+  border-color:#45464b;
+}
+.resetSheet{
+  max-width:430px;
+}
+.resetIntro{
+  color:#777;
+  font-size:10px;
+  line-height:1.6;
+  margin:-3px 0 15px;
+}
+.resetIntro strong{color:#aaa;font-weight:600}
+.resetWarning{
+  display:none;
+  margin-top:10px;
+  padding:9px 10px;
+  border:1px solid rgba(255,104,104,.25);
+  border-radius:9px;
+  color:#ff7777;
+  background:rgba(255,104,104,.05);
+  font-size:9px;
+}
+.resetWarning.show{display:block}
+.modalActions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:15px;
+}
+.modalActions button{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #34353a;
+  background:#222326;
+  color:#ddd;
+  cursor:pointer;
+}
+.modalActions button:last-child{
+  background:#eee;
+  color:#111;
 }
 </style>
